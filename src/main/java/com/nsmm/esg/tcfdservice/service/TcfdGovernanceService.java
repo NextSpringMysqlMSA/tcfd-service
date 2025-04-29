@@ -25,9 +25,9 @@ public class TcfdGovernanceService {
     private final TcfdGovernanceExecutiveKpiRepository kpiRepository;
     private final TcfdGovernanceEducationRepository educationRepository;
 
-    public Long createCommittee(TcfdGovernanceCommitteeRequest request) {
+    public Long createCommittee(Long memberId, TcfdGovernanceCommitteeRequest request) {
         TcfdGovernanceCommittee committee = TcfdGovernanceCommittee.builder()
-                .memberId(request.getMemberId())
+                .memberId(memberId)  // ✅ X-MEMBER-ID에서 받은 값을 세팅
                 .committeeName(request.getCommitteeName())
                 .memberName(request.getMemberName())
                 .memberPosition(request.getMemberPosition())
@@ -37,6 +37,7 @@ public class TcfdGovernanceService {
 
         return committeeRepository.save(committee).getId();
     }
+
 
     public Long createMeeting(TcfdGovernanceMeetingRequest request) {
         TcfdGovernanceMeeting meeting = TcfdGovernanceMeeting.builder()
