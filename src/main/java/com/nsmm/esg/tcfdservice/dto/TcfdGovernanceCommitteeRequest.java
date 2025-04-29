@@ -3,7 +3,7 @@ package com.nsmm.esg.tcfdservice.dto;
 import lombok.Getter;
 
 @Getter
-public class CreateTcfdGovernanceCommitteeRequest {
+public class TcfdGovernanceCommitteeRequest {
 
     private Long memberId;              // 사용자 ID
     private String committeeName;       // 위원회 이름

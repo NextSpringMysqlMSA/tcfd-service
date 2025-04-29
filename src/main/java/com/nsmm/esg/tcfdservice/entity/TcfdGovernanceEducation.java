@@ -1,9 +1,9 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,8 +24,11 @@ public class TcfdGovernanceEducation {
     @Column(nullable = false, length = 100)
     private String educationTitle; // 교육 제목
 
-    @Column(nullable = false, length = 100)
-    private Integer participantCount; //교육 일자 참석 자수
+    @Column(nullable = false)
+    private LocalDate educationDate; // 교육 일자 (날짜만)
+
+    @Column(nullable = false)
+    private Integer participantCount; // 참석자 수
 
     @Lob
     private String content; // 교육 내용

@@ -21,6 +21,9 @@ public class TcfdGovernanceExecutiveKpi {
     private Long memberId;
 
     @Column(nullable = false, length = 100)
+    private String executiveName; // 경영진 이름
+
+    @Column(nullable = false, length = 100)
     private String kpiName; // KPI 이름
 
     private String targetValue; // KPI 목표 값
