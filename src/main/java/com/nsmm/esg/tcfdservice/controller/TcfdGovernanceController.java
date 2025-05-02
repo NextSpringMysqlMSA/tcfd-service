@@ -20,12 +20,21 @@ public class TcfdGovernanceController {
     @PostMapping("/committee")
     public String createCommittee(@RequestBody TcfdGovernanceCommitteeRequest request,
                                   HttpServletRequest httpRequest) {
-        Long memberId = Long.parseLong(httpRequest.getHeader("X-MEMBER-ID"));
+        String authorization = httpRequest.getHeader("Authorization");
+        String memberIdHeader = httpRequest.getHeader("X-MEMBER-ID");
 
+        System.out.println("🔐 Authorization 헤더 값: " + authorization);
+        System.out.println("👤 X-MEMBER-ID 헤더 값: " + memberIdHeader);
+
+        if (memberIdHeader == null || memberIdHeader.isBlank()) {
+            throw new IllegalArgumentException("X-MEMBER-ID 헤더가 누락되었습니다.");
+        }
+
+        Long memberId = Long.parseLong(memberIdHeader);
         Long id = tcfdGovernanceService.createCommittee(memberId, request);
-
         return "위원회 생성 완료. ID = " + id;
     }
+
 
 
     @PostMapping("/meeting")

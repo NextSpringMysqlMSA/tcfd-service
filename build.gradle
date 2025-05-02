@@ -26,22 +26,23 @@ repositories {
 ext {
 	set('springCloudVersion', "2023.0.2") // 기존 코드 기준 유지
 }
-
 dependencies {
-	// 기본 스타터
+	// 중복 제거하고 이 하나만 남겨두세요
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	// Config 서버 연동
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// DB
+	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// 개발 도구
@@ -51,6 +52,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
 
 dependencyManagement {
 	imports {

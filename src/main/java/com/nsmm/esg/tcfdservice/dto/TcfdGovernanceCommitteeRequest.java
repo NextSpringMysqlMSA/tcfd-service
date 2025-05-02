@@ -1,11 +1,14 @@
 package com.nsmm.esg.tcfdservice.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TcfdGovernanceCommitteeRequest {
 
-    private Long memberId;              // 사용자 ID
     private String committeeName;       // 위원회 이름
     private String memberName;           // 구성원 이름
     private String memberPosition;       // 구성원 직책

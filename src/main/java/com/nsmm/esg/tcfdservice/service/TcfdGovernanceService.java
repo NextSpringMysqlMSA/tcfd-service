@@ -27,7 +27,7 @@ public class TcfdGovernanceService {
 
     public Long createCommittee(Long memberId, TcfdGovernanceCommitteeRequest request) {
         TcfdGovernanceCommittee committee = TcfdGovernanceCommittee.builder()
-                .memberId(memberId)  // ✅ X-MEMBER-ID에서 받은 값을 세팅
+                .memberId(memberId)  //  X-MEMBER-ID에서 받은 값을 세팅
                 .committeeName(request.getCommitteeName())
                 .memberName(request.getMemberName())
                 .memberPosition(request.getMemberPosition())
