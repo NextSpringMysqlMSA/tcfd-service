@@ -27,7 +27,7 @@ public class TcfdGovernanceService {
 
     public Long createCommittee(Long memberId, TcfdGovernanceCommitteeRequest request) {
         TcfdGovernanceCommittee committee = TcfdGovernanceCommittee.builder()
-                .memberId(memberId)  //  X-MEMBER-ID에서 받은 값을 세팅
+                .memberId(memberId)
                 .committeeName(request.getCommitteeName())
                 .memberName(request.getMemberName())
                 .memberPosition(request.getMemberPosition())
@@ -39,9 +39,9 @@ public class TcfdGovernanceService {
     }
 
 
-    public Long createMeeting(TcfdGovernanceMeetingRequest request) {
+    public Long createMeeting(Long memberId, TcfdGovernanceMeetingRequest request) {
         TcfdGovernanceMeeting meeting = TcfdGovernanceMeeting.builder()
-                .memberId(request.getMemberId())
+                .memberId(memberId)
                 .meetingName(request.getMeetingName())
                 .meetingDate(request.getMeetingDate())
                 .agenda(request.getAgenda())
@@ -49,9 +49,9 @@ public class TcfdGovernanceService {
         return meetingRepository.save(meeting).getId();
     }
 
-    public Long createExecutiveKpi(TcfdGovernanceExecutiveKpiRequest request) {
+    public Long createExecutiveKpi(Long memberId,TcfdGovernanceExecutiveKpiRequest request) {
         TcfdGovernanceExecutiveKpi executiveKpi = TcfdGovernanceExecutiveKpi.builder()
-                .memberId(request.getMemberId())
+                .memberId(memberId)
                 .executiveName(request.getExecutiveName())
                 .kpiName(request.getKpiName())
                 .targetValue(request.getTargetValue())
@@ -60,9 +60,9 @@ public class TcfdGovernanceService {
         return kpiRepository.save(executiveKpi).getId();
     }
 
-    public Long createEducation(TcfdGovernanceEducationRequest request) {
+    public Long createEducation(Long memberId,TcfdGovernanceEducationRequest request) {
         TcfdGovernanceEducation education = TcfdGovernanceEducation.builder()
-                .memberId(request.getMemberId())
+                .memberId(memberId)
                 .educationTitle(request.getEducationTitle())
                 .educationDate(request.getEducationDate())
                 .participantCount(request.getParticipantCount())
