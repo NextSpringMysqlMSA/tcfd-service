@@ -3,10 +3,12 @@ package com.nsmm.esg.tcfdservice.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceMeeting;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
 public class TcfdGovernanceMeetingRequest {
 
     private String meetingName;     // 회의 제목
@@ -24,5 +26,14 @@ public class TcfdGovernanceMeetingRequest {
                 .meetingDate(this.meetingDate)
                 .agenda(this.agenda)
                 .build();
+    }
+
+    // Entity → DTO 변환 메서드
+    public static TcfdGovernanceMeetingRequest fromEntity(TcfdGovernanceMeeting entity) {
+        TcfdGovernanceMeetingRequest dto = new TcfdGovernanceMeetingRequest();
+        dto.meetingName = entity.getMeetingName();
+        dto.meetingDate = entity.getMeetingDate();
+        dto.agenda = entity.getAgenda();
+        return dto;
     }
 }
