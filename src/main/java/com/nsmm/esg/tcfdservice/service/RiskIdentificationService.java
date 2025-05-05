@@ -3,45 +3,59 @@ package com.nsmm.esg.tcfdservice.service;
 import com.nsmm.esg.tcfdservice.dto.RiskIdentificationRequest;
 import com.nsmm.esg.tcfdservice.entity.RiskIdentification;
 import com.nsmm.esg.tcfdservice.repository.RiskIdentificationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RiskIdentificationService {
 
-    private final RiskIdentificationRepository riskIdentificationRepository;
+    private final RiskIdentificationRepository riskRepository;
 
-    @Transactional
-    public Long createRisk(Long memberId, RiskIdentificationRequest request) {
-        RiskIdentification risk = request.toEntity(memberId);
-        riskIdentificationRepository.save(risk);
-        return risk.getId();
+    // 리스크 호출
+    public List<RiskIdentificationRequest> getRisks(Long memberId) {
+        return riskRepository.findByMemberIdAndDeletedFalse(memberId).stream()
+                .map(RiskIdentificationRequest::fromEntity)
+                .toList();
     }
+    //----------------------------------------------------------------------------------------------------------------
 
+    // 리스크 생성
+    public Long createRisk(Long memberId, RiskIdentificationRequest request) {
+        return riskRepository.save(request.toEntity(memberId)).getId();
+    }
+    //----------------------------------------------------------------------------------------------------------------
+
+    // 리스크 수정
     @Transactional
     public void updateRisk(Long memberId, Long id, RiskIdentificationRequest request) {
-        RiskIdentification risk = riskIdentificationRepository.findById(id)
-                .filter(r -> !r.isDeleted())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리스크 ID입니다."));
+        RiskIdentification risk = riskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("수정할 리스크가 없거나 권한이 없습니다."));
+
         if (!risk.getMemberId().equals(memberId)) {
-            throw new SecurityException("리스크 수정 권한이 없습니다.");
+            throw new IllegalArgumentException("해당 리스크에 대한 권한이 없습니다.");
         }
 
-        // 업데이트 로직 (setter 사용 없이 update 메서드 추천)
         risk.updateFromDto(request);
     }
+    //----------------------------------------------------------------------------------------------------------------
 
-    @Transactional
+    // 리스크 삭제
     public void deleteRisk(Long memberId, Long id) {
-        RiskIdentification risk = riskIdentificationRepository.findById(id)
-                .filter(r -> !r.isDeleted())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리스크 ID입니다."));
-        if (!risk.getMemberId().equals(memberId)) {
-            throw new SecurityException("리스크 삭제 권한이 없습니다.");
-        }
+        RiskIdentification risk = riskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("삭제할 리스크가 없거나 권한이 없습니다."));
 
-        riskIdentificationRepository.delete(risk);
+        if (!risk.getMemberId().equals(memberId)) {
+            throw new IllegalArgumentException("해당 리스크에 대한 권한이 없습니다.");
+        }
+        riskRepository.delete(risk);
     }
+    //----------------------------------------------------------------------------------------------------------------
+
+
+
 }

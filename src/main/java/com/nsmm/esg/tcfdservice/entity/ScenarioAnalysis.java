@@ -37,8 +37,6 @@ public class ScenarioAnalysis {
 
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
-    private boolean deleted = false;
 
     @PrePersist
     protected void onCreate() {
@@ -50,9 +48,6 @@ public class ScenarioAnalysis {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void softDelete() {
-        this.deleted = true;
-    }
 
     // DTO 기반 수정 메서드
     public void updateFromDto(ScenarioAnalysisRequest request) {

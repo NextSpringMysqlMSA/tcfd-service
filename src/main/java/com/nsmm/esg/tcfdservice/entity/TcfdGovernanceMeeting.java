@@ -1,5 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
+import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceMeetingRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,11 +36,28 @@ public class TcfdGovernanceMeeting implements Identifiable<Long>{
     @Lob
     private String agenda; // 회의 안건
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     @PrePersist
-    protected void prePersist() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+
+    public void updateFromRequest(TcfdGovernanceMeetingRequest request) {
+        this.meetingName = request.getMeetingName();
+        this.meetingDate = request.getMeetingDate();
+        this.agenda = request.getAgenda();
+    }
+
+
+
 }

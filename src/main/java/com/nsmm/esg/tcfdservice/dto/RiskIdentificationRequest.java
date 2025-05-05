@@ -8,16 +8,15 @@ import lombok.Getter;
 @Builder
 public class RiskIdentificationRequest {
 
-    private final String riskType;
-    private final String riskCategory;
-    private final String riskCause;
-    private final String time;
-    private final String impact;
-    private final String financialImpact;
-    private final String businessModelImpact;
-    private final String plans;
+    private String riskType;
+    private String riskCategory;
+    private String riskCause;
+    private String time;
+    private String impact;
+    private String financialImpact;
+    private String businessModelImpact;
+    private String plans;
 
-    // DTO → Entity 변환
     public RiskIdentification toEntity(Long memberId) {
         return RiskIdentification.builder()
                 .memberId(memberId)
@@ -31,4 +30,18 @@ public class RiskIdentificationRequest {
                 .plans(plans)
                 .build();
     }
+
+    public static RiskIdentificationRequest fromEntity(RiskIdentification entity) {
+        return RiskIdentificationRequest.builder()
+                .riskType(entity.getRiskType())
+                .riskCategory(entity.getRiskCategory())
+                .riskCause(entity.getRiskCause())
+                .time(entity.getTime())
+                .impact(entity.getImpact())
+                .financialImpact(entity.getFinancialImpact())
+                .businessModelImpact(entity.getBusinessModelImpact())
+                .plans(entity.getPlans())
+                .build();
+    }
+
 }

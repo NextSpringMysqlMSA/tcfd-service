@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/tcfd/strategy")
 @RequiredArgsConstructor
@@ -20,6 +22,16 @@ public class RiskIdentificationController {
         }
         return Long.parseLong(memberIdHeader);
     }
+    //----------------------------------------------------------------------------------------------------------------
+
+    // 전체 조회
+    @GetMapping("/risk")
+    public List<RiskIdentificationRequest> getRisks(HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return riskIdentificationService.getRisks(memberId);
+    }
+    //----------------------------------------------------------------------------------------------------------------
+
 
     @PostMapping("/risk")
     public String createRisk(@RequestBody RiskIdentificationRequest request,
@@ -28,6 +40,7 @@ public class RiskIdentificationController {
         Long id = riskIdentificationService.createRisk(memberId, request);
         return "리스크 등록 완료. ID = " + id;
     }
+    //----------------------------------------------------------------------------------------------------------------
 
     @PutMapping("/risk/{id}")
     public String updateRisk(@PathVariable Long id,
@@ -37,6 +50,7 @@ public class RiskIdentificationController {
         riskIdentificationService.updateRisk(memberId, id, request);
         return "리스크 수정 완료. ID = " + id;
     }
+    //----------------------------------------------------------------------------------------------------------------
 
     @DeleteMapping("/risk/{id}")
     public String deleteRisk(@PathVariable Long id,
@@ -45,4 +59,5 @@ public class RiskIdentificationController {
         riskIdentificationService.deleteRisk(memberId, id);
         return "리스크 삭제 완료. ID = " + id;
     }
+    //----------------------------------------------------------------------------------------------------------------
 }

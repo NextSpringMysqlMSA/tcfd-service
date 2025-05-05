@@ -8,19 +8,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ScenarioAnalysisService {
 
     private final ScenarioAnalysisRepository scenarioAnalysisRepository;
 
-    // 생성
-    @Transactional
-    public Long createScenario(Long memberId, ScenarioAnalysisRequest request) {
-        ScenarioAnalysis scenario = request.toEntity(memberId);
-        scenarioAnalysisRepository.save(scenario);
-        return scenario.getId();
+    // 시나리오 호출
+    public List<ScenarioAnalysisRequest> getScenarios(Long memberId) {
+        return scenarioAnalysisRepository.findByMemberId(memberId).stream()
+                .map(ScenarioAnalysisRequest::fromEntity)
+                .toList();
     }
+    //----------------------------------------------------------------------------------------------------------------
+
+    // 생성
+    public Long createScenario(Long memberId, ScenarioAnalysisRequest request) {
+        return scenarioAnalysisRepository.save(request.toEntity(memberId)).getId();
+    }
+    //----------------------------------------------------------------------------------------------------------------
 
     // 수정
     @Transactional
@@ -34,9 +42,9 @@ public class ScenarioAnalysisService {
 
         scenario.updateFromDto(request);
     }
+    //----------------------------------------------------------------------------------------------------------------
 
     // 삭제
-    @Transactional
     public void deleteScenario(Long memberId, Long id) {
         ScenarioAnalysis scenario = scenarioAnalysisRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 시나리오가 존재하지 않습니다."));
@@ -47,4 +55,5 @@ public class ScenarioAnalysisService {
 
         scenarioAnalysisRepository.delete(scenario);
     }
+    //----------------------------------------------------------------------------------------------------------------
 }

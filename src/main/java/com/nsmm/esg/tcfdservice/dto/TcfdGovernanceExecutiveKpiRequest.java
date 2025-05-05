@@ -1,33 +1,34 @@
 package com.nsmm.esg.tcfdservice.dto;
 
 import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceExecutiveKpi;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class TcfdGovernanceExecutiveKpiRequest {
 
-    private String executiveName;   // 경영진 이름
-    private String kpiName;         // KPI 이름
-    private String targetValue;     // 목표값
-    private String achievedValue;   // 달성값
+    private final String executiveName;
+    private final String kpiName;
+    private final String targetValue;
+    private final String achievedValue;
 
-    // DTO → Entity 변환 메서드
     public TcfdGovernanceExecutiveKpi toEntity(Long memberId) {
         return TcfdGovernanceExecutiveKpi.builder()
                 .memberId(memberId)
-                .executiveName(this.executiveName)
-                .kpiName(this.kpiName)
-                .targetValue(this.targetValue)
-                .achievedValue(this.achievedValue)
+                .executiveName(executiveName)
+                .kpiName(kpiName)
+                .targetValue(targetValue)
+                .achievedValue(achievedValue)
                 .build();
     }
-    // Entity → DTO 변환 메서드
+
     public static TcfdGovernanceExecutiveKpiRequest fromEntity(TcfdGovernanceExecutiveKpi entity) {
-        TcfdGovernanceExecutiveKpiRequest dto = new TcfdGovernanceExecutiveKpiRequest();
-        dto.executiveName = entity.getExecutiveName();
-        dto.kpiName = entity.getKpiName();
-        dto.targetValue = entity.getTargetValue();
-        dto.achievedValue = entity.getAchievedValue();
-        return dto;
+        return TcfdGovernanceExecutiveKpiRequest.builder()
+                .executiveName(entity.getExecutiveName())
+                .kpiName(entity.getKpiName())
+                .targetValue(entity.getTargetValue())
+                .achievedValue(entity.getAchievedValue())
+                .build();
     }
 }

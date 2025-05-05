@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/tcfd/strategy")
 @RequiredArgsConstructor
@@ -20,8 +22,17 @@ public class ScenarioAnalysisController {
         }
         return Long.parseLong(memberIdHeader);
     }
+    //----------------------------------------------------------------------------------------------------------------
 
-    // ✅ 생성
+    // 읽기
+    @GetMapping("/scenario")
+    public List<ScenarioAnalysisRequest> getScenarios(HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return scenarioAnalysisService.getScenarios(memberId);
+    }
+    //----------------------------------------------------------------------------------------------------------------
+
+    // 생성
     @PostMapping("/scenario")
     public String createScenario(@RequestBody ScenarioAnalysisRequest request,
                                  HttpServletRequest httpRequest) {
@@ -29,8 +40,9 @@ public class ScenarioAnalysisController {
         Long id = scenarioAnalysisService.createScenario(memberId, request);
         return "시나리오 분석 등록 완료. ID = " + id;
     }
+    //----------------------------------------------------------------------------------------------------------------
 
-    // ✅ 수정
+    // 수정
     @PutMapping("/scenario/{id}")
     public String updateScenario(@PathVariable Long id,
                                  @RequestBody ScenarioAnalysisRequest request,
@@ -39,8 +51,9 @@ public class ScenarioAnalysisController {
         scenarioAnalysisService.updateScenario(memberId, id, request);
         return "시나리오 분석 수정 완료. ID = " + id;
     }
+    //----------------------------------------------------------------------------------------------------------------
 
-    // ✅ 삭제
+    // 삭제
     @DeleteMapping("/scenario/{id}")
     public String deleteScenario(@PathVariable Long id,
                                  HttpServletRequest httpRequest) {
@@ -48,4 +61,5 @@ public class ScenarioAnalysisController {
         scenarioAnalysisService.deleteScenario(memberId, id);
         return "시나리오 분석 삭제 완료. ID = " + id;
     }
+    //----------------------------------------------------------------------------------------------------------------
 }

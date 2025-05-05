@@ -34,9 +34,6 @@ public class RiskIdentification {
 
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
-    private boolean deleted = false;
-
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -47,9 +44,6 @@ public class RiskIdentification {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void softDelete() {
-        this.deleted = true;
-    }
 
     public void updateFromDto(RiskIdentificationRequest request) {
         this.riskType = request.getRiskType();

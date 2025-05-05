@@ -1,5 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
+import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceEducationRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,11 +39,27 @@ public class TcfdGovernanceEducation implements Identifiable<Long>{
     @Lob
     private String content; // 교육 내용
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     @PrePersist
-    protected void prePersist() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateFromRequest(TcfdGovernanceEducationRequest request) {
+        this.educationTitle = request.getEducationTitle();
+        this.educationDate = request.getEducationDate();
+        this.participantCount = request.getParticipantCount();
+        this.content = request.getContent();
+    }
+
+
 }
