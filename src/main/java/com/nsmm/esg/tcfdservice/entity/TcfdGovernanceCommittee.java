@@ -12,7 +12,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tcfd_governance_committee")
-public class TcfdGovernanceCommittee {
+public class TcfdGovernanceCommittee implements Identifiable<Long> {
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

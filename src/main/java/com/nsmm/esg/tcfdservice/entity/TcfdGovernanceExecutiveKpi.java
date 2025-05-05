@@ -11,7 +11,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tcfd_governance_executive_kpi")
-public class TcfdGovernanceExecutiveKpi {
+public class TcfdGovernanceExecutiveKpi implements Identifiable<Long>{
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

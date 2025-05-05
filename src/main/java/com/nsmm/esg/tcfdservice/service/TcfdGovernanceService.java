@@ -1,20 +1,14 @@
-// src/main/java/com/nsmm/esg.tcfdservice.service.TcfdGovernanceCommitteeService.java
 package com.nsmm.esg.tcfdservice.service;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceCommitteeRequest;
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceEducationRequest;
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceExecutiveKpiRequest;
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceMeetingRequest;
-import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceCommittee;
-import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceEducation;
-import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceExecutiveKpi;
-import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceMeeting;
-import com.nsmm.esg.tcfdservice.repository.TcfdGovernanceCommitteeRepository;
-import com.nsmm.esg.tcfdservice.repository.TcfdGovernanceEducationRepository;
-import com.nsmm.esg.tcfdservice.repository.TcfdGovernanceExecutiveKpiRepository;
-import com.nsmm.esg.tcfdservice.repository.TcfdGovernanceMeetingRepository;
+import com.nsmm.esg.tcfdservice.dto.*;
+import com.nsmm.esg.tcfdservice.entity.*;
+import com.nsmm.esg.tcfdservice.repository.*;
+import com.nsmm.esg.tcfdservice.entity.Identifiable;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,50 +19,40 @@ public class TcfdGovernanceService {
     private final TcfdGovernanceExecutiveKpiRepository kpiRepository;
     private final TcfdGovernanceEducationRepository educationRepository;
 
+    // 위원회 생성
     public Long createCommittee(Long memberId, TcfdGovernanceCommitteeRequest request) {
-        TcfdGovernanceCommittee committee = TcfdGovernanceCommittee.builder()
-                .memberId(memberId)
-                .committeeName(request.getCommitteeName())
-                .memberName(request.getMemberName())
-                .memberPosition(request.getMemberPosition())
-                .memberAffiliation(request.getMemberAffiliation())
-                .climateResponsibility(request.getClimateResponsibility())
-                .build();
-
-        return committeeRepository.save(committee).getId();
+        return saveEntityAndReturnId(request.toEntity(memberId), committeeRepository);
     }
 
-
+    // 회의 생성
     public Long createMeeting(Long memberId, TcfdGovernanceMeetingRequest request) {
-        TcfdGovernanceMeeting meeting = TcfdGovernanceMeeting.builder()
-                .memberId(memberId)
-                .meetingName(request.getMeetingName())
-                .meetingDate(request.getMeetingDate())
-                .agenda(request.getAgenda())
-                .build();
-        return meetingRepository.save(meeting).getId();
+        return saveEntityAndReturnId(request.toEntity(memberId), meetingRepository);
     }
 
-    public Long createExecutiveKpi(Long memberId,TcfdGovernanceExecutiveKpiRequest request) {
-        TcfdGovernanceExecutiveKpi executiveKpi = TcfdGovernanceExecutiveKpi.builder()
-                .memberId(memberId)
-                .executiveName(request.getExecutiveName())
-                .kpiName(request.getKpiName())
-                .targetValue(request.getTargetValue())
-                .achievedValue(request.getAchievedValue())
-                .build();
-        return kpiRepository.save(executiveKpi).getId();
+    // KPI 생성
+    public Long createExecutiveKpi(Long memberId, TcfdGovernanceExecutiveKpiRequest request) {
+        return saveEntityAndReturnId(request.toEntity(memberId), kpiRepository);
     }
 
-    public Long createEducation(Long memberId,TcfdGovernanceEducationRequest request) {
-        TcfdGovernanceEducation education = TcfdGovernanceEducation.builder()
-                .memberId(memberId)
-                .educationTitle(request.getEducationTitle())
-                .educationDate(request.getEducationDate())
-                .participantCount(request.getParticipantCount())
-                .content(request.getContent())
-                .build();
-        return educationRepository.save(education).getId();
+    // 교육 생성
+    public Long createEducation(Long memberId, TcfdGovernanceEducationRequest request) {
+        return saveEntityAndReturnId(request.toEntity(memberId), educationRepository);
+    }
 
+    // 위원회 목록 조회
+    public List<TcfdGovernanceCommitteeRequest> getCommittees(Long memberId) {
+        return committeeRepository.findByMemberId(memberId).stream()
+                .map(TcfdGovernanceCommitteeRequest::fromEntity)
+                .toList();
+    }
+
+    /**
+     * 공통 저장 로직
+     * @param entity 저장할 엔티티 (ID getter를 포함해야 함)
+     * @param repository JPA Repository
+     * @return 저장된 엔티티의 ID
+     */
+    private <T extends Identifiable<ID>, ID> ID saveEntityAndReturnId(T entity, JpaRepository<T, ID> repository) {
+        return repository.save(entity).getId();
     }
 }
