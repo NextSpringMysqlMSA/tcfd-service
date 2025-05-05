@@ -46,6 +46,27 @@ public class TcfdGovernanceService {
                 .toList();
     }
 
+    // 회의 목록 조회
+    public List<TcfdGovernanceMeetingRequest> getMeetings(Long memberId) {
+        return meetingRepository.findByMemberId(memberId).stream()
+                .map(TcfdGovernanceMeetingRequest::fromEntity)
+                .toList();
+    }
+
+    // KPI 목록 조회
+    public List<TcfdGovernanceExecutiveKpiRequest> getExecutiveKpis(Long memberId) {
+        return kpiRepository.findByMemberId(memberId).stream()
+                .map(TcfdGovernanceExecutiveKpiRequest::fromEntity)
+                .toList();
+    }
+
+    // 교육 목록 조회
+    public List<TcfdGovernanceEducationRequest> getEducations(Long memberId) {
+        return educationRepository.findByMemberId(memberId).stream()
+                .map(TcfdGovernanceEducationRequest::fromEntity)
+                .toList();
+    }
+
     /**
      * 공통 저장 로직
      * @param entity 저장할 엔티티 (ID getter를 포함해야 함)

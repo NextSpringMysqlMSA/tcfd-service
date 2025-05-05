@@ -21,4 +21,13 @@ public class TcfdGovernanceExecutiveKpiRequest {
                 .achievedValue(this.achievedValue)
                 .build();
     }
+    // Entity → DTO 변환 메서드
+    public static TcfdGovernanceExecutiveKpiRequest fromEntity(TcfdGovernanceExecutiveKpi entity) {
+        TcfdGovernanceExecutiveKpiRequest dto = new TcfdGovernanceExecutiveKpiRequest();
+        dto.executiveName = entity.getExecutiveName();
+        dto.kpiName = entity.getKpiName();
+        dto.targetValue = entity.getTargetValue();
+        dto.achievedValue = entity.getAchievedValue();
+        return dto;
+    }
 }

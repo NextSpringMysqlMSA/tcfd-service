@@ -72,6 +72,17 @@ public class TcfdGovernanceController {
     }
 
     /**
+     * 회의 목록 조회
+     * @param httpRequest HTTP 요청 객체
+     * @return 회의 요청 DTO 리스트
+     */
+    @GetMapping("/meeting")
+    public List<TcfdGovernanceMeetingRequest> getMeetings(HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return tcfdGovernanceService.getMeetings(memberId);
+    }
+
+    /**
      * 경영진 KPI 등록
      * @param request KPI 요청 DTO
      * @param httpRequest HTTP 요청 객체
@@ -83,6 +94,28 @@ public class TcfdGovernanceController {
         Long memberId = extractMemberId(httpRequest);
         Long id = tcfdGovernanceService.createExecutiveKpi(memberId, request);
         return "경영진 KPI 등록 완료. ID = " + id;
+    }
+
+    /**
+     * 경영진 KPI 목록 조회
+     * @param httpRequest HTTP 요청 객체
+     * @return KPI 요청 DTO 리스트
+     */
+    @GetMapping("/executive-kpi")
+    public List<TcfdGovernanceExecutiveKpiRequest> getExecutiveKpis(HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return tcfdGovernanceService.getExecutiveKpis(memberId);
+    }
+
+    /**
+     * 환경 교육 목록 조회
+     * @param httpRequest HTTP 요청 객체
+     * @return 교육 요청 DTO 리스트
+     */
+    @GetMapping("/education")
+    public List<TcfdGovernanceEducationRequest> getEducations(HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return tcfdGovernanceService.getEducations(memberId);
     }
 
     /**

@@ -23,4 +23,13 @@ public class TcfdGovernanceEducationRequest {
                 .content(this.content)
                 .build();
     }
+    // Entity → DTO 변환 메서드
+    public static TcfdGovernanceEducationRequest fromEntity(TcfdGovernanceEducation entity) {
+        TcfdGovernanceEducationRequest dto = new TcfdGovernanceEducationRequest();
+        dto.educationTitle = entity.getEducationTitle();
+        dto.educationDate = entity.getEducationDate();
+        dto.participantCount = entity.getParticipantCount();
+        dto.content = entity.getContent();
+        return dto;
+    }
 }
