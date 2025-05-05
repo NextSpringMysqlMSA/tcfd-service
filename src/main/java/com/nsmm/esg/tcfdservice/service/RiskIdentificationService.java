@@ -18,7 +18,7 @@ public class RiskIdentificationService {
 
     // 리스크 호출
     public List<RiskIdentificationRequest> getRisks(Long memberId) {
-        return riskRepository.findByMemberIdAndDeletedFalse(memberId).stream()
+        return riskRepository.findById(memberId).stream()
                 .map(RiskIdentificationRequest::fromEntity)
                 .toList();
     }

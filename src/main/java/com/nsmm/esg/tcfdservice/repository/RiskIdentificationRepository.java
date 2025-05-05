@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface RiskIdentificationRepository extends JpaRepository<RiskIdentification, Long> {
-        List<RiskIdentification> findByMemberIdAndDeletedFalse(Long memberId);
+        List<RiskIdentification> findByMemberId(Long memberId);
 
 }
