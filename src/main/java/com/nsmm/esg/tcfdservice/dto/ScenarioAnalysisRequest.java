@@ -8,17 +8,18 @@ import lombok.Getter;
 @Builder
 public class ScenarioAnalysisRequest {
 
-    private String regions;
-    private Double longitude;
-    private Double latitude;
-    private String warming;
-    private String industry;
-    private String scenario;
-    private Integer baseYear;
-    private String climate;
-    private Double damage;
-    private String format;
-    private String responseStrategy;
+    private final Long id;
+    private final String regions;
+    private final Double longitude;
+    private final Double latitude;
+    private final String warming;
+    private final String industry;
+    private final String scenario;
+    private final Integer baseYear;
+    private final String climate;
+    private final Double damage;
+    private final String format;
+    private final String responseStrategy;
 
     public ScenarioAnalysis toEntity(Long memberId) {
         return ScenarioAnalysis.builder()
@@ -38,6 +39,7 @@ public class ScenarioAnalysisRequest {
     }
     public static ScenarioAnalysisRequest fromEntity(ScenarioAnalysis entity) {
         return ScenarioAnalysisRequest.builder()
+                .id(entity.getId())
                 .regions(entity.getRegions())
                 .longitude(entity.getLongitude())
                 .latitude(entity.getLatitude())

@@ -31,7 +31,7 @@ public class TcfdGovernanceCommitteeRequest {
 
     public static TcfdGovernanceCommitteeRequest fromEntity(TcfdGovernanceCommittee entity) {
         return TcfdGovernanceCommitteeRequest.builder()
-                .id(entity.getId()) // 🔹id 포함
+                .id(entity.getId())
                 .committeeName(entity.getCommitteeName())
                 .memberName(entity.getMemberName())
                 .memberPosition(entity.getMemberPosition())
