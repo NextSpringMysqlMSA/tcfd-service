@@ -1,6 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceMeetingRequest;
+import com.nsmm.esg.tcfdservice.dto.GovernanceEducationRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tcfd_governance_meeting")
-public class TcfdGovernanceMeeting implements Identifiable<Long>{
+@Table(name = "governance_education")
+public class GovernanceEducation implements Identifiable<Long>{
 
     @Override
     public Long getId() {
@@ -28,13 +28,16 @@ public class TcfdGovernanceMeeting implements Identifiable<Long>{
     private Long memberId;
 
     @Column(nullable = false, length = 100)
-    private String meetingName; // 회의 이름
+    private String educationTitle; // 교육 제목
 
     @Column(nullable = false)
-    private LocalDate meetingDate; // 회의 날짜 (추가!)
+    private LocalDate educationDate; // 교육 일자 (날짜만)
+
+    @Column(nullable = false)
+    private Integer participantCount; // 참석자 수
 
     @Lob
-    private String agenda; // 회의 안건
+    private String content; // 교육 내용
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -51,13 +54,12 @@ public class TcfdGovernanceMeeting implements Identifiable<Long>{
         this.updatedAt = LocalDateTime.now();
     }
 
-
-    public void updateFromRequest(TcfdGovernanceMeetingRequest request) {
-        this.meetingName = request.getMeetingName();
-        this.meetingDate = request.getMeetingDate();
-        this.agenda = request.getAgenda();
+    public void updateFromRequest(GovernanceEducationRequest request) {
+        this.educationTitle = request.getEducationTitle();
+        this.educationDate = request.getEducationDate();
+        this.participantCount = request.getParticipantCount();
+        this.content = request.getContent();
     }
-
 
 
 }

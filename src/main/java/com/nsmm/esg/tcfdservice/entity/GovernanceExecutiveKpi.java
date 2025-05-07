@@ -1,10 +1,9 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceEducationRequest;
+import com.nsmm.esg.tcfdservice.dto.GovernanceExecutiveKpiRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,8 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tcfd_governance_education")
-public class TcfdGovernanceEducation implements Identifiable<Long>{
+@Table(name = "governance_executive_kpi")
+public class GovernanceExecutiveKpi implements Identifiable<Long>{
 
     @Override
     public Long getId() {
@@ -28,16 +27,14 @@ public class TcfdGovernanceEducation implements Identifiable<Long>{
     private Long memberId;
 
     @Column(nullable = false, length = 100)
-    private String educationTitle; // 교육 제목
+    private String executiveName; // 경영진 이름
 
-    @Column(nullable = false)
-    private LocalDate educationDate; // 교육 일자 (날짜만)
+    @Column(nullable = false, length = 100)
+    private String kpiName; // KPI 이름
 
-    @Column(nullable = false)
-    private Integer participantCount; // 참석자 수
+    private String targetValue; // KPI 목표 값
 
-    @Lob
-    private String content; // 교육 내용
+    private String achievedValue; // KPI 달성 값
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -54,12 +51,12 @@ public class TcfdGovernanceEducation implements Identifiable<Long>{
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updateFromRequest(TcfdGovernanceEducationRequest request) {
-        this.educationTitle = request.getEducationTitle();
-        this.educationDate = request.getEducationDate();
-        this.participantCount = request.getParticipantCount();
-        this.content = request.getContent();
-    }
 
+    public void updateFromRequest(GovernanceExecutiveKpiRequest request) {
+        this.executiveName = request.getExecutiveName();
+        this.kpiName = request.getKpiName();
+        this.targetValue = request.getTargetValue();
+        this.achievedValue = request.getAchievedValue();
+    }
 
 }

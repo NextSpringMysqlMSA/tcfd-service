@@ -1,20 +1,20 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceExecutiveKpi;
+import com.nsmm.esg.tcfdservice.entity.GovernanceExecutiveKpi;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class TcfdGovernanceExecutiveKpiRequest {
+public class GovernanceExecutiveKpiRequest {
     private final Long id;
     private final String executiveName;
     private final String kpiName;
     private final String targetValue;
     private final String achievedValue;
 
-    public TcfdGovernanceExecutiveKpi toEntity(Long memberId) {
-        return TcfdGovernanceExecutiveKpi.builder()
+    public GovernanceExecutiveKpi toEntity(Long memberId) {
+        return GovernanceExecutiveKpi.builder()
                 .memberId(memberId)
                 .executiveName(executiveName)
                 .kpiName(kpiName)
@@ -23,8 +23,8 @@ public class TcfdGovernanceExecutiveKpiRequest {
                 .build();
     }
 
-    public static TcfdGovernanceExecutiveKpiRequest fromEntity(TcfdGovernanceExecutiveKpi entity) {
-        return TcfdGovernanceExecutiveKpiRequest.builder()
+    public static GovernanceExecutiveKpiRequest fromEntity(GovernanceExecutiveKpi entity) {
+        return GovernanceExecutiveKpiRequest.builder()
                 .id(entity.getId())
                 .executiveName(entity.getExecutiveName())
                 .kpiName(entity.getKpiName())

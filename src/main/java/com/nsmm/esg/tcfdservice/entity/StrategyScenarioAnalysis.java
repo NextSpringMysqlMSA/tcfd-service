@@ -1,6 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-import com.nsmm.esg.tcfdservice.dto.ScenarioAnalysisRequest;
+import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "scenario_analysis")
-public class ScenarioAnalysis {
+@Table(name = "strategy_scenario_analysis")
+public class StrategyScenarioAnalysis {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class ScenarioAnalysis {
 
 
     // DTO 기반 수정 메서드
-    public void updateFromDto(ScenarioAnalysisRequest request) {
+    public void updateFromDto(StrategyScenarioAnalysisRequest request) {
         this.regions = request.getRegions();
         this.longitude = request.getLongitude();
         this.latitude = request.getLatitude();
