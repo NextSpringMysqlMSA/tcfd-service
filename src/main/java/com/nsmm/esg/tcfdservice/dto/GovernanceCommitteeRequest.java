@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 public class GovernanceCommitteeRequest {
 
+    private final Long id;
     private final String committeeName;
     private final String memberName;
     private final String memberPosition;
@@ -27,6 +28,7 @@ public class GovernanceCommitteeRequest {
 
     public static GovernanceCommitteeRequest fromEntity(GovernanceCommittee entity) {
         return GovernanceCommitteeRequest.builder()
+                .id(entity.getId())
                 .committeeName(entity.getCommitteeName())
                 .memberName(entity.getMemberName())
                 .memberPosition(entity.getMemberPosition())

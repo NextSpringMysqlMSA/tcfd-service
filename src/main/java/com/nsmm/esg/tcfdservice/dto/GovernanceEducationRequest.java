@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Builder
 public class GovernanceEducationRequest {
 
+    private final Long id;
     private final String educationTitle;
     private final LocalDate educationDate;
     private final Integer participantCount;
@@ -26,6 +27,7 @@ public class GovernanceEducationRequest {
 
     public static GovernanceEducationRequest fromEntity(GovernanceEducation entity) {
         return GovernanceEducationRequest.builder()
+                .id(entity.getId())
                 .educationTitle(entity.getEducationTitle())
                 .educationDate(entity.getEducationDate())
                 .participantCount(entity.getParticipantCount())

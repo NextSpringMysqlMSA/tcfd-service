@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class GovernanceMeetingRequest {
 
+    private final Long id;
     private final String meetingName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -29,6 +30,7 @@ public class GovernanceMeetingRequest {
 
     public static GovernanceMeetingRequest fromEntity(GovernanceMeeting entity) {
         return GovernanceMeetingRequest.builder()
+                .id(entity.getId())
                 .meetingName(entity.getMeetingName())
                 .meetingDate(entity.getMeetingDate())
                 .agenda(entity.getAgenda())

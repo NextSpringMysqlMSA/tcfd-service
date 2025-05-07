@@ -1,21 +1,23 @@
 package com.nsmm.esg.tcfdservice.dto;
 
 import com.nsmm.esg.tcfdservice.entity.GoalKpi;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@Builder
 public class GoalKpiRequest {
 
-    private String indicator;
-    private String detailedIndicator;
-    private String unit;
-    private int baseYear;
-    private int goalYear;
-    private int referenceValue;
-    private int currentValue;
-    private int targetValue;
+    private final Long id;
+    private final String indicator;
+    private final String detailedIndicator;
+    private final String unit;
+    private final int baseYear;
+    private final int goalYear;
+    private final int referenceValue;
+    private final int currentValue;
+    private final int targetValue;
 
     // DTO → Entity
     public GoalKpi toEntity(Long memberId) {
@@ -34,15 +36,16 @@ public class GoalKpiRequest {
 
     // Entity → DTO
     public static GoalKpiRequest fromEntity(GoalKpi entity) {
-        GoalKpiRequest dto = new GoalKpiRequest();
-        dto.indicator = entity.getIndicator();
-        dto.detailedIndicator = entity.getDetailedIndicator();
-        dto.unit = entity.getUnit();
-        dto.baseYear = entity.getBaseYear();
-        dto.goalYear = entity.getGoalYear();
-        dto.referenceValue = entity.getReferenceValue();
-        dto.currentValue = entity.getCurrentValue();
-        dto.targetValue = entity.getTargetValue();
-        return dto;
+        return GoalKpiRequest.builder()
+                .id(entity.getId())
+                .indicator(entity.getIndicator())
+                .detailedIndicator(entity.getDetailedIndicator())
+                .unit(entity.getUnit())
+                .baseYear(entity.getBaseYear())
+                .goalYear(entity.getGoalYear())
+                .referenceValue(entity.getReferenceValue())
+                .currentValue(entity.getCurrentValue())
+                .targetValue(entity.getTargetValue())
+                .build();
     }
 }
