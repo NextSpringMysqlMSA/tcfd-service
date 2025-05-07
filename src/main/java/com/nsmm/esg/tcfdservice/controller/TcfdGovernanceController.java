@@ -44,6 +44,15 @@ public class TcfdGovernanceController {
     }
 
     /**
+     * 특정 위원회 조회 (GET)
+     */
+    @GetMapping("/committee/{id}")
+    public TcfdGovernanceCommitteeRequest getCommitteeById(@PathVariable Long id, HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return tcfdGovernanceService.getCommitteeById(memberId, id);
+    }
+
+    /**
      * 위원회 생성 (POST)
      */
     @PostMapping("/committee")

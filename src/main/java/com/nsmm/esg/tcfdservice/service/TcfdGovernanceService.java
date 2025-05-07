@@ -36,6 +36,19 @@ public class TcfdGovernanceService {
                 .toList();
     }
 
+    /*
+     * 특정 위원회 조회
+     */
+    public TcfdGovernanceCommitteeRequest getCommitteeById(Long memberId, Long committeeId) {
+        // 특정 committeeId에 해당하는 위원회 정보를 조회
+        TcfdGovernanceCommittee committee = committeeRepository.findById(committeeId)
+                .filter(c -> c.getMemberId().equals(memberId))
+                .orElseThrow(() -> new IllegalArgumentException("수정할 위원회가 존재하지 않거나 권한이 없습니다."));
+
+        // 엔티티를 요청 객체로 변환하여 반환
+        return TcfdGovernanceCommitteeRequest.fromEntity(committee);
+    }
+
     /**
      * 위원회 수정
      */
