@@ -36,7 +36,7 @@ public class GovernanceService {
                 .toList();
     }
 
-    /*
+    /**
      * 특정 위원회 조회
      */
     public GovernanceCommitteeRequest getCommitteeById(Long memberId, Long committeeId) {
@@ -90,6 +90,16 @@ public class GovernanceService {
     }
 
     /**
+     * 특정 회의 조회
+     */
+    public GovernanceMeetingRequest getMeetingById(Long memberId, Long meetingId) {
+        GovernanceMeeting meeting = meetingRepository.findById(meetingId)
+                .filter(m -> m.getMemberId().equals(memberId))
+                .orElseThrow(() -> new IllegalArgumentException("조회할 회의가 존재하지 않거나 권한이 없습니다."));
+        return GovernanceMeetingRequest.fromEntity(meeting);
+    }
+
+    /**
      * 회의 수정
      */
     @Transactional
@@ -130,6 +140,17 @@ public class GovernanceService {
     }
 
     /**
+     * 특정 경영진 KPI 조회
+     */
+    public GovernanceExecutiveKpiRequest getExecutiveKpiById(Long memberId, Long kpiId) {
+        GovernanceExecutiveKpi kpi = kpiRepository.findById(kpiId)
+                .filter(k -> k.getMemberId().equals(memberId))
+                .orElseThrow(() -> new IllegalArgumentException("조회할 KPI가 존재하지 않거나 권한이 없습니다."));
+        return GovernanceExecutiveKpiRequest.fromEntity(kpi);
+    }
+
+
+    /**
      * 경영진 KPI 수정
      */
     @Transactional
@@ -168,6 +189,17 @@ public class GovernanceService {
                 .map(GovernanceEducationRequest::fromEntity)
                 .toList();
     }
+
+    /**
+     * 특정 환경 교육 조회
+     */
+    public GovernanceEducationRequest getEducationById(Long memberId, Long educationId) {
+        GovernanceEducation education = educationRepository.findById(educationId)
+                .filter(e -> e.getMemberId().equals(memberId))
+                .orElseThrow(() -> new IllegalArgumentException("조회할 교육이 존재하지 않거나 권한이 없습니다."));
+        return GovernanceEducationRequest.fromEntity(education);
+    }
+
 
     /**
      * 환경 교육 수정

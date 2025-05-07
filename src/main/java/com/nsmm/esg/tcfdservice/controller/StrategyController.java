@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("/api/v1/tcfd/strategy")
 @RequiredArgsConstructor
 public class StrategyController {
-    private final StrategyService strategyService;
 
+    private final StrategyService strategyService;
 
     private Long extractMemberId(HttpServletRequest request) {
         String memberIdHeader = request.getHeader("X-MEMBER-ID");
@@ -23,17 +23,24 @@ public class StrategyController {
         }
         return Long.parseLong(memberIdHeader);
     }
-    //----------------------------------------------------------------------------------------------------------------
 
-    // 읽기
+    //----------------------------------------------------------------------------------------------------------------
+    // 시나리오 조회
     @GetMapping("/scenario")
     public List<StrategyScenarioAnalysisRequest> getScenarios(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return strategyService.getScenarios(memberId);
     }
-    //----------------------------------------------------------------------------------------------------------------
 
-    // 생성
+    // 리스크 개별 조회 (권한 포함 확인)
+    @GetMapping("/scenario/{id}")
+    public StrategyScenarioAnalysisRequest getScenarioById(@PathVariable Long id, HttpServletRequest request) {
+        Long memberId = extractMemberId(request);
+        return strategyService.getScenarioById(memberId, id);
+    }
+
+    //----------------------------------------------------------------------------------------------------------------
+    // 시나리오 생성
     @PostMapping("/scenario")
     public String createScenario(@RequestBody StrategyScenarioAnalysisRequest request,
                                  HttpServletRequest httpRequest) {
@@ -41,9 +48,9 @@ public class StrategyController {
         Long id = strategyService.createScenario(memberId, request);
         return "시나리오 분석 등록 완료. ID = " + id;
     }
-    //----------------------------------------------------------------------------------------------------------------
 
-    // 수정
+    //----------------------------------------------------------------------------------------------------------------
+    // 시나리오 수정
     @PutMapping("/scenario/{id}")
     public String updateScenario(@PathVariable Long id,
                                  @RequestBody StrategyScenarioAnalysisRequest request,
@@ -52,9 +59,9 @@ public class StrategyController {
         strategyService.updateScenario(memberId, id, request);
         return "시나리오 분석 수정 완료. ID = " + id;
     }
-    //----------------------------------------------------------------------------------------------------------------
 
-    // 삭제
+    //----------------------------------------------------------------------------------------------------------------
+    // 시나리오 삭제
     @DeleteMapping("/scenario/{id}")
     public String deleteScenario(@PathVariable Long id,
                                  HttpServletRequest httpRequest) {
@@ -62,17 +69,25 @@ public class StrategyController {
         strategyService.deleteScenario(memberId, id);
         return "시나리오 분석 삭제 완료. ID = " + id;
     }
-    //----------------------------------------------------------------------------------------------------------------
 
-    // 전체 조회
+    //----------------------------------------------------------------------------------------------------------------
+    // 리스크 전체 조회
     @GetMapping("/risk")
     public List<StrategyRiskIdentificationRequest> getRisks(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return strategyService.getRisks(memberId);
     }
+
     //----------------------------------------------------------------------------------------------------------------
+    // 리스크 개별 조회 (권한 포함 확인)
+    @GetMapping("/risk/{id}")
+    public StrategyRiskIdentificationRequest getRiskById(@PathVariable Long id, HttpServletRequest request) {
+        Long memberId = extractMemberId(request);
+        return strategyService.getRiskById(memberId, id);
+    }
 
-
+    //----------------------------------------------------------------------------------------------------------------
+    // 리스크 생성
     @PostMapping("/risk")
     public String createRisk(@RequestBody StrategyRiskIdentificationRequest request,
                              HttpServletRequest httpRequest) {
@@ -80,8 +95,9 @@ public class StrategyController {
         Long id = strategyService.createRisk(memberId, request);
         return "리스크 등록 완료. ID = " + id;
     }
-    //----------------------------------------------------------------------------------------------------------------
 
+    //----------------------------------------------------------------------------------------------------------------
+    // 리스크 수정
     @PutMapping("/risk/{id}")
     public String updateRisk(@PathVariable Long id,
                              @RequestBody StrategyRiskIdentificationRequest request,
@@ -90,8 +106,9 @@ public class StrategyController {
         strategyService.updateRisk(memberId, id, request);
         return "리스크 수정 완료. ID = " + id;
     }
-    //----------------------------------------------------------------------------------------------------------------
 
+    //----------------------------------------------------------------------------------------------------------------
+    // 리스크 삭제
     @DeleteMapping("/risk/{id}")
     public String deleteRisk(@PathVariable Long id,
                              HttpServletRequest httpRequest) {
@@ -99,5 +116,4 @@ public class StrategyController {
         strategyService.deleteRisk(memberId, id);
         return "리스크 삭제 완료. ID = " + id;
     }
-    //----------------------------------------------------------------------------------------------------------------
 }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -26,6 +27,16 @@ public class StrategyService {
                 .map(StrategyScenarioAnalysisRequest::fromEntity)
                 .toList();
     }
+
+    // 시나리오 분석 단건 조회
+    public StrategyScenarioAnalysisRequest getScenarioById(Long memberId, Long id) {
+        StrategyScenarioAnalysis scenario = strategyScenarioAnalysisRepository.findById(id)
+                .filter(s -> s.getMemberId().equals(memberId))
+                .orElseThrow(() -> new IllegalArgumentException("해당 시나리오가 존재하지 않거나 권한이 없습니다."));
+
+        return StrategyScenarioAnalysisRequest.fromEntity(scenario);
+    }
+
 
     // 시나리오 분석 생성 - DTO를 엔티티로 변환 후 저장하고 생성된 ID 반환
     public Long createScenario(Long memberId, StrategyScenarioAnalysisRequest request) {
@@ -60,11 +71,22 @@ public class StrategyService {
         strategyScenarioAnalysisRepository.delete(scenario);
     }
 
+    //=====================================================risk=======================================================
+
     // 리스크 식별 전체 조회 - 특정 사용자(memberId)의 리스크 목록 반환
     public List<StrategyRiskIdentificationRequest> getRisks(Long memberId) {
         return strategyRiskIdentificationRepository.findByMemberId(memberId).stream()
                 .map(StrategyRiskIdentificationRequest::fromEntity)
                 .toList();
+    }
+
+    // 리스크 부분 조회
+    public StrategyRiskIdentificationRequest getRiskById(Long memberId, Long id) {
+        StrategyRiskIdentification risk = strategyRiskIdentificationRepository.findById(id)
+                .filter(r -> r.getMemberId().equals(memberId))
+                .orElseThrow(() -> new IllegalArgumentException("해당 리스크가 존재하지 않거나 권한이 없습니다."));
+
+        return StrategyRiskIdentificationRequest.fromEntity(risk);
     }
 
     // 리스크 식별 생성 - DTO를 엔티티로 변환 후 저장하고 생성된 ID 반환

@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class StrategyScenarioAnalysisRequest {
+public class  StrategyScenarioAnalysisRequest {
 
     private final Long id;
     private final String regions;

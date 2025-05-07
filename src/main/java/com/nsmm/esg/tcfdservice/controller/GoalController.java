@@ -32,6 +32,25 @@ public class GoalController {
     }
 
     /**
+     * KPI 목표 목록 조회
+     */
+    @GetMapping("/kpi")
+    public List<GoalKpiRequest> getKpiGoals(HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return goalService.getKpiGoals(memberId);
+    }
+
+    /**
+     * 특정 KPI 목표 조회 (GET)
+     */
+    @GetMapping("/kpi/{id}")
+    public GoalKpiRequest getKpiGoalById(@PathVariable Long id, HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return goalService.getKpiGoalById(id, memberId);
+    }
+
+
+    /**
      * KPI 목표 저장
      */
     @PostMapping("/kpi")
@@ -41,14 +60,6 @@ public class GoalController {
         return "KPI 목표 저장 완료. ID = " + id;
     }
 
-    /**
-     * KPI 목표 목록 조회
-     */
-    @GetMapping("/kpi")
-    public List<GoalKpiRequest> getKpiGoals(HttpServletRequest httpRequest) {
-        Long memberId = extractMemberId(httpRequest);
-        return goalService.getKpiGoals(memberId);
-    }
 
     /**
      * KPI 목표 수정

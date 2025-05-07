@@ -32,13 +32,26 @@ public class GoalService {
     }
 
     /**
+     * 특정 KPI 목표 조회
+     */
+    public GoalKpiRequest getKpiGoalById(Long id, Long memberId) {
+        GoalKpi kpi = goalKpiRepository.findById(id)
+                .filter(g -> g.getMemberId().equals(memberId))
+                .orElseThrow(() -> new IllegalArgumentException("조회할 KPI 목표가 존재하지 않거나 권한이 없습니다."));
+        return GoalKpiRequest.fromEntity(kpi);
+    }
+
+
+    /**
      * KPI 목표 수정
      */
-    public Long updateKpiGoal(Long goalId, Long memberId, GoalKpiRequest request) {
-        GoalKpi entity = goalKpiRepository.findById(goalId)
+    public void updateKpiGoal(Long goalId, Long memberId, GoalKpiRequest request) {
+        GoalKpi goalKpi = goalKpiRepository.findById(goalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 KPI 목표가 존재하지 않습니다. ID = " + goalId));
-        entity.updateFromDto(request);
-        return goalKpiRepository.save(entity).getId();
+        if(!goalKpi.getMemberId().equals(memberId)) {
+            throw new IllegalArgumentException("해당 목표에 대한 권한이 없습니다.");
+        }
+        goalKpi.updateFromDto(request);
     }
 
     /**

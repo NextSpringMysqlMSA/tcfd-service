@@ -109,6 +109,17 @@ public class GovernanceController {
     }
 
     /**
+     * 특정 회의 조회 (GET)
+     */
+    @GetMapping("/meeting/{id}")
+    public GovernanceMeetingRequest getMeetingById(@PathVariable Long id,
+                                                   HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return governanceService.getMeetingById(memberId, id);
+    }
+
+
+    /**
      * 회의 수정 (PUT)
      */
     @PutMapping("/meeting/{id}")
@@ -141,6 +152,17 @@ public class GovernanceController {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getExecutiveKpis(memberId);
     }
+
+    /**
+     * 특정 경영진 KPI 조회 (GET)
+     */
+    @GetMapping("/executive-kpi/{id}")
+    public GovernanceExecutiveKpiRequest getExecutiveKpiById(@PathVariable Long id,
+                                                             HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return governanceService.getExecutiveKpiById(memberId, id);
+    }
+
 
     /**
      * 경영진 KPI 등록 (POST)
@@ -186,6 +208,17 @@ public class GovernanceController {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getEducations(memberId);
     }
+
+    /**
+     * 특정 환경 교육 조회 (GET)
+     */
+    @GetMapping("/education/{id}")
+    public GovernanceEducationRequest getEducationById(@PathVariable Long id,
+                                                       HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return governanceService.getEducationById(memberId, id);
+    }
+
 
     /**
      * 환경 교육 등록 (POST)
