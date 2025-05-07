@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Builder
 public class TcfdGovernanceEducationRequest {
 
+    private final Long id;
     private final String educationTitle;
     private final LocalDate educationDate;
     private final Integer participantCount;
@@ -26,6 +27,7 @@ public class TcfdGovernanceEducationRequest {
 
     public static TcfdGovernanceEducationRequest fromEntity(TcfdGovernanceEducation entity) {
         return TcfdGovernanceEducationRequest.builder()
+                .id(entity.getId())
                 .educationTitle(entity.getEducationTitle())
                 .educationDate(entity.getEducationDate())
                 .participantCount(entity.getParticipantCount())
