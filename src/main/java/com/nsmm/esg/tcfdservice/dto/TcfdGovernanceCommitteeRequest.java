@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class TcfdGovernanceCommitteeRequest {
 
+    private final Long id;
     private final String committeeName;
     private final String memberName;
     private final String memberPosition;
@@ -30,6 +31,7 @@ public class TcfdGovernanceCommitteeRequest {
 
     public static TcfdGovernanceCommitteeRequest fromEntity(TcfdGovernanceCommittee entity) {
         return TcfdGovernanceCommitteeRequest.builder()
+                .id(entity.getId())
                 .committeeName(entity.getCommitteeName())
                 .memberName(entity.getMemberName())
                 .memberPosition(entity.getMemberPosition())

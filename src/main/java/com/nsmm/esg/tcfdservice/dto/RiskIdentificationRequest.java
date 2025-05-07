@@ -8,14 +8,15 @@ import lombok.Getter;
 @Builder
 public class RiskIdentificationRequest {
 
-    private String riskType;
-    private String riskCategory;
-    private String riskCause;
-    private String time;
-    private String impact;
-    private String financialImpact;
-    private String businessModelImpact;
-    private String plans;
+    private final Long id;
+    private final String riskType;
+    private final String riskCategory;
+    private final String riskCause;
+    private final String time;
+    private final String impact;
+    private final String financialImpact;
+    private final String businessModelImpact;
+    private final String plans;
 
     public RiskIdentification toEntity(Long memberId) {
         return RiskIdentification.builder()
@@ -33,6 +34,7 @@ public class RiskIdentificationRequest {
 
     public static RiskIdentificationRequest fromEntity(RiskIdentification entity) {
         return RiskIdentificationRequest.builder()
+                .id(entity.getId())
                 .riskType(entity.getRiskType())
                 .riskCategory(entity.getRiskCategory())
                 .riskCause(entity.getRiskCause())

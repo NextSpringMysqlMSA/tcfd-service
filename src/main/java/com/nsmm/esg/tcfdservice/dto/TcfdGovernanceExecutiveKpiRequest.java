@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class TcfdGovernanceExecutiveKpiRequest {
-
+    private final Long id;
     private final String executiveName;
     private final String kpiName;
     private final String targetValue;
@@ -25,6 +25,7 @@ public class TcfdGovernanceExecutiveKpiRequest {
 
     public static TcfdGovernanceExecutiveKpiRequest fromEntity(TcfdGovernanceExecutiveKpi entity) {
         return TcfdGovernanceExecutiveKpiRequest.builder()
+                .id(entity.getId())
                 .executiveName(entity.getExecutiveName())
                 .kpiName(entity.getKpiName())
                 .targetValue(entity.getTargetValue())

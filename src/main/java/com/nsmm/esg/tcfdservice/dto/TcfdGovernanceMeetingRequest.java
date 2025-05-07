@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class TcfdGovernanceMeetingRequest {
 
+    private final Long id;
     private final String meetingName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -29,6 +30,7 @@ public class TcfdGovernanceMeetingRequest {
 
     public static TcfdGovernanceMeetingRequest fromEntity(TcfdGovernanceMeeting entity) {
         return TcfdGovernanceMeetingRequest.builder()
+                .id(entity.getId())
                 .meetingName(entity.getMeetingName())
                 .meetingDate(entity.getMeetingDate())
                 .agenda(entity.getAgenda())
