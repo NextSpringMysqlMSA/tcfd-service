@@ -1,6 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceCommitteeRequest;
+import com.nsmm.esg.tcfdservice.dto.GovernanceCommitteeRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tcfd_governance_committee")
-public class TcfdGovernanceCommittee implements Identifiable<Long> {
+@Table(name = "governance_committee")
+public class GovernanceCommittee implements Identifiable<Long> {
 
     @Override
     public Long getId() {
@@ -57,7 +57,7 @@ public class TcfdGovernanceCommittee implements Identifiable<Long> {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updateFromRequest(TcfdGovernanceCommitteeRequest request) {
+    public void updateFromRequest(GovernanceCommitteeRequest request) {
         this.committeeName = request.getCommitteeName();
         this.memberName = request.getMemberName();
         this.memberPosition = request.getMemberPosition();

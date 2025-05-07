@@ -1,6 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGoalKpiRequest;
+import com.nsmm.esg.tcfdservice.dto.GoalKpiRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tcfd_goal_kpi")
-public class TcfdGoalKpi implements Identifiable<Long> {
+@Table(name = "goal_kpi")
+public class GoalKpi implements Identifiable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,7 +65,7 @@ public class TcfdGoalKpi implements Identifiable<Long> {
         return this.id;
     }
 
-    public void updateFromRequest(TcfdGoalKpiRequest request) {
+    public void updateFromRequest(GoalKpiRequest request) {
         this.indicator = request.getIndicator();
         this.detailedIndicator = request.getDetailedIndicator();
         this.unit = request.getUnit();

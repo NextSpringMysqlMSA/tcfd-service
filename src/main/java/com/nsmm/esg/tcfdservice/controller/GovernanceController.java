@@ -1,10 +1,10 @@
 package com.nsmm.esg.tcfdservice.controller;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceCommitteeRequest;
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceEducationRequest;
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceExecutiveKpiRequest;
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceMeetingRequest;
-import com.nsmm.esg.tcfdservice.service.TcfdGovernanceService;
+import com.nsmm.esg.tcfdservice.dto.GovernanceCommitteeRequest;
+import com.nsmm.esg.tcfdservice.dto.GovernanceEducationRequest;
+import com.nsmm.esg.tcfdservice.dto.GovernanceExecutiveKpiRequest;
+import com.nsmm.esg.tcfdservice.dto.GovernanceMeetingRequest;
+import com.nsmm.esg.tcfdservice.service.GovernanceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tcfd/governance")
 @RequiredArgsConstructor
-public class TcfdGovernanceController {
+public class GovernanceController {
 
-    private final TcfdGovernanceService tcfdGovernanceService;
+    private final GovernanceService governanceService;
 
     /**
      * 공통적으로 사용하는 X-MEMBER-ID 추출 메서드
@@ -38,28 +38,28 @@ public class TcfdGovernanceController {
      * 위원회 목록 조회 (GET)
      */
     @GetMapping("/committee")
-    public List<TcfdGovernanceCommitteeRequest> getCommittees(HttpServletRequest httpRequest) {
+    public List<GovernanceCommitteeRequest> getCommittees(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        return tcfdGovernanceService.getCommittees(memberId);
+        return governanceService.getCommittees(memberId);
     }
 
     /**
      * 특정 위원회 조회 (GET)
      */
     @GetMapping("/committee/{id}")
-    public TcfdGovernanceCommitteeRequest getCommitteeById(@PathVariable Long id, HttpServletRequest httpRequest) {
+    public GovernanceCommitteeRequest getCommitteeById(@PathVariable Long id, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        return tcfdGovernanceService.getCommitteeById(memberId, id);
+        return governanceService.getCommitteeById(memberId, id);
     }
 
     /**
      * 위원회 생성 (POST)
      */
     @PostMapping("/committee")
-    public String createCommittee(@RequestBody TcfdGovernanceCommitteeRequest request,
+    public String createCommittee(@RequestBody GovernanceCommitteeRequest request,
                                   HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        Long id = tcfdGovernanceService.createCommittee(memberId, request);
+        Long id = governanceService.createCommittee(memberId, request);
         return "위원회 생성 완료. ID = " + id;
     }
 
@@ -68,10 +68,10 @@ public class TcfdGovernanceController {
      */
     @PutMapping("/committee/{id}")
     public String updateCommittee(@PathVariable Long id,
-                                  @RequestBody TcfdGovernanceCommitteeRequest request,
+                                  @RequestBody GovernanceCommitteeRequest request,
                                   HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.updateCommittee(memberId, id, request);
+        governanceService.updateCommittee(memberId, id, request);
         return "위원회 수정 완료. ID = " + id;
     }
 
@@ -82,7 +82,7 @@ public class TcfdGovernanceController {
     public String deleteCommittee(@PathVariable Long id,
                                   HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.deleteCommittee(memberId, id);
+        governanceService.deleteCommittee(memberId, id);
         return "위원회 삭제 완료. ID = " + id;
     }
 
@@ -92,19 +92,19 @@ public class TcfdGovernanceController {
      * 회의 목록 조회 (GET)
      */
     @GetMapping("/meeting")
-    public List<TcfdGovernanceMeetingRequest> getMeetings(HttpServletRequest httpRequest) {
+    public List<GovernanceMeetingRequest> getMeetings(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        return tcfdGovernanceService.getMeetings(memberId);
+        return governanceService.getMeetings(memberId);
     }
 
     /**
      * 회의 등록 (POST)
      */
     @PostMapping("/meeting")
-    public String createMeeting(@RequestBody TcfdGovernanceMeetingRequest request,
+    public String createMeeting(@RequestBody GovernanceMeetingRequest request,
                                 HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        Long id = tcfdGovernanceService.createMeeting(memberId, request);
+        Long id = governanceService.createMeeting(memberId, request);
         return "회의 등록 완료. ID = " + id;
     }
 
@@ -113,10 +113,10 @@ public class TcfdGovernanceController {
      */
     @PutMapping("/meeting/{id}")
     public String updateMeeting(@PathVariable Long id,
-                                @RequestBody TcfdGovernanceMeetingRequest request,
+                                @RequestBody GovernanceMeetingRequest request,
                                 HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.updateMeeting(memberId, id, request);
+        governanceService.updateMeeting(memberId, id, request);
         return "회의 수정 완료. ID = " + id;
     }
 
@@ -127,7 +127,7 @@ public class TcfdGovernanceController {
     public String deleteMeeting(@PathVariable Long id,
                                 HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.deleteMeeting(memberId, id);
+        governanceService.deleteMeeting(memberId, id);
         return "회의 삭제 완료. ID = " + id;
     }
 
@@ -137,19 +137,19 @@ public class TcfdGovernanceController {
      * 경영진 KPI 목록 조회 (GET)
      */
     @GetMapping("/executive-kpi")
-    public List<TcfdGovernanceExecutiveKpiRequest> getExecutiveKpis(HttpServletRequest httpRequest) {
+    public List<GovernanceExecutiveKpiRequest> getExecutiveKpis(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        return tcfdGovernanceService.getExecutiveKpis(memberId);
+        return governanceService.getExecutiveKpis(memberId);
     }
 
     /**
      * 경영진 KPI 등록 (POST)
      */
     @PostMapping("/executive-kpi")
-    public String createExecutiveKpi(@RequestBody TcfdGovernanceExecutiveKpiRequest request,
+    public String createExecutiveKpi(@RequestBody GovernanceExecutiveKpiRequest request,
                                      HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        Long id = tcfdGovernanceService.createExecutiveKpi(memberId, request);
+        Long id = governanceService.createExecutiveKpi(memberId, request);
         return "경영진 KPI 등록 완료. ID = " + id;
     }
 
@@ -158,10 +158,10 @@ public class TcfdGovernanceController {
      */
     @PutMapping("/executive-kpi/{id}")
     public String updateExecutiveKpi(@PathVariable Long id,
-                                     @RequestBody TcfdGovernanceExecutiveKpiRequest request,
+                                     @RequestBody GovernanceExecutiveKpiRequest request,
                                      HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.updateExecutiveKpi(memberId, id, request);
+        governanceService.updateExecutiveKpi(memberId, id, request);
         return "경영진 KPI 수정 완료. ID = " + id;
     }
 
@@ -172,7 +172,7 @@ public class TcfdGovernanceController {
     public String deleteExecutiveKpi(@PathVariable Long id,
                                      HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.deleteExecutiveKpi(memberId, id);
+        governanceService.deleteExecutiveKpi(memberId, id);
         return "경영진 KPI 삭제 완료. ID = " + id;
     }
 
@@ -182,19 +182,19 @@ public class TcfdGovernanceController {
      * 환경 교육 목록 조회 (GET)
      */
     @GetMapping("/education")
-    public List<TcfdGovernanceEducationRequest> getEducations(HttpServletRequest httpRequest) {
+    public List<GovernanceEducationRequest> getEducations(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        return tcfdGovernanceService.getEducations(memberId);
+        return governanceService.getEducations(memberId);
     }
 
     /**
      * 환경 교육 등록 (POST)
      */
     @PostMapping("/education")
-    public String createEducation(@RequestBody TcfdGovernanceEducationRequest request,
+    public String createEducation(@RequestBody GovernanceEducationRequest request,
                                   HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        Long id = tcfdGovernanceService.createEducation(memberId, request);
+        Long id = governanceService.createEducation(memberId, request);
         return "환경 교육 등록 완료. ID = " + id;
     }
 
@@ -203,10 +203,10 @@ public class TcfdGovernanceController {
      */
     @PutMapping("/education/{id}")
     public String updateEducation(@PathVariable Long id,
-                                  @RequestBody TcfdGovernanceEducationRequest request,
+                                  @RequestBody GovernanceEducationRequest request,
                                   HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.updateEducation(memberId, id, request);
+        governanceService.updateEducation(memberId, id, request);
         return "환경 교육 수정 완료. ID = " + id;
     }
 
@@ -217,7 +217,7 @@ public class TcfdGovernanceController {
     public String deleteEducation(@PathVariable Long id,
                                   HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        tcfdGovernanceService.deleteEducation(memberId, id);
+        governanceService.deleteEducation(memberId, id);
         return "환경 교육 삭제 완료. ID = " + id;
     }
 }

@@ -1,6 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-import com.nsmm.esg.tcfdservice.dto.RiskIdentificationRequest;
+import com.nsmm.esg.tcfdservice.dto.StrategyRiskIdentificationRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "risk_identification")
-public class RiskIdentification {
+@Table(name = "strategy_risk_identification")
+public class StrategyRiskIdentification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class RiskIdentification {
     }
 
 
-    public void updateFromDto(RiskIdentificationRequest request) {
+    public void updateFromDto(StrategyRiskIdentificationRequest request) {
         this.riskType = request.getRiskType();
         this.riskCategory = request.getRiskCategory();
         this.riskCause = request.getRiskCause();

@@ -1,12 +1,12 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.nsmm.esg.tcfdservice.entity.TcfdGoalKpi;
+import com.nsmm.esg.tcfdservice.entity.GoalKpi;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TcfdGoalKpiRequest {
+public class GoalKpiRequest {
 
     private String indicator;
     private String detailedIndicator;
@@ -18,8 +18,8 @@ public class TcfdGoalKpiRequest {
     private int targetValue;
 
     // DTO → Entity
-    public TcfdGoalKpi toEntity(Long memberId) {
-        return TcfdGoalKpi.builder()
+    public GoalKpi toEntity(Long memberId) {
+        return GoalKpi.builder()
                 .memberId(memberId)
                 .indicator(indicator)
                 .detailedIndicator(detailedIndicator)
@@ -33,8 +33,8 @@ public class TcfdGoalKpiRequest {
     }
 
     // Entity → DTO
-    public static TcfdGoalKpiRequest fromEntity(TcfdGoalKpi entity) {
-        TcfdGoalKpiRequest dto = new TcfdGoalKpiRequest();
+    public static GoalKpiRequest fromEntity(GoalKpi entity) {
+        GoalKpiRequest dto = new GoalKpiRequest();
         dto.indicator = entity.getIndicator();
         dto.detailedIndicator = entity.getDetailedIndicator();
         dto.unit = entity.getUnit();

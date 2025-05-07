@@ -1,12 +1,12 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.nsmm.esg.tcfdservice.entity.ScenarioAnalysis;
+import com.nsmm.esg.tcfdservice.entity.StrategyScenarioAnalysis;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class ScenarioAnalysisRequest {
+public class StrategyScenarioAnalysisRequest {
 
     private String regions;
     private Double longitude;
@@ -20,8 +20,8 @@ public class ScenarioAnalysisRequest {
     private String format;
     private String responseStrategy;
 
-    public ScenarioAnalysis toEntity(Long memberId) {
-        return ScenarioAnalysis.builder()
+    public StrategyScenarioAnalysis toEntity(Long memberId) {
+        return StrategyScenarioAnalysis.builder()
                 .memberId(memberId)
                 .regions(regions)
                 .longitude(longitude)
@@ -36,8 +36,8 @@ public class ScenarioAnalysisRequest {
                 .responseStrategy(responseStrategy)
                 .build();
     }
-    public static ScenarioAnalysisRequest fromEntity(ScenarioAnalysis entity) {
-        return ScenarioAnalysisRequest.builder()
+    public static StrategyScenarioAnalysisRequest fromEntity(StrategyScenarioAnalysis entity) {
+        return StrategyScenarioAnalysisRequest.builder()
                 .regions(entity.getRegions())
                 .longitude(entity.getLongitude())
                 .latitude(entity.getLatitude())

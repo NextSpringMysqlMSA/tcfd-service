@@ -1,7 +1,7 @@
 package com.nsmm.esg.tcfdservice.controller;
 
-import com.nsmm.esg.tcfdservice.dto.ScenarioAnalysisRequest;
-import com.nsmm.esg.tcfdservice.service.ScenarioAnalysisService;
+import com.nsmm.esg.tcfdservice.dto.StrategyRiskIdentificationRequest;
+import com.nsmm.esg.tcfdservice.service.StrategyRiskIdentificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tcfd/strategy")
 @RequiredArgsConstructor
-public class ScenarioAnalysisController {
+public class StrategyRiskIdentificationController {
 
-    private final ScenarioAnalysisService scenarioAnalysisService;
+    private final StrategyRiskIdentificationService strategyRiskIdentificationService;
 
     private Long extractMemberId(HttpServletRequest request) {
         String memberIdHeader = request.getHeader("X-MEMBER-ID");
@@ -24,42 +24,40 @@ public class ScenarioAnalysisController {
     }
     //----------------------------------------------------------------------------------------------------------------
 
-    // 읽기
-    @GetMapping("/scenario")
-    public List<ScenarioAnalysisRequest> getScenarios(HttpServletRequest httpRequest) {
+    // 전체 조회
+    @GetMapping("/risk")
+    public List<StrategyRiskIdentificationRequest> getRisks(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        return scenarioAnalysisService.getScenarios(memberId);
+        return strategyRiskIdentificationService.getRisks(memberId);
     }
     //----------------------------------------------------------------------------------------------------------------
 
-    // 생성
-    @PostMapping("/scenario")
-    public String createScenario(@RequestBody ScenarioAnalysisRequest request,
-                                 HttpServletRequest httpRequest) {
+
+    @PostMapping("/risk")
+    public String createRisk(@RequestBody StrategyRiskIdentificationRequest request,
+                             HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        Long id = scenarioAnalysisService.createScenario(memberId, request);
-        return "시나리오 분석 등록 완료. ID = " + id;
+        Long id = strategyRiskIdentificationService.createRisk(memberId, request);
+        return "리스크 등록 완료. ID = " + id;
     }
     //----------------------------------------------------------------------------------------------------------------
 
-    // 수정
-    @PutMapping("/scenario/{id}")
-    public String updateScenario(@PathVariable Long id,
-                                 @RequestBody ScenarioAnalysisRequest request,
-                                 HttpServletRequest httpRequest) {
+    @PutMapping("/risk/{id}")
+    public String updateRisk(@PathVariable Long id,
+                             @RequestBody StrategyRiskIdentificationRequest request,
+                             HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        scenarioAnalysisService.updateScenario(memberId, id, request);
-        return "시나리오 분석 수정 완료. ID = " + id;
+        strategyRiskIdentificationService.updateRisk(memberId, id, request);
+        return "리스크 수정 완료. ID = " + id;
     }
     //----------------------------------------------------------------------------------------------------------------
 
-    // 삭제
-    @DeleteMapping("/scenario/{id}")
-    public String deleteScenario(@PathVariable Long id,
-                                 HttpServletRequest httpRequest) {
+    @DeleteMapping("/risk/{id}")
+    public String deleteRisk(@PathVariable Long id,
+                             HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        scenarioAnalysisService.deleteScenario(memberId, id);
-        return "시나리오 분석 삭제 완료. ID = " + id;
+        strategyRiskIdentificationService.deleteRisk(memberId, id);
+        return "리스크 삭제 완료. ID = " + id;
     }
     //----------------------------------------------------------------------------------------------------------------
 }

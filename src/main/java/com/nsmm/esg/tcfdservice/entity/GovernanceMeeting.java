@@ -1,9 +1,10 @@
 package com.nsmm.esg.tcfdservice.entity;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceExecutiveKpiRequest;
+import com.nsmm.esg.tcfdservice.dto.GovernanceMeetingRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tcfd_governance_executive_kpi")
-public class TcfdGovernanceExecutiveKpi implements Identifiable<Long>{
+@Table(name = "governance_meeting")
+public class GovernanceMeeting implements Identifiable<Long>{
 
     @Override
     public Long getId() {
@@ -27,14 +28,13 @@ public class TcfdGovernanceExecutiveKpi implements Identifiable<Long>{
     private Long memberId;
 
     @Column(nullable = false, length = 100)
-    private String executiveName; // 경영진 이름
+    private String meetingName; // 회의 이름
 
-    @Column(nullable = false, length = 100)
-    private String kpiName; // KPI 이름
+    @Column(nullable = false)
+    private LocalDate meetingDate; // 회의 날짜 (추가!)
 
-    private String targetValue; // KPI 목표 값
-
-    private String achievedValue; // KPI 달성 값
+    @Lob
+    private String agenda; // 회의 안건
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -52,11 +52,12 @@ public class TcfdGovernanceExecutiveKpi implements Identifiable<Long>{
     }
 
 
-    public void updateFromRequest(TcfdGovernanceExecutiveKpiRequest request) {
-        this.executiveName = request.getExecutiveName();
-        this.kpiName = request.getKpiName();
-        this.targetValue = request.getTargetValue();
-        this.achievedValue = request.getAchievedValue();
+    public void updateFromRequest(GovernanceMeetingRequest request) {
+        this.meetingName = request.getMeetingName();
+        this.meetingDate = request.getMeetingDate();
+        this.agenda = request.getAgenda();
     }
+
+
 
 }

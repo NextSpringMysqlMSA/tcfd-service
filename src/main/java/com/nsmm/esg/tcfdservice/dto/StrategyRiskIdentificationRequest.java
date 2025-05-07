@@ -1,12 +1,12 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.nsmm.esg.tcfdservice.entity.RiskIdentification;
+import com.nsmm.esg.tcfdservice.entity.StrategyRiskIdentification;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class RiskIdentificationRequest {
+public class StrategyRiskIdentificationRequest {
 
     private String riskType;
     private String riskCategory;
@@ -17,8 +17,8 @@ public class RiskIdentificationRequest {
     private String businessModelImpact;
     private String plans;
 
-    public RiskIdentification toEntity(Long memberId) {
-        return RiskIdentification.builder()
+    public StrategyRiskIdentification toEntity(Long memberId) {
+        return StrategyRiskIdentification.builder()
                 .memberId(memberId)
                 .riskType(riskType)
                 .riskCategory(riskCategory)
@@ -31,8 +31,8 @@ public class RiskIdentificationRequest {
                 .build();
     }
 
-    public static RiskIdentificationRequest fromEntity(RiskIdentification entity) {
-        return RiskIdentificationRequest.builder()
+    public static StrategyRiskIdentificationRequest fromEntity(StrategyRiskIdentification entity) {
+        return StrategyRiskIdentificationRequest.builder()
                 .riskType(entity.getRiskType())
                 .riskCategory(entity.getRiskCategory())
                 .riskCause(entity.getRiskCause())

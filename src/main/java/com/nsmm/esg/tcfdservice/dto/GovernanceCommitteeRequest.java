@@ -1,15 +1,12 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nsmm.esg.tcfdservice.entity.*;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 @Builder
-public class TcfdGovernanceCommitteeRequest {
+public class GovernanceCommitteeRequest {
 
     private final String committeeName;
     private final String memberName;
@@ -17,8 +14,8 @@ public class TcfdGovernanceCommitteeRequest {
     private final String memberAffiliation;
     private final String climateResponsibility;
 
-    public TcfdGovernanceCommittee toEntity(Long memberId) {
-        return TcfdGovernanceCommittee.builder()
+    public GovernanceCommittee toEntity(Long memberId) {
+        return GovernanceCommittee.builder()
                 .memberId(memberId)
                 .committeeName(committeeName)
                 .memberName(memberName)
@@ -28,8 +25,8 @@ public class TcfdGovernanceCommitteeRequest {
                 .build();
     }
 
-    public static TcfdGovernanceCommitteeRequest fromEntity(TcfdGovernanceCommittee entity) {
-        return TcfdGovernanceCommitteeRequest.builder()
+    public static GovernanceCommitteeRequest fromEntity(GovernanceCommittee entity) {
+        return GovernanceCommitteeRequest.builder()
                 .committeeName(entity.getCommitteeName())
                 .memberName(entity.getMemberName())
                 .memberPosition(entity.getMemberPosition())

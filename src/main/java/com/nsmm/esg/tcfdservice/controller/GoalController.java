@@ -1,7 +1,7 @@
 package com.nsmm.esg.tcfdservice.controller;
 
-import com.nsmm.esg.tcfdservice.dto.TcfdGoalKpiRequest;
-import com.nsmm.esg.tcfdservice.service.TcfdGoalService;
+import com.nsmm.esg.tcfdservice.dto.GoalKpiRequest;
+import com.nsmm.esg.tcfdservice.service.GoalService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/tcfd/goal")
-public class TcfdGoalController {
+public class GoalController {
 
-    private final TcfdGoalService tcfdGoalService;
+    private final GoalService goalService;
 
     /**
      * 공통적으로 사용하는 X-MEMBER-ID 추출 메서드
@@ -35,9 +35,9 @@ public class TcfdGoalController {
      * KPI 목표 저장
      */
     @PostMapping("/KPIGoal")
-    public String saveKpiGoal(@RequestBody TcfdGoalKpiRequest request, HttpServletRequest httpRequest) {
+    public String saveKpiGoal(@RequestBody GoalKpiRequest request, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        Long id = tcfdGoalService.saveKpiGoal(memberId, request);
+        Long id = goalService.saveKpiGoal(memberId, request);
         return "KPI 목표 저장 완료. ID = " + id;
     }
 
@@ -45,8 +45,8 @@ public class TcfdGoalController {
      * KPI 목표 목록 조회
      */
     @GetMapping("/KPIGoal")
-    public List<TcfdGoalKpiRequest> getKpiGoals(HttpServletRequest httpRequest) {
+    public List<GoalKpiRequest> getKpiGoals(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        return tcfdGoalService.getKpiGoals(memberId);
+        return goalService.getKpiGoals(memberId);
     }
 }
