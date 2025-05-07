@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class TcfdGovernanceCommitteeRequest {
+public class GovernanceCommitteeRequest {
 
     private final Long id;
     private final String committeeName;
@@ -18,8 +18,8 @@ public class TcfdGovernanceCommitteeRequest {
     private final String memberAffiliation;
     private final String climateResponsibility;
 
-    public TcfdGovernanceCommittee toEntity(Long memberId) {
-        return TcfdGovernanceCommittee.builder()
+    public GovernanceCommittee toEntity(Long memberId) {
+        return GovernanceCommittee.builder()
                 .memberId(memberId)
                 .committeeName(committeeName)
                 .memberName(memberName)
@@ -29,8 +29,8 @@ public class TcfdGovernanceCommitteeRequest {
                 .build();
     }
 
-    public static TcfdGovernanceCommitteeRequest fromEntity(TcfdGovernanceCommittee entity) {
-        return TcfdGovernanceCommitteeRequest.builder()
+    public static GovernanceCommitteeRequest fromEntity(GovernanceCommittee entity) {
+        return GovernanceCommitteeRequest.builder()
                 .id(entity.getId())
                 .committeeName(entity.getCommitteeName())
                 .memberName(entity.getMemberName())

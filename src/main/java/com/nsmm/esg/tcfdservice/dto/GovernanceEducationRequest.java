@@ -1,13 +1,13 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceEducation;
+import com.nsmm.esg.tcfdservice.entity.GovernanceEducation;
 import lombok.Builder;
 import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
 @Builder
-public class TcfdGovernanceEducationRequest {
+public class GovernanceEducationRequest {
 
     private final Long id;
     private final String educationTitle;
@@ -15,8 +15,8 @@ public class TcfdGovernanceEducationRequest {
     private final Integer participantCount;
     private final String content;
 
-    public TcfdGovernanceEducation toEntity(Long memberId) {
-        return TcfdGovernanceEducation.builder()
+    public GovernanceEducation toEntity(Long memberId) {
+        return GovernanceEducation.builder()
                 .memberId(memberId)
                 .educationTitle(educationTitle)
                 .educationDate(educationDate)
@@ -25,8 +25,8 @@ public class TcfdGovernanceEducationRequest {
                 .build();
     }
 
-    public static TcfdGovernanceEducationRequest fromEntity(TcfdGovernanceEducation entity) {
-        return TcfdGovernanceEducationRequest.builder()
+    public static GovernanceEducationRequest fromEntity(GovernanceEducation entity) {
+        return GovernanceEducationRequest.builder()
                 .id(entity.getId())
                 .educationTitle(entity.getEducationTitle())
                 .educationDate(entity.getEducationDate())

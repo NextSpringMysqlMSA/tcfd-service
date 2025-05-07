@@ -1,7 +1,7 @@
 package com.nsmm.esg.tcfdservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceMeeting;
+import com.nsmm.esg.tcfdservice.entity.GovernanceMeeting;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class TcfdGovernanceMeetingRequest {
+public class GovernanceMeetingRequest {
 
     private final Long id;
     private final String meetingName;
@@ -19,8 +19,8 @@ public class TcfdGovernanceMeetingRequest {
 
     private final String agenda;
 
-    public TcfdGovernanceMeeting toEntity(Long memberId) {
-        return TcfdGovernanceMeeting.builder()
+    public GovernanceMeeting toEntity(Long memberId) {
+        return com.nsmm.esg.tcfdservice.entity.GovernanceMeeting.builder()
                 .memberId(memberId)
                 .meetingName(meetingName)
                 .meetingDate(meetingDate)
@@ -28,8 +28,8 @@ public class TcfdGovernanceMeetingRequest {
                 .build();
     }
 
-    public static TcfdGovernanceMeetingRequest fromEntity(TcfdGovernanceMeeting entity) {
-        return TcfdGovernanceMeetingRequest.builder()
+    public static GovernanceMeetingRequest fromEntity(GovernanceMeeting entity) {
+        return GovernanceMeetingRequest.builder()
                 .id(entity.getId())
                 .meetingName(entity.getMeetingName())
                 .meetingDate(entity.getMeetingDate())

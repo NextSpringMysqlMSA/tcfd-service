@@ -13,48 +13,48 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TcfdGovernanceService {
+public class GovernanceService {
 
-    private final TcfdGovernanceCommitteeRepository committeeRepository;
-    private final TcfdGovernanceMeetingRepository meetingRepository;
-    private final TcfdGovernanceExecutiveKpiRepository kpiRepository;
-    private final TcfdGovernanceEducationRepository educationRepository;
+    private final GovernanceCommitteeRepository committeeRepository;
+    private final GovernanceMeetingRepository meetingRepository;
+    private final GovernanceExecutiveKpiRepository kpiRepository;
+    private final GovernanceEducationRepository educationRepository;
 
     /**
      * 위원회 생성
      */
-    public Long createCommittee(Long memberId, TcfdGovernanceCommitteeRequest request) {
+    public Long createCommittee(Long memberId, GovernanceCommitteeRequest request) {
         return saveEntityAndReturnId(request.toEntity(memberId), committeeRepository);
     }
 
     /**
      * 위원회 목록 조회
      */
-    public List<TcfdGovernanceCommitteeRequest> getCommittees(Long memberId) {
+    public List<GovernanceCommitteeRequest> getCommittees(Long memberId) {
         return committeeRepository.findByMemberId(memberId).stream()
-                .map(TcfdGovernanceCommitteeRequest::fromEntity)
+                .map(GovernanceCommitteeRequest::fromEntity)
                 .toList();
     }
 
     /*
      * 특정 위원회 조회
      */
-    public TcfdGovernanceCommitteeRequest getCommitteeById(Long memberId, Long committeeId) {
+    public GovernanceCommitteeRequest getCommitteeById(Long memberId, Long committeeId) {
         // 특정 committeeId에 해당하는 위원회 정보를 조회
-        TcfdGovernanceCommittee committee = committeeRepository.findById(committeeId)
+        GovernanceCommittee committee = committeeRepository.findById(committeeId)
                 .filter(c -> c.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("수정할 위원회가 존재하지 않거나 권한이 없습니다."));
 
         // 엔티티를 요청 객체로 변환하여 반환
-        return TcfdGovernanceCommitteeRequest.fromEntity(committee);
+        return GovernanceCommitteeRequest.fromEntity(committee);
     }
 
     /**
      * 위원회 수정
      */
     @Transactional
-    public void updateCommittee(Long memberId, Long id, TcfdGovernanceCommitteeRequest request) {
-        TcfdGovernanceCommittee committee = committeeRepository.findById(id)
+    public void updateCommittee(Long memberId, Long id, GovernanceCommitteeRequest request) {
+        GovernanceCommittee committee = committeeRepository.findById(id)
                 .filter(c -> c.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("수정할 위원회가 존재하지 않거나 권한이 없습니다."));
 
@@ -65,7 +65,7 @@ public class TcfdGovernanceService {
      * 위원회 삭제
      */
     public void deleteCommittee(Long memberId, Long id) {
-        TcfdGovernanceCommittee committee = committeeRepository.findById(id)
+        GovernanceCommittee committee = committeeRepository.findById(id)
                 .filter(c -> c.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("삭제할 위원회가 존재하지 않거나 권한이 없습니다."));
 
@@ -76,16 +76,16 @@ public class TcfdGovernanceService {
     /**
      * 회의 생성
      */
-    public Long createMeeting(Long memberId, TcfdGovernanceMeetingRequest request) {
+    public Long createMeeting(Long memberId, GovernanceMeetingRequest request) {
         return saveEntityAndReturnId(request.toEntity(memberId), meetingRepository);
     }
 
     /**
      * 회의 목록 조회
      */
-    public List<TcfdGovernanceMeetingRequest> getMeetings(Long memberId) {
+    public List<GovernanceMeetingRequest> getMeetings(Long memberId) {
         return meetingRepository.findByMemberId(memberId).stream()
-                .map(TcfdGovernanceMeetingRequest::fromEntity)
+                .map(GovernanceMeetingRequest::fromEntity)
                 .toList();
     }
 
@@ -93,8 +93,8 @@ public class TcfdGovernanceService {
      * 회의 수정
      */
     @Transactional
-    public void updateMeeting(Long memberId, Long id, TcfdGovernanceMeetingRequest request) {
-        TcfdGovernanceMeeting meeting = meetingRepository.findById(id)
+    public void updateMeeting(Long memberId, Long id, GovernanceMeetingRequest request) {
+        GovernanceMeeting meeting = meetingRepository.findById(id)
                 .filter(m -> m.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("수정할 회의가 존재하지 않거나 권한이 없습니다."));
 
@@ -105,7 +105,7 @@ public class TcfdGovernanceService {
      * 회의 삭제
      */
     public void deleteMeeting(Long memberId, Long id) {
-        TcfdGovernanceMeeting meeting = meetingRepository.findById(id)
+        GovernanceMeeting meeting = meetingRepository.findById(id)
                 .filter(m -> m.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("삭제할 회의가 존재하지 않거나 권한이 없습니다."));
 
@@ -116,16 +116,16 @@ public class TcfdGovernanceService {
     /**
      * 경영진 KPI 생성
      */
-    public Long createExecutiveKpi(Long memberId, TcfdGovernanceExecutiveKpiRequest request) {
+    public Long createExecutiveKpi(Long memberId, GovernanceExecutiveKpiRequest request) {
         return saveEntityAndReturnId(request.toEntity(memberId), kpiRepository);
     }
 
     /**
      * 경영진 KPI 목록 조회
      */
-    public List<TcfdGovernanceExecutiveKpiRequest> getExecutiveKpis(Long memberId) {
+    public List<GovernanceExecutiveKpiRequest> getExecutiveKpis(Long memberId) {
         return kpiRepository.findByMemberId(memberId).stream()
-                .map(TcfdGovernanceExecutiveKpiRequest::fromEntity)
+                .map(GovernanceExecutiveKpiRequest::fromEntity)
                 .toList();
     }
 
@@ -133,8 +133,8 @@ public class TcfdGovernanceService {
      * 경영진 KPI 수정
      */
     @Transactional
-    public void updateExecutiveKpi(Long memberId, Long id, TcfdGovernanceExecutiveKpiRequest request) {
-        TcfdGovernanceExecutiveKpi kpi = kpiRepository.findById(id)
+    public void updateExecutiveKpi(Long memberId, Long id, GovernanceExecutiveKpiRequest request) {
+        GovernanceExecutiveKpi kpi = kpiRepository.findById(id)
                 .filter(k -> k.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("수정할 KPI가 존재하지 않거나 권한이 없습니다."));
 
@@ -145,7 +145,7 @@ public class TcfdGovernanceService {
      * 경영진 KPI 삭제
      */
     public void deleteExecutiveKpi(Long memberId, Long id) {
-        TcfdGovernanceExecutiveKpi kpi = kpiRepository.findById(id)
+        GovernanceExecutiveKpi kpi = kpiRepository.findById(id)
                 .filter(k -> k.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("삭제할 KPI가 존재하지 않거나 권한이 없습니다."));
 
@@ -156,16 +156,16 @@ public class TcfdGovernanceService {
     /**
      * 환경 교육 생성
      */
-    public Long createEducation(Long memberId, TcfdGovernanceEducationRequest request) {
+    public Long createEducation(Long memberId, GovernanceEducationRequest request) {
         return saveEntityAndReturnId(request.toEntity(memberId), educationRepository);
     }
 
     /**
      * 환경 교육 목록 조회
      */
-    public List<TcfdGovernanceEducationRequest> getEducations(Long memberId) {
+    public List<GovernanceEducationRequest> getEducations(Long memberId) {
         return educationRepository.findByMemberId(memberId).stream()
-                .map(TcfdGovernanceEducationRequest::fromEntity)
+                .map(GovernanceEducationRequest::fromEntity)
                 .toList();
     }
 
@@ -173,8 +173,8 @@ public class TcfdGovernanceService {
      * 환경 교육 수정
      */
     @Transactional
-    public void updateEducation(Long memberId, Long id, TcfdGovernanceEducationRequest request) {
-        TcfdGovernanceEducation education = educationRepository.findById(id)
+    public void updateEducation(Long memberId, Long id, GovernanceEducationRequest request) {
+        GovernanceEducation education = educationRepository.findById(id)
                 .filter(e -> e.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("수정할 교육이 존재하지 않거나 권한이 없습니다."));
 
@@ -185,7 +185,7 @@ public class TcfdGovernanceService {
      * 환경 교육 삭제
      */
     public void deleteEducation(Long memberId, Long id) {
-        TcfdGovernanceEducation education = educationRepository.findById(id)
+        GovernanceEducation education = educationRepository.findById(id)
                 .filter(e -> e.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("삭제할 교육이 존재하지 않거나 권한이 없습니다."));
 
