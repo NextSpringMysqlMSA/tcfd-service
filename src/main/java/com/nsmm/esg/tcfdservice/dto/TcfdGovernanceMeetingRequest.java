@@ -1,14 +1,39 @@
 package com.nsmm.esg.tcfdservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nsmm.esg.tcfdservice.entity.TcfdGovernanceMeeting;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Getter
+@Builder
 public class TcfdGovernanceMeetingRequest {
 
-    private Long memberId;          // 사용자 ID
-    private String meetingName;     // 회의 제목
-    private LocalDate meetingDate;  // 회의 날짜 (yyyy-MM-dd 형식으로 요청)
-    private String agenda;          // 주요 안건 및 의결 내용
+    private final Long id;
+    private final String meetingName;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private final LocalDate meetingDate;
+
+    private final String agenda;
+
+    public TcfdGovernanceMeeting toEntity(Long memberId) {
+        return TcfdGovernanceMeeting.builder()
+                .memberId(memberId)
+                .meetingName(meetingName)
+                .meetingDate(meetingDate)
+                .agenda(agenda)
+                .build();
+    }
+
+    public static TcfdGovernanceMeetingRequest fromEntity(TcfdGovernanceMeeting entity) {
+        return TcfdGovernanceMeetingRequest.builder()
+                .id(entity.getId())
+                .meetingName(entity.getMeetingName())
+                .meetingDate(entity.getMeetingDate())
+                .agenda(entity.getAgenda())
+                .build();
+    }
 }

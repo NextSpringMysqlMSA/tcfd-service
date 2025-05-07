@@ -1,6 +1,6 @@
-// src/main/java/com/nsmm/esg.tcfdservice.entity.TcfdGovernanceCommittee.java
 package com.nsmm.esg.tcfdservice.entity;
 
+import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceCommitteeRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +12,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tcfd_governance_committee")
-public class TcfdGovernanceCommittee {
+public class TcfdGovernanceCommittee implements Identifiable<Long> {
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +41,29 @@ public class TcfdGovernanceCommittee {
     @Lob
     private String climateResponsibility; // 기후 관련 역할 및 책임 설명
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
+
     @PrePersist
-    protected void prePersist() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateFromRequest(TcfdGovernanceCommitteeRequest request) {
+        this.committeeName = request.getCommitteeName();
+        this.memberName = request.getMemberName();
+        this.memberPosition = request.getMemberPosition();
+        this.memberAffiliation = request.getMemberAffiliation();
+        this.climateResponsibility = request.getClimateResponsibility();
+    }
+
 }
+

@@ -1,5 +1,6 @@
 package com.nsmm.esg.tcfdservice.entity;
 
+import com.nsmm.esg.tcfdservice.dto.TcfdGovernanceExecutiveKpiRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tcfd_governance_executive_kpi")
-public class TcfdGovernanceExecutiveKpi {
+public class TcfdGovernanceExecutiveKpi implements Identifiable<Long>{
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +36,27 @@ public class TcfdGovernanceExecutiveKpi {
 
     private String achievedValue; // KPI 달성 값
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     @PrePersist
-    protected void prePersist() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+
+    public void updateFromRequest(TcfdGovernanceExecutiveKpiRequest request) {
+        this.executiveName = request.getExecutiveName();
+        this.kpiName = request.getKpiName();
+        this.targetValue = request.getTargetValue();
+        this.achievedValue = request.getAchievedValue();
+    }
+
 }

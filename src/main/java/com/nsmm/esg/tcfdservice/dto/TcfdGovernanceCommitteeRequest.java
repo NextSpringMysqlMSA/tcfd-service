@@ -1,14 +1,42 @@
 package com.nsmm.esg.tcfdservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nsmm.esg.tcfdservice.entity.*;
+import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
+@Builder
 public class TcfdGovernanceCommitteeRequest {
 
-    private Long memberId;              // 사용자 ID
-    private String committeeName;       // 위원회 이름
-    private String memberName;           // 구성원 이름
-    private String memberPosition;       // 구성원 직책
-    private String memberAffiliation;    // 구성원 소속
-    private String climateResponsibility; // 기후 관련 역할 및 책임
+    private final Long id;
+    private final String committeeName;
+    private final String memberName;
+    private final String memberPosition;
+    private final String memberAffiliation;
+    private final String climateResponsibility;
+
+    public TcfdGovernanceCommittee toEntity(Long memberId) {
+        return TcfdGovernanceCommittee.builder()
+                .memberId(memberId)
+                .committeeName(committeeName)
+                .memberName(memberName)
+                .memberPosition(memberPosition)
+                .memberAffiliation(memberAffiliation)
+                .climateResponsibility(climateResponsibility)
+                .build();
+    }
+
+    public static TcfdGovernanceCommitteeRequest fromEntity(TcfdGovernanceCommittee entity) {
+        return TcfdGovernanceCommitteeRequest.builder()
+                .id(entity.getId()) // 🔹id 포함
+                .committeeName(entity.getCommitteeName())
+                .memberName(entity.getMemberName())
+                .memberPosition(entity.getMemberPosition())
+                .memberAffiliation(entity.getMemberAffiliation())
+                .climateResponsibility(entity.getClimateResponsibility())
+                .build();
+    }
 }
