@@ -35,9 +35,9 @@ public class GoalController {
      * KPI 목표 저장
      */
     @PostMapping("/kpi")
-    public String saveKpiGoal(@RequestBody GoalKpiRequest request, HttpServletRequest httpRequest) {
+    public String createKpiGoal(@RequestBody GoalKpiRequest request, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
-        Long id = goalService.saveKpiGoal(memberId, request);
+        Long id = goalService.createKpiGoal(memberId, request);
         return "KPI 목표 저장 완료. ID = " + id;
     }
 
@@ -48,5 +48,25 @@ public class GoalController {
     public List<GoalKpiRequest> getKpiGoals(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return goalService.getKpiGoals(memberId);
+    }
+
+    /**
+     * KPI 목표 수정
+     */
+    @PutMapping("/kpi/{id}")
+    public String updateKpiGoal(@PathVariable Long id, @RequestBody GoalKpiRequest request, HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        goalService.updateKpiGoal(id, memberId, request);
+        return "KPI 목표 수정 완료. ID = " + id;
+    }
+
+    /**
+     * KPI 목표 삭제
+     */
+    @DeleteMapping("/kpi/{id}")
+    public String deleteKpiGoal(@PathVariable Long id, HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        goalService.deleteKpiGoal(id, memberId);
+        return "KPI 목표 삭제 완료. ID = " + id;
     }
 }

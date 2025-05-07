@@ -65,7 +65,7 @@ public class GoalKpi implements Identifiable<Long> {
         return this.id;
     }
 
-    public void updateFromRequest(GoalKpiRequest request) {
+    public void updateFromDto(GoalKpiRequest request) {
         this.indicator = request.getIndicator();
         this.detailedIndicator = request.getDetailedIndicator();
         this.unit = request.getUnit();
