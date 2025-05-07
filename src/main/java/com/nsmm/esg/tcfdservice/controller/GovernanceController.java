@@ -19,7 +19,7 @@ public class GovernanceController {
     private final GovernanceService governanceService;
 
     /**
-     * 공통적으로 사용하는 X-MEMBER-ID 추출 메서드
+     * 공통적으로 사용하는 X-MEMBER-ID 추출 메서드....
      * - 인증된 사용자 식별을 위해 사용됨
      * @param request HttpServletRequest 객체
      * @return Long 타입의 회원 ID
