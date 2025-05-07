@@ -22,7 +22,7 @@ public class GoalController {
     private Long extractMemberId(HttpServletRequest request) {
         String memberIdHeader = request.getHeader("X-MEMBER-ID");
 
-        // ✅ 헤더가 없으면 기본값 1L 반환
+        // 헤더가 없으면 기본값 1L 반환
         if (memberIdHeader == null || memberIdHeader.isBlank()) {
             System.out.println("⚠️ X-MEMBER-ID 누락 → 기본값 1L 사용");
             return 1L;
@@ -34,7 +34,7 @@ public class GoalController {
     /**
      * KPI 목표 저장
      */
-    @PostMapping("/KPIGoal")
+    @PostMapping("/kpi")
     public String saveKpiGoal(@RequestBody GoalKpiRequest request, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         Long id = goalService.saveKpiGoal(memberId, request);
@@ -44,7 +44,7 @@ public class GoalController {
     /**
      * KPI 목표 목록 조회
      */
-    @GetMapping("/KPIGoal")
+    @GetMapping("/kpi")
     public List<GoalKpiRequest> getKpiGoals(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return goalService.getKpiGoals(memberId);
