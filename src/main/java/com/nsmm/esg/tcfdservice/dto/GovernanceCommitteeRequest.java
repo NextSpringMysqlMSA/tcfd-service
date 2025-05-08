@@ -1,11 +1,8 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nsmm.esg.tcfdservice.entity.*;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 @Builder

@@ -1,7 +1,6 @@
 package com.nsmm.esg.tcfdservice.dto;
 
 import com.nsmm.esg.tcfdservice.entity.GoalKpi;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
