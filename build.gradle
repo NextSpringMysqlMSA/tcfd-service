@@ -24,7 +24,7 @@ repositories {
 }
 
 ext {
-	set('springCloudVersion', "2023.0.2") // 기존 코드 기준 유지
+	set('springCloudVersion', "2023.0.2")
 }
 dependencies {
 	// 중복 제거하고 이 하나만 남겨두세요
