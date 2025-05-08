@@ -6,20 +6,21 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class  StrategyScenarioAnalysisRequest {
+public class StrategyScenarioAnalysisRequest {
 
     private final Long id;
+
     private final String regions;
     private final Double longitude;
     private final Double latitude;
-    private final String warming;
+    private final String assetType;       // 변경: warming → assetType
     private final String industry;
     private final String scenario;
     private final Integer baseYear;
     private final String climate;
-    private final Double damage;
-    private final String format;
-    private final String responseStrategy;
+    private final Double assetValue;
+    private final Double estimatedDamage;
+
 
     public StrategyScenarioAnalysis toEntity(Long memberId) {
         return StrategyScenarioAnalysis.builder()
@@ -27,32 +28,28 @@ public class  StrategyScenarioAnalysisRequest {
                 .regions(regions)
                 .longitude(longitude)
                 .latitude(latitude)
-                .warming(warming)
+                .assetType(assetType)
                 .industry(industry)
                 .scenario(scenario)
                 .baseYear(baseYear)
                 .climate(climate)
-                .damage(damage)
-                .format(format)
-                .responseStrategy(responseStrategy)
-                .build();
+                .assetValue(assetValue)
+                .build(); // 피해액은 백엔드 계산 후 setDamage()로 따로 처리
     }
+
     public static StrategyScenarioAnalysisRequest fromEntity(StrategyScenarioAnalysis entity) {
         return StrategyScenarioAnalysisRequest.builder()
                 .id(entity.getId())
                 .regions(entity.getRegions())
                 .longitude(entity.getLongitude())
                 .latitude(entity.getLatitude())
-                .warming(entity.getWarming())
+                .assetType(entity.getAssetType())
                 .industry(entity.getIndustry())
                 .scenario(entity.getScenario())
                 .baseYear(entity.getBaseYear())
                 .climate(entity.getClimate())
-                .damage(entity.getDamage())
-                .format(entity.getFormat())
-                .responseStrategy(entity.getResponseStrategy())
-                .build();
+                .assetValue(entity.getAssetValue())
+                .estimatedDamage(entity.getEstimatedDamage())
+                .build(); // estimatedDamage는 응답용 DTO로 따로 정의할 수 있음
     }
-
-
 }
