@@ -51,7 +51,7 @@ public class GoalController {
 
 
     /**
-     * KPI 목표 저장
+     * KPI 목표 저장......
      */
     @PostMapping("/kpi")
     public String createKpiGoal(@RequestBody GoalKpiRequest request, HttpServletRequest httpRequest) {
