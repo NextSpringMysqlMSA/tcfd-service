@@ -49,7 +49,6 @@ public class GoalController {
         return goalService.getKpiGoalById(id, memberId);
     }
 
-
     /**
      * KPI 목표 저장......
      */
