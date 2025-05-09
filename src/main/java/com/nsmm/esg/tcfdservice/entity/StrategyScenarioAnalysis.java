@@ -32,7 +32,7 @@ public class StrategyScenarioAnalysis {
     @Column(nullable = false)
     private Double assetValue;           // 자산 가치
 
-    private Double estimatedDamage;               // 백엔드에서 계산되는 예상 피해액
+    private Long estimatedDamage;               // 백엔드에서 계산되는 예상 피해액
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -63,7 +63,7 @@ public class StrategyScenarioAnalysis {
         // damage는 계산 후 set
     }
 
-    public void setDamage(double damage) {
+    public void setDamage(Long damage) {
         this.estimatedDamage = damage;
     }
 }

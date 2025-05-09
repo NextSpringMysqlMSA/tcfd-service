@@ -19,7 +19,7 @@ public class StrategyScenarioAnalysisRequest {
     private final Integer baseYear;
     private final String climate;
     private final Double assetValue;
-    private final Double estimatedDamage;
+    private final Long estimatedDamage;
 
 
     public StrategyScenarioAnalysis toEntity(Long memberId) {
