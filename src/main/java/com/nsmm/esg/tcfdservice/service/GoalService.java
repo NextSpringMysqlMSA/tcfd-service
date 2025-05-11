@@ -1,6 +1,7 @@
 package com.nsmm.esg.tcfdservice.service;
 
 import com.nsmm.esg.tcfdservice.dto.GoalKpiRequest;
+import com.nsmm.esg.tcfdservice.dto.GoalKpiResponse;
 import com.nsmm.esg.tcfdservice.entity.GoalKpi;
 import com.nsmm.esg.tcfdservice.repository.GoalKpiRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +26,20 @@ public class GoalService {
     /**
      * KPI 목표 목록 조회
      */
-    public List<GoalKpiRequest> getKpiGoals(Long memberId) {
+    public List<GoalKpiResponse> getKpiGoals(Long memberId) {
         return goalKpiRepository.findByMemberId(memberId).stream()
-                .map(GoalKpiRequest::fromEntity)
+                .map(GoalKpiResponse::fromEntity)
                 .toList();
     }
 
     /**
      * 특정 KPI 목표 조회
      */
-    public GoalKpiRequest getKpiGoalById(Long id, Long memberId) {
+    public GoalKpiResponse getKpiGoalById(Long id, Long memberId) {
         GoalKpi kpi = goalKpiRepository.findById(id)
                 .filter(g -> g.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("조회할 KPI 목표가 존재하지 않거나 권한이 없습니다."));
-        return GoalKpiRequest.fromEntity(kpi);
+        return GoalKpiResponse.fromEntity(kpi);
     }
 
 

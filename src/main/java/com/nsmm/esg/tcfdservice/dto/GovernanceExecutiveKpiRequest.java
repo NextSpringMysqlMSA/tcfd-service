@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class GovernanceExecutiveKpiRequest {
-    private final Long id;
+
     private final String executiveName;
     private final String kpiName;
     private final String targetValue;
@@ -20,16 +20,6 @@ public class GovernanceExecutiveKpiRequest {
                 .kpiName(kpiName)
                 .targetValue(targetValue)
                 .achievedValue(achievedValue)
-                .build();
-    }
-
-    public static GovernanceExecutiveKpiRequest fromEntity(GovernanceExecutiveKpi entity) {
-        return GovernanceExecutiveKpiRequest.builder()
-                .id(entity.getId())
-                .executiveName(entity.getExecutiveName())
-                .kpiName(entity.getKpiName())
-                .targetValue(entity.getTargetValue())
-                .achievedValue(entity.getAchievedValue())
                 .build();
     }
 }

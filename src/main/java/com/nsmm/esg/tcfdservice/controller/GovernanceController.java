@@ -1,9 +1,6 @@
 package com.nsmm.esg.tcfdservice.controller;
 
-import com.nsmm.esg.tcfdservice.dto.GovernanceCommitteeRequest;
-import com.nsmm.esg.tcfdservice.dto.GovernanceEducationRequest;
-import com.nsmm.esg.tcfdservice.dto.GovernanceExecutiveKpiRequest;
-import com.nsmm.esg.tcfdservice.dto.GovernanceMeetingRequest;
+import com.nsmm.esg.tcfdservice.dto.*;
 import com.nsmm.esg.tcfdservice.service.GovernanceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +35,7 @@ public class GovernanceController {
      * 위원회 목록 조회 (GET)
      */
     @GetMapping("/committee")
-    public List<GovernanceCommitteeRequest> getCommittees(HttpServletRequest httpRequest) {
+    public List<GovernanceCommitteeResponse> getCommittees(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getCommittees(memberId);
     }
@@ -47,7 +44,7 @@ public class GovernanceController {
      * 특정 위원회 조회 (GET)
      */
     @GetMapping("/committee/{id}")
-    public GovernanceCommitteeRequest getCommitteeById(@PathVariable Long id, HttpServletRequest httpRequest) {
+    public GovernanceCommitteeResponse getCommitteeById(@PathVariable Long id, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getCommitteeById(memberId, id);
     }
@@ -92,9 +89,20 @@ public class GovernanceController {
      * 회의 목록 조회 (GET)
      */
     @GetMapping("/meeting")
-    public List<GovernanceMeetingRequest> getMeetings(HttpServletRequest httpRequest) {
+    public List<GovernanceMeetingResponse> getMeetings(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getMeetings(memberId);
+    }
+
+
+    /**
+     * 특정 회의 조회 (GET)
+     */
+    @GetMapping("/meeting/{id}")
+    public GovernanceMeetingResponse getMeetingById(@PathVariable Long id,
+                                                    HttpServletRequest httpRequest) {
+        Long memberId = extractMemberId(httpRequest);
+        return governanceService.getMeetingById(memberId, id);
     }
 
     /**
@@ -107,17 +115,6 @@ public class GovernanceController {
         Long id = governanceService.createMeeting(memberId, request);
         return "회의 등록 완료. ID = " + id;
     }
-
-    /**
-     * 특정 회의 조회 (GET)
-     */
-    @GetMapping("/meeting/{id}")
-    public GovernanceMeetingRequest getMeetingById(@PathVariable Long id,
-                                                   HttpServletRequest httpRequest) {
-        Long memberId = extractMemberId(httpRequest);
-        return governanceService.getMeetingById(memberId, id);
-    }
-
 
     /**
      * 회의 수정 (PUT)
@@ -148,7 +145,7 @@ public class GovernanceController {
      * 경영진 KPI 목록 조회 (GET)
      */
     @GetMapping("/executive-kpi")
-    public List<GovernanceExecutiveKpiRequest> getExecutiveKpis(HttpServletRequest httpRequest) {
+    public List<GovernanceExecutiveKpiResponse> getExecutiveKpis(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getExecutiveKpis(memberId);
     }
@@ -157,7 +154,7 @@ public class GovernanceController {
      * 특정 경영진 KPI 조회 (GET)
      */
     @GetMapping("/executive-kpi/{id}")
-    public GovernanceExecutiveKpiRequest getExecutiveKpiById(@PathVariable Long id,
+    public GovernanceExecutiveKpiResponse getExecutiveKpiById(@PathVariable Long id,
                                                              HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getExecutiveKpiById(memberId, id);
@@ -204,7 +201,7 @@ public class GovernanceController {
      * 환경 교육 목록 조회 (GET)
      */
     @GetMapping("/education")
-    public List<GovernanceEducationRequest> getEducations(HttpServletRequest httpRequest) {
+    public List<GovernanceEducationResponse> getEducations(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getEducations(memberId);
     }
@@ -213,7 +210,7 @@ public class GovernanceController {
      * 특정 환경 교육 조회 (GET)
      */
     @GetMapping("/education/{id}")
-    public GovernanceEducationRequest getEducationById(@PathVariable Long id,
+    public GovernanceEducationResponse getEducationById(@PathVariable Long id,
                                                        HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return governanceService.getEducationById(memberId, id);
