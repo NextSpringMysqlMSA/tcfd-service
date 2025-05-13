@@ -5,55 +5,68 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
+@Setter
 @Builder
 public class GoalNetzeroRequest {
 
     private Long id;
     private String industrialSector;     // 산업군 (예: 제조업, 에너지)
-    private double baseYearEmission;     // 기준 연도 배출량 (tCO₂e)
-    private double targetYearEmission;   // 목표 연도 배출량 (tCO₂e)
-    private double reductionRate;        // 감축율 (%)
-    private int baseYear;                // 기준 연도
-    private int targetYear;              // 목표 연도
     private double financialAssetValue;  // 금융 자산 가치 (투자액, 대출액)
-    private double attributionFactor;    // 귀속 계수 (AF)
+    private double totalAssetValue;      // 총 자산 가치 (기업가치, 총사업비, 자산가치)
     private String assetType;            // 자산 유형 (기업대출, 상장주식/채권, PF 등)
-    private String scenario;             // 시나리오 (IEA Net Zero 2050, NGFS Orderly Transition)
-    private double activityAmount;       // 활동량 (예: 대출액, 투자액)
-    private double assetValue;           // 자산 가치 (예: 총 자산, 기업 가치)
+    private double emissionFactor;       // 산업별 배출계수 (자동 계산)
+    private double attributionFactor;    // 귀속 계수 (AF) - 자동 계산됨
+    private double baseYearEmission;     // 기준 연도 배출량 (tCO₂e) - 자동 계산됨
+    private double targetYearEmission;   // 목표 연도 배출량 (tCO₂e) - 자동 계산됨
+    private double reductionRate;        // 평균 감축률 (%) - 자동 계산됨
+    private int baseYear = 2025;         // 기준 연도 (2025으로 고정)
+    private int targetYear = 2050;       // 목표 연도 (2050으로 고정)
+    private String scenario;             // ✅ 시나리오 (예: "IEA Net Zero 2050")
 
-    // DTO → Entity 변환
+    // 연도별 예상 배출량 (2030, 2040, 2050)
+    private Map<Integer, Double> yearlyEmissions = new HashMap<>();
+
+    // ✅ DTO → Entity 변환
     public GoalNetzero toEntity(Long memberId) {
         return GoalNetzero.builder()
                 .memberId(memberId)
                 .industrialSector(this.industrialSector)
-                .baseYearEmission(this.baseYearEmission)
-                .targetYearEmission(this.targetYearEmission)
-                .reductionRate(this.reductionRate)
-                .baseYear(this.baseYear)
-                .targetYear(this.targetYear)
                 .financialAssetValue(this.financialAssetValue)
-                .attributionFactor(this.attributionFactor)
+                .totalAssetValue(this.totalAssetValue) // ✅ 총 자산 가치 추가
+                .attributionFactor(this.attributionFactor) // 서비스에서 자동 계산됨
                 .assetType(this.assetType)
+                .emissionFactor(this.emissionFactor) // 서비스에서 자동 설정
+                .baseYearEmission(this.baseYearEmission) // 서비스에서 자동 계산됨
+                .targetYearEmission(this.targetYearEmission) // 서비스에서 자동 계산됨
+                .reductionRate(this.reductionRate) // 서비스에서 자동 계산됨
+                .baseYear(2025) // 기준년도 2025로 고정
+                .targetYear(2050) // 목표년도 2050으로 고정
                 .scenario(this.scenario)
+                .yearlyEmissions(this.yearlyEmissions)
                 .build();
     }
 
-    // Entity → DTO 변환
+    // ✅ Entity → DTO 변환
     public static GoalNetzeroRequest fromEntity(GoalNetzero entity) {
         return GoalNetzeroRequest.builder()
                 .id(entity.getId())
                 .industrialSector(entity.getIndustrialSector())
+                .financialAssetValue(entity.getFinancialAssetValue())
+                .totalAssetValue(entity.getTotalAssetValue()) // ✅ 총 자산 가치 추가
+                .attributionFactor(entity.getAttributionFactor())
+                .assetType(entity.getAssetType())
+                .emissionFactor(entity.getEmissionFactor())
                 .baseYearEmission(entity.getBaseYearEmission())
                 .targetYearEmission(entity.getTargetYearEmission())
                 .reductionRate(entity.getReductionRate())
-                .baseYear(entity.getBaseYear())
-                .targetYear(entity.getTargetYear())
-                .financialAssetValue(entity.getFinancialAssetValue())
-                .attributionFactor(entity.getAttributionFactor())
-                .assetType(entity.getAssetType())
+                .baseYear(2025) // 기준년도 2025로 고정
+                .targetYear(2050) // 목표년도 2050으로 고정
                 .scenario(entity.getScenario())
+                .yearlyEmissions(entity.getYearlyEmissions())
                 .build();
     }
 }
