@@ -1,6 +1,6 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.nsmm.esg.tcfdservice.entity.GoalNetzero;
+import com.nsmm.esg.tcfdservice.entity.GoalNetZero;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Builder
-public class GoalNetzeroRequest {
+public class GoalNetZeroRequest {
 
     private Long id;
     private String industrialSector;     // 산업군 (예: 제조업, 에너지)
@@ -31,8 +31,8 @@ public class GoalNetzeroRequest {
     private Map<Integer, Double> yearlyEmissions = new HashMap<>();
 
     // ✅ DTO → Entity 변환
-    public GoalNetzero toEntity(Long memberId) {
-        return GoalNetzero.builder()
+    public GoalNetZero toEntity(Long memberId) {
+        return GoalNetZero.builder()
                 .memberId(memberId)
                 .industrialSector(this.industrialSector)
                 .financialAssetValue(this.financialAssetValue)
@@ -51,8 +51,8 @@ public class GoalNetzeroRequest {
     }
 
     // ✅ Entity → DTO 변환
-    public static GoalNetzeroRequest fromEntity(GoalNetzero entity) {
-        return GoalNetzeroRequest.builder()
+    public static GoalNetZeroRequest fromEntity(GoalNetZero entity) {
+        return GoalNetZeroRequest.builder()
                 .id(entity.getId())
                 .industrialSector(entity.getIndustrialSector())
                 .financialAssetValue(entity.getFinancialAssetValue())

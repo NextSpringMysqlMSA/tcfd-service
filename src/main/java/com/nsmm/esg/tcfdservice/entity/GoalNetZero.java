@@ -13,7 +13,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 @Table(name = "goal_net_zero")
-public class GoalNetzero {
+public class GoalNetZero {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

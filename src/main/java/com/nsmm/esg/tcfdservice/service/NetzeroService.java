@@ -1,7 +1,7 @@
 package com.nsmm.esg.tcfdservice.service;
 
-import com.nsmm.esg.tcfdservice.dto.GoalNetzeroRequest;
-import com.nsmm.esg.tcfdservice.entity.GoalNetzero;
+import com.nsmm.esg.tcfdservice.dto.GoalNetZeroRequest;
+import com.nsmm.esg.tcfdservice.entity.GoalNetZero;
 import com.nsmm.esg.tcfdservice.repository.GoalNetzeroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,30 +33,30 @@ public class NetzeroService {
     );
 
     // ✅ NetZero 목표 목록 조회
-    public List<GoalNetzeroRequest> getNetZeroGoals(Long memberId) {
+    public List<GoalNetZeroRequest> getNetZeroGoals(Long memberId) {
         return goalNetzeroRepository.findByMemberId(memberId).stream()
-                .map(GoalNetzeroRequest::fromEntity)
+                .map(GoalNetZeroRequest::fromEntity)
                 .collect(Collectors.toList());
     }
 
     // ✅ NetZero 목표 단건 조회
-    public GoalNetzeroRequest getNetZeroGoalById(Long id, Long memberId) {
-        GoalNetzero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
+    public GoalNetZeroRequest getNetZeroGoalById(Long id, Long memberId) {
+        GoalNetZero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 NetZero 목표가 존재하지 않거나 권한이 없습니다."));
-        return GoalNetzeroRequest.fromEntity(goal);
+        return GoalNetZeroRequest.fromEntity(goal);
     }
 
     // ✅ NetZero 목표 삭제
     @Transactional
     public void deleteNetZeroGoal(Long id, Long memberId) {
-        GoalNetzero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
+        GoalNetZero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 NetZero 목표가 존재하지 않거나 권한이 없습니다."));
         goalNetzeroRepository.delete(goal);
     }
 
     // ✅ NetZero 목표 저장
     @Transactional
-    public Long createNetZeroGoal(Long memberId, GoalNetzeroRequest request) {
+    public Long createNetZeroGoal(Long memberId, GoalNetZeroRequest request) {
         double emissionFactor = getEmissionFactorByIndustry(request.getIndustrialSector());
         double baseYearEmission = calculateBaseYearEmission(
                 request.getFinancialAssetValue(),
@@ -64,7 +64,7 @@ public class NetzeroService {
                 request.getTotalAssetValue()
         );
 
-        GoalNetzero goal = request.toEntity(memberId);
+        GoalNetZero goal = request.toEntity(memberId);
         goal.setEmissionFactor(emissionFactor);
         goal.setBaseYearEmission(baseYearEmission);
         goal.setTargetYearEmission(calculateTargetYearEmission(baseYearEmission, 2050, 2025));
@@ -75,8 +75,8 @@ public class NetzeroService {
 
     // ✅ NetZero 목표 수정
     @Transactional
-    public void updateNetZeroGoal(Long id, Long memberId, GoalNetzeroRequest request) {
-        GoalNetzero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
+    public void updateNetZeroGoal(Long id, Long memberId, GoalNetZeroRequest request) {
+        GoalNetZero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 NetZero 목표가 존재하지 않거나 권한이 없습니다."));
 
         double emissionFactor = getEmissionFactorByIndustry(request.getIndustrialSector());
@@ -104,14 +104,14 @@ public class NetzeroService {
 
     // ✅ NetZero 중간 목표 배출량 조회 (2030, 2040, 2050)
     public Map<Integer, Double> getMidTargetEmissions(Long id, Long memberId) {
-        GoalNetzero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
+        GoalNetZero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 NetZero 목표가 존재하지 않거나 권한이 없습니다."));
         return calculateYearlyEmissions(goal.getBaseYearEmission(), 2025);
     }
 
     // ✅ NetZero 목표 계산값 확인 (2030, 2040, 2050)
     public Map<String, Double> calculateNetZeroValues(Long id, Long memberId) {
-        GoalNetzero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
+        GoalNetZero goal = goalNetzeroRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 NetZero 목표가 존재하지 않거나 권한이 없습니다."));
         double baseYearEmission = goal.getBaseYearEmission();
         Map<Integer, Double> yearlyEmissions = calculateYearlyEmissions(baseYearEmission, 2025);

@@ -2,7 +2,7 @@ package com.nsmm.esg.tcfdservice.controller;
 
 import com.nsmm.esg.tcfdservice.dto.GoalKpiRequest;
 
-import com.nsmm.esg.tcfdservice.dto.GoalNetzeroRequest;
+import com.nsmm.esg.tcfdservice.dto.GoalNetZeroRequest;
 
 import com.nsmm.esg.tcfdservice.dto.GoalKpiResponse;
 
@@ -91,26 +91,26 @@ public class GoalController {
 
     // ------------------------- NetZero 목표 API -------------------------
     @GetMapping("/netzero")
-    public List<GoalNetzeroRequest> getNetZeroGoals(HttpServletRequest request) {
+    public List<GoalNetZeroRequest> getNetZeroGoals(HttpServletRequest request) {
         Long memberId = extractMemberId(request);
         return netzeroService.getNetZeroGoals(memberId);
     }
 
     @GetMapping("/netzero/{id}")
-    public GoalNetzeroRequest getNetZeroGoalById(@PathVariable Long id, HttpServletRequest request) {
+    public GoalNetZeroRequest getNetZeroGoalById(@PathVariable Long id, HttpServletRequest request) {
         Long memberId = extractMemberId(request);
         return netzeroService.getNetZeroGoalById(id, memberId);
     }
 
     @PostMapping("/netzero")
-    public String createNetZeroGoal(@RequestBody GoalNetzeroRequest request, HttpServletRequest httpRequest) {
+    public String createNetZeroGoal(@RequestBody GoalNetZeroRequest request, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         Long id = netzeroService.createNetZeroGoal(memberId, request);
         return "✅ NetZero 목표 저장 완료. ID = " + id;
     }
 
     @PutMapping("/netzero/{id}")
-    public String updateNetZeroGoal(@PathVariable Long id, @RequestBody GoalNetzeroRequest request, HttpServletRequest httpRequest) {
+    public String updateNetZeroGoal(@PathVariable Long id, @RequestBody GoalNetZeroRequest request, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         netzeroService.updateNetZeroGoal(id, memberId, request);
         return "✅ NetZero 목표 수정 완료. ID = " + id;
