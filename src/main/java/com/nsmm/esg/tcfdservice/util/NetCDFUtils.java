@@ -56,13 +56,13 @@ public class NetCDFUtils {
 
         // 디렉토리 존재 여부 확인
         if (!dir.exists() || !dir.isDirectory()) {
-            throw new RuntimeException("❌ 디렉토리 없음: " + dir.getAbsolutePath());
+            throw new RuntimeException("디렉토리 없음: " + dir.getAbsolutePath());
         }
 
         // 디렉토리 내 파일 목록 불러오기 (null 처리 포함)
         File[] files = dir.listFiles();
         if (files == null || files.length == 0) {
-            throw new RuntimeException("❌ 디렉토리 내 NetCDF 파일 없음: " + dir.getAbsolutePath());
+            throw new RuntimeException("디렉토리 내 NetCDF 파일 없음: " + dir.getAbsolutePath());
         }
 
         // 소문자로 변환하여 파일명 조건 검사
@@ -80,6 +80,6 @@ public class NetCDFUtils {
         }
 
         // 조건에 맞는 파일이 없는 경우 예외 발생
-        throw new RuntimeException("❌ 해당 조건의 파일 없음: hazard=" + hazardType + ", scenario=" + scenario + ", year=" + baseYear);
+        throw new RuntimeException("해당 조건의 파일 없음: hazard=" + hazardType + ", scenario=" + scenario + ", year=" + baseYear);
     }
 }

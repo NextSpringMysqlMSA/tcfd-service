@@ -2,73 +2,85 @@ package com.nsmm.esg.tcfdservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 넷제로(탄소중립) 목표 정보를 관리하는 엔티티
+ */
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "goal_net_zero")
 public class GoalNetZero {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 고유 식별자
 
-    private Long memberId;
-    private String industrialSector;
-    private double financialAssetValue;
-    private double totalAssetValue;
-    private double attributionFactor;
-    private String assetType;
-    private double emissionFactor;
-    private double baseYearEmission;
-    private double targetYearEmission;
-    private double reductionRate;
-    private int baseYear;
-    private int targetYear;
-    private String scenario;
+    private Long memberId; // 회원 ID
 
-    @ElementCollection
-    @CollectionTable(name = "goal_netzero_yearly_emissions", joinColumns = @JoinColumn(name = "goal_id"))
-    @MapKeyColumn(name = "year")
-    @Column(name = "emission")
-    private Map<Integer, Double> yearlyEmissions = new HashMap<>();
+    private String industrialSector; // 산업 부문
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private int baseYear; // 기준 연도
 
-    private LocalDateTime updatedAt;
+    private int targetYear; // 목표 연도
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    private String scenario; // 시나리오 정보
+
+    @OneToMany(mappedBy = "netZero", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<GoalNetZeroIndustry> industries = new ArrayList<>();
+
+    @OneToMany(mappedBy = "netZero", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<GoalNetZeroEmission> emissions = new ArrayList<>();
+
+
+    @CreationTimestamp
+    private LocalDateTime createdAt; // 생성 일시
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt; // 수정 일시
+
+    // 연관관계 편의 메서드
+    /**
+     * 산업별 목표를 추가하는 편의 메서드
+     * @param industry 추가할 산업별 목표 객체
+     */
+    public void addIndustry(GoalNetZeroIndustry industry) {
+        industries.add(industry);
+        industry.setNetZero(this);
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    /**
+     * 배출량 정보를 추가하는 편의 메서드
+     * @param emission 추가할 배출량 객체
+     */
+    public void addEmission(GoalNetZeroEmission emission) {
+        emissions.add(emission);
+        emission.setNetZero(this);
     }
 
-    // ✅ DTO 기반 업데이트 메서드 (자동 수정)
-    public void updateFromDto(double financialAssetValue, double totalAssetValue, double emissionFactor,
-                              double baseYearEmission, double targetYearEmission, Map<Integer, Double> yearlyEmissions) {
-        this.financialAssetValue = financialAssetValue;
-        this.totalAssetValue = totalAssetValue;
-        this.emissionFactor = emissionFactor;
-        this.baseYearEmission = baseYearEmission;
-        this.targetYearEmission = targetYearEmission;
-        this.yearlyEmissions = yearlyEmissions;
-        this.reductionRate = calculateReductionRate(baseYearEmission, targetYearEmission);
+    /**
+     * 넷제로 목표 정보를 업데이트하는 메서드
+     * @param industrialSector 산업 부문
+     * @param baseYear 기준 연도
+     * @param targetYear 목표 연도
+     * @param scenario 시나리오 정보
+     */
+    public void updateInfo(String industrialSector, int baseYear, int targetYear, String scenario) {
+        this.industrialSector = industrialSector;
+        this.baseYear = baseYear;
+        this.targetYear = targetYear;
+        this.scenario = scenario;
     }
 
-    // ✅ 평균 감축률 자동 계산 메서드
-    private double calculateReductionRate(double baseYearEmission, double targetYearEmission) {
-        if (baseYearEmission == 0) return 0;
-        return (baseYearEmission - targetYearEmission) / baseYearEmission * 100.0;
-    }
+
+
 }

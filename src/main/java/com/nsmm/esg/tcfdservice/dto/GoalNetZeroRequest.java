@@ -1,72 +1,75 @@
 package com.nsmm.esg.tcfdservice.dto;
 
 import com.nsmm.esg.tcfdservice.entity.GoalNetZero;
+import com.nsmm.esg.tcfdservice.entity.GoalNetZeroIndustry;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
+/**
+ * 넷제로 포트폴리오 생성 및 수정 요청 DTO
+ */
 @Getter
-@Setter
 @Builder
 public class GoalNetZeroRequest {
 
-    private Long id;
-    private String industrialSector;     // 산업군 (예: 제조업, 에너지)
-    private double financialAssetValue;  // 금융 자산 가치 (투자액, 대출액)
-    private double totalAssetValue;      // 총 자산 가치 (기업가치, 총사업비, 자산가치)
-    private String assetType;            // 자산 유형 (기업대출, 상장주식/채권, PF 등)
-    private double emissionFactor;       // 산업별 배출계수 (자동 계산)
-    private double attributionFactor;    // 귀속 계수 (AF) - 자동 계산됨
-    private double baseYearEmission;     // 기준 연도 배출량 (tCO₂e) - 자동 계산됨
-    private double targetYearEmission;   // 목표 연도 배출량 (tCO₂e) - 자동 계산됨
-    private double reductionRate;        // 평균 감축률 (%) - 자동 계산됨
-    private int baseYear = 2025;         // 기준 연도 (2025으로 고정)
-    private int targetYear = 2050;       // 목표 연도 (2050으로 고정)
-    private String scenario;             // ✅ 시나리오 (예: "IEA Net Zero 2050")
+    // 산업군 (예: 금융업, 제조업 등)
+    private final String industrialSector;
 
-    // 연도별 예상 배출량 (2030, 2040, 2050)
-    private Map<Integer, Double> yearlyEmissions = new HashMap<>();
+    // 기준연도 (예: 2020)
+    private final int baseYear;
 
-    // ✅ DTO → Entity 변환
+    // 목표연도 (예: 2050)
+    private final int targetYear;
+
+    // 분석 시나리오 (예: SSP1-2.6)
+    private final String scenario;
+
+    // 산업별 자산 항목 리스트
+    private final List<IndustryAsset> assets;
+
+    /**
+     * GoalNetZero 엔티티로 변환
+     *
+     * @param memberId 작성자 ID
+     * @return 변환된 GoalNetZero 엔티티
+     */
     public GoalNetZero toEntity(Long memberId) {
-        return GoalNetZero.builder()
+        GoalNetZero goal = GoalNetZero.builder()
                 .memberId(memberId)
-                .industrialSector(this.industrialSector)
-                .financialAssetValue(this.financialAssetValue)
-                .totalAssetValue(this.totalAssetValue) // ✅ 총 자산 가치 추가
-                .attributionFactor(this.attributionFactor) // 서비스에서 자동 계산됨
-                .assetType(this.assetType)
-                .emissionFactor(this.emissionFactor) // 서비스에서 자동 설정
-                .baseYearEmission(this.baseYearEmission) // 서비스에서 자동 계산됨
-                .targetYearEmission(this.targetYearEmission) // 서비스에서 자동 계산됨
-                .reductionRate(this.reductionRate) // 서비스에서 자동 계산됨
-                .baseYear(2025) // 기준년도 2025로 고정
-                .targetYear(2050) // 목표년도 2050으로 고정
-                .scenario(this.scenario)
-                .yearlyEmissions(this.yearlyEmissions)
+                .industrialSector(industrialSector)
+                .baseYear(baseYear)
+                .targetYear(targetYear)
+                .scenario(scenario)
                 .build();
+
+        // 각 자산 항목을 GoalNetZeroIndustry로 변환 후 추가 (연관관계 포함)
+        for (IndustryAsset asset : assets) {
+            GoalNetZeroIndustry industry = GoalNetZeroIndustry.builder()
+                    .industry(asset.getIndustry())
+                    .assetType(asset.getAssetType())
+                    .amount(asset.getAmount())
+                    .totalAssetValue(asset.getTotalAssetValue())
+                    .emissionFactor(asset.getEmissionFactor())
+                    .build();
+
+            goal.addIndustry(industry); // 양방향 연관관계 설정
+        }
+
+        return goal;
     }
 
-    // ✅ Entity → DTO 변환
-    public static GoalNetZeroRequest fromEntity(GoalNetZero entity) {
-        return GoalNetZeroRequest.builder()
-                .id(entity.getId())
-                .industrialSector(entity.getIndustrialSector())
-                .financialAssetValue(entity.getFinancialAssetValue())
-                .totalAssetValue(entity.getTotalAssetValue()) // ✅ 총 자산 가치 추가
-                .attributionFactor(entity.getAttributionFactor())
-                .assetType(entity.getAssetType())
-                .emissionFactor(entity.getEmissionFactor())
-                .baseYearEmission(entity.getBaseYearEmission())
-                .targetYearEmission(entity.getTargetYearEmission())
-                .reductionRate(entity.getReductionRate())
-                .baseYear(2025) // 기준년도 2025로 고정
-                .targetYear(2050) // 목표년도 2050으로 고정
-                .scenario(entity.getScenario())
-                .yearlyEmissions(entity.getYearlyEmissions())
-                .build();
+    /**
+     * 산업별 자산 항목 DTO
+     */
+    @Getter
+    @Builder
+    public static class IndustryAsset {
+        private final String industry;        // 산업명 (예: 철강, 건설)
+        private final String assetType;       // 자산 유형 (예: PF, 기업대출)
+        private final double amount;          // 해당 자산 금액 (Ai)
+        private final double totalAssetValue; // 산업 내 총 자산 금액 (AV)
+        private final double emissionFactor;  // 배출계수 (EF)
     }
 }
