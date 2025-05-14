@@ -1,7 +1,9 @@
 package com.nsmm.esg.tcfdservice.controller;
 
 import com.nsmm.esg.tcfdservice.dto.StrategyRiskIdentificationRequest;
+import com.nsmm.esg.tcfdservice.dto.StrategyRiskIdentificationResponse;
 import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisRequest;
+import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisResponse;
 import com.nsmm.esg.tcfdservice.service.StrategyService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +29,14 @@ public class StrategyController {
     //----------------------------------------------------------------------------------------------------------------
     // 시나리오 조회
     @GetMapping("/scenario")
-    public List<StrategyScenarioAnalysisRequest> getScenarios(HttpServletRequest httpRequest) {
+    public List<StrategyScenarioAnalysisResponse> getScenarios(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return strategyService.getScenarios(memberId);
     }
 
     // 리스크 개별 조회 (권한 포함 확인)
     @GetMapping("/scenario/{id}")
-    public StrategyScenarioAnalysisRequest getScenarioById(@PathVariable Long id, HttpServletRequest request) {
+    public StrategyScenarioAnalysisResponse getScenarioById(@PathVariable Long id, HttpServletRequest request) {
         Long memberId = extractMemberId(request);
         return strategyService.getScenarioById(memberId, id);
     }
@@ -73,7 +75,7 @@ public class StrategyController {
     //----------------------------------------------------------------------------------------------------------------
     // 리스크 전체 조회
     @GetMapping("/risk")
-    public List<StrategyRiskIdentificationRequest> getRisks(HttpServletRequest httpRequest) {
+    public List<StrategyRiskIdentificationResponse> getRisks(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return strategyService.getRisks(memberId);
     }
@@ -81,7 +83,7 @@ public class StrategyController {
     //----------------------------------------------------------------------------------------------------------------
     // 리스크 개별 조회 (권한 포함 확인)
     @GetMapping("/risk/{id}")
-    public StrategyRiskIdentificationRequest getRiskById(@PathVariable Long id, HttpServletRequest request) {
+    public StrategyRiskIdentificationResponse getRiskById(@PathVariable Long id, HttpServletRequest request) {
         Long memberId = extractMemberId(request);
         return strategyService.getRiskById(memberId, id);
     }

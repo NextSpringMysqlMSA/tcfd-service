@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/v1/tcfd/**").permitAll() // ✅ 인증 없이 허용
+                        .requestMatchers("/api/v1/tcfd/**").permitAll() // 인증 없이 허용
                         .anyRequest().denyAll()
                 );
 

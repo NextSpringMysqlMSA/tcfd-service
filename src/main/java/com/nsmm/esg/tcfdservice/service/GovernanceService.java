@@ -30,23 +30,23 @@ public class GovernanceService {
     /**
      * 위원회 목록 조회
      */
-    public List<GovernanceCommitteeRequest> getCommittees(Long memberId) {
+    public List<GovernanceCommitteeResponse> getCommittees(Long memberId) {
         return committeeRepository.findByMemberId(memberId).stream()
-                .map(GovernanceCommitteeRequest::fromEntity)
+                .map(GovernanceCommitteeResponse::fromEntity)
                 .toList();
     }
 
     /**
      * 특정 위원회 조회
      */
-    public GovernanceCommitteeRequest getCommitteeById(Long memberId, Long committeeId) {
+    public GovernanceCommitteeResponse getCommitteeById(Long memberId, Long committeeId) {
         // 특정 committeeId에 해당하는 위원회 정보를 조회
         GovernanceCommittee committee = committeeRepository.findById(committeeId)
                 .filter(c -> c.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("수정할 위원회가 존재하지 않거나 권한이 없습니다."));
 
         // 엔티티를 요청 객체로 변환하여 반환
-        return GovernanceCommitteeRequest.fromEntity(committee);
+        return GovernanceCommitteeResponse.fromEntity(committee);
     }
 
     /**
@@ -83,20 +83,20 @@ public class GovernanceService {
     /**
      * 회의 목록 조회
      */
-    public List<GovernanceMeetingRequest> getMeetings(Long memberId) {
+    public List<GovernanceMeetingResponse> getMeetings(Long memberId) {
         return meetingRepository.findByMemberId(memberId).stream()
-                .map(GovernanceMeetingRequest::fromEntity)
+                .map(GovernanceMeetingResponse::fromEntity)
                 .toList();
     }
 
     /**
      * 특정 회의 조회
      */
-    public GovernanceMeetingRequest getMeetingById(Long memberId, Long meetingId) {
+    public GovernanceMeetingResponse getMeetingById(Long memberId, Long meetingId) {
         GovernanceMeeting meeting = meetingRepository.findById(meetingId)
                 .filter(m -> m.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("조회할 회의가 존재하지 않거나 권한이 없습니다."));
-        return GovernanceMeetingRequest.fromEntity(meeting);
+        return GovernanceMeetingResponse.fromEntity(meeting);
     }
 
     /**
@@ -133,20 +133,20 @@ public class GovernanceService {
     /**
      * 경영진 KPI 목록 조회
      */
-    public List<GovernanceExecutiveKpiRequest> getExecutiveKpis(Long memberId) {
+    public List<GovernanceExecutiveKpiResponse> getExecutiveKpis(Long memberId) {
         return kpiRepository.findByMemberId(memberId).stream()
-                .map(GovernanceExecutiveKpiRequest::fromEntity)
+                .map(GovernanceExecutiveKpiResponse::fromEntity)
                 .toList();
     }
 
     /**
      * 특정 경영진 KPI 조회
      */
-    public GovernanceExecutiveKpiRequest getExecutiveKpiById(Long memberId, Long kpiId) {
+    public GovernanceExecutiveKpiResponse getExecutiveKpiById(Long memberId, Long kpiId) {
         GovernanceExecutiveKpi kpi = kpiRepository.findById(kpiId)
                 .filter(k -> k.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("조회할 KPI가 존재하지 않거나 권한이 없습니다."));
-        return GovernanceExecutiveKpiRequest.fromEntity(kpi);
+        return GovernanceExecutiveKpiResponse.fromEntity(kpi);
     }
 
 
@@ -184,20 +184,20 @@ public class GovernanceService {
     /**
      * 환경 교육 목록 조회
      */
-    public List<GovernanceEducationRequest> getEducations(Long memberId) {
+    public List<GovernanceEducationResponse> getEducations(Long memberId) {
         return educationRepository.findByMemberId(memberId).stream()
-                .map(GovernanceEducationRequest::fromEntity)
+                .map(GovernanceEducationResponse::fromEntity)
                 .toList();
     }
 
     /**
      * 특정 환경 교육 조회
      */
-    public GovernanceEducationRequest getEducationById(Long memberId, Long educationId) {
+    public GovernanceEducationResponse getEducationById(Long memberId, Long educationId) {
         GovernanceEducation education = educationRepository.findById(educationId)
                 .filter(e -> e.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("조회할 교육이 존재하지 않거나 권한이 없습니다."));
-        return GovernanceEducationRequest.fromEntity(education);
+        return GovernanceEducationResponse.fromEntity(education);
     }
 
 
