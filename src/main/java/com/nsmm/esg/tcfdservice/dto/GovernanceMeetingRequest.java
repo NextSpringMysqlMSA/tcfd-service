@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @Builder
 public class GovernanceMeetingRequest {
 
-    private final Long id;
     private final String meetingName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -20,20 +19,11 @@ public class GovernanceMeetingRequest {
     private final String agenda;
 
     public GovernanceMeeting toEntity(Long memberId) {
-        return com.nsmm.esg.tcfdservice.entity.GovernanceMeeting.builder()
+        return GovernanceMeeting.builder()
                 .memberId(memberId)
                 .meetingName(meetingName)
                 .meetingDate(meetingDate)
                 .agenda(agenda)
-                .build();
-    }
-
-    public static GovernanceMeetingRequest fromEntity(GovernanceMeeting entity) {
-        return GovernanceMeetingRequest.builder()
-                .id(entity.getId())
-                .meetingName(entity.getMeetingName())
-                .meetingDate(entity.getMeetingDate())
-                .agenda(entity.getAgenda())
                 .build();
     }
 }

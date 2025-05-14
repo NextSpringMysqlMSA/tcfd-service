@@ -1,7 +1,9 @@
 package com.nsmm.esg.tcfdservice.service;
 
 import com.nsmm.esg.tcfdservice.dto.StrategyRiskIdentificationRequest;
+import com.nsmm.esg.tcfdservice.dto.StrategyRiskIdentificationResponse;
 import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisRequest;
+import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisResponse;
 import com.nsmm.esg.tcfdservice.entity.StrategyRiskIdentification;
 import com.nsmm.esg.tcfdservice.entity.StrategyScenarioAnalysis;
 import com.nsmm.esg.tcfdservice.repository.StrategyRiskIdentificationRepository;
@@ -23,19 +25,19 @@ public class StrategyService {
 
 
     // 시나리오 분석 전체 조회 - 특정 사용자(memberId)의 시나리오 목록 반환
-    public List<StrategyScenarioAnalysisRequest> getScenarios(Long memberId) {
+    public List<StrategyScenarioAnalysisResponse> getScenarios(Long memberId) {
         return strategyScenarioAnalysisRepository.findByMemberId(memberId).stream()
-                .map(StrategyScenarioAnalysisRequest::fromEntity)
+                .map(StrategyScenarioAnalysisResponse::fromEntity)
                 .toList();
     }
 
     // 시나리오 분석 단건 조회
-    public StrategyScenarioAnalysisRequest getScenarioById(Long memberId, Long id) {
+    public StrategyScenarioAnalysisResponse getScenarioById(Long memberId, Long id) {
         StrategyScenarioAnalysis scenario = strategyScenarioAnalysisRepository.findById(id)
                 .filter(s -> s.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("해당 시나리오가 존재하지 않거나 권한이 없습니다."));
 
-        return StrategyScenarioAnalysisRequest.fromEntity(scenario);
+        return StrategyScenarioAnalysisResponse.fromEntity(scenario);
     }
 
     private static final Map<String, Double> REGION_PRECIPITATION_MAP = Map.of(
@@ -113,19 +115,19 @@ public class StrategyService {
     //=====================================================risk=======================================================
 
     // 리스크 식별 전체 조회 - 특정 사용자(memberId)의 리스크 목록 반환
-    public List<StrategyRiskIdentificationRequest> getRisks(Long memberId) {
+    public List<StrategyRiskIdentificationResponse> getRisks(Long memberId) {
         return strategyRiskIdentificationRepository.findByMemberId(memberId).stream()
-                .map(StrategyRiskIdentificationRequest::fromEntity)
+                .map(StrategyRiskIdentificationResponse::fromEntity)
                 .toList();
     }
 
     // 리스크 부분 조회
-    public StrategyRiskIdentificationRequest getRiskById(Long memberId, Long id) {
+    public StrategyRiskIdentificationResponse getRiskById(Long memberId, Long id) {
         StrategyRiskIdentification risk = strategyRiskIdentificationRepository.findById(id)
                 .filter(r -> r.getMemberId().equals(memberId))
                 .orElseThrow(() -> new IllegalArgumentException("해당 리스크가 존재하지 않거나 권한이 없습니다."));
 
-        return StrategyRiskIdentificationRequest.fromEntity(risk);
+        return StrategyRiskIdentificationResponse.fromEntity(risk);
     }
 
     // 리스크 식별 생성 - DTO를 엔티티로 변환 후 저장하고 생성된 ID 반환

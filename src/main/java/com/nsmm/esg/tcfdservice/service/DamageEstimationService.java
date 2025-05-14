@@ -18,7 +18,6 @@ public class DamageEstimationService {
         try (NetcdfFile nc = NetcdfFile.open(path)) {
             float windSpeed = readValue(nc, "sfcWind", lat, lon);
             double ratio = Math.pow(windSpeed / 70.0, 2) * 100;
-
             return logAndReturnDamage("태풍", windSpeed, "풍속(m/s)", ratio, assetValue);
         } catch (Exception e) {
             throw handleError("태풍", e);
@@ -30,22 +29,22 @@ public class DamageEstimationService {
         log.info("🌊 [홍수] 시나리오: {}, 연도: {}, 좌표: ({}, {}), 자산: {}, 경로: {}", scenario, baseYear, lat, lon, assetValue, path);
 
         try (NetcdfFile nc = NetcdfFile.open(path)) {
-            float depth = readValue(nc, "pr", lat, lon);
-            double ratio = Math.pow(depth / 3.0, 2) * 100;
-
-            return logAndReturnDamage("홍수", depth, "침수 깊이(m)", ratio, assetValue);
+            float prRaw = readValue(nc, "pr", lat, lon);
+            float estimatedDepth = prRaw * 86400f / 1000f; // kg/m²/s → mm/day → m/day
+            double ratio = Math.pow(estimatedDepth / 3.0, 2) * 100;
+            return logAndReturnDamage("홍수", estimatedDepth, "침수 깊이(m)", ratio, assetValue);
         } catch (Exception e) {
             throw handleError("홍수", e);
         }
     }
-
 
     public Long calculateDroughtDamage(String scenario, int baseYear, double lat, double lon, double assetValue, double normalPrecipitation) {
         String path = NetCDFUtils.resolveHazardPath("drought", scenario, baseYear);
         log.info("🌵 [가뭄] 시나리오: {}, 연도: {}, 좌표: ({}, {}), 자산: {}, 평년 강수량: {}, 경로: {}", scenario, baseYear, lat, lon, assetValue, normalPrecipitation, path);
 
         try (NetcdfFile nc = NetcdfFile.open(path)) {
-            float actualPrecip = readValue(nc, "pr", lat, lon);
+            float prRaw = readValue(nc, "pr", lat, lon);
+            float actualPrecip = prRaw * 86400f; // kg/m²/s → mm/day
 
             double ratio = Math.max(0, 1 - (actualPrecip / normalPrecipitation)) * 100;
             log.info("🌧️ 실제 강수량: {} mm", actualPrecip);
@@ -61,15 +60,17 @@ public class DamageEstimationService {
         log.info("🔥 [폭염] 시나리오: {}, 연도: {}, 좌표: ({}, {}), 자산: {}, 경로: {}", scenario, baseYear, lat, lon, assetValue, path);
 
         try (NetcdfFile nc = NetcdfFile.open(path)) {
-            log.info("📦 NetCDF 파일 변수 목록:");
-            for (Variable var : nc.getVariables()) {
-                log.info("  - {}", var.getFullName());
+            Variable tasmaxVar = nc.findVariable("tasmax");
+            if (tasmaxVar == null) {
+                throw new RuntimeException("NetCDF에 'tasmax' 변수 없음");
             }
-            float tasmaxK = readValue(nc, "tasmax", lat, lon);
-            float tmaxCelsius = tasmaxK - 273.15f;
+
+            String units = tasmaxVar.findAttribute("units").getStringValue().toLowerCase();
+            float tasmaxRaw = readValue(nc, "tasmax", lat, lon);
+            float tmaxCelsius = units.contains("k") ? tasmaxRaw - 273.15f : tasmaxRaw;
+
             double ratio = Math.max(0, (tmaxCelsius - 35.0) / 15.0) * 100;
             return logAndReturnDamage("폭염", tmaxCelsius, "최고기온(℃)", ratio, assetValue);
-
         } catch (Exception e) {
             throw handleError("폭염", e);
         }

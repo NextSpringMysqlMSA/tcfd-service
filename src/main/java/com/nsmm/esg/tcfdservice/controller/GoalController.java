@@ -1,7 +1,11 @@
 package com.nsmm.esg.tcfdservice.controller;
 
 import com.nsmm.esg.tcfdservice.dto.GoalKpiRequest;
+
 import com.nsmm.esg.tcfdservice.dto.GoalNetzeroRequest;
+
+import com.nsmm.esg.tcfdservice.dto.GoalKpiResponse;
+
 import com.nsmm.esg.tcfdservice.service.GoalService;
 import com.nsmm.esg.tcfdservice.service.NetzeroService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +45,7 @@ public class GoalController {
      * KPI 목표 목록 조회
      */
     @GetMapping("/kpi")
-    public List<GoalKpiRequest> getKpiGoals(HttpServletRequest httpRequest) {
+    public List<GoalKpiResponse> getKpiGoals(HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return goalService.getKpiGoals(memberId);
     }
@@ -50,7 +54,7 @@ public class GoalController {
      * 특정 KPI 목표 조회 (GET)
      */
     @GetMapping("/kpi/{id}")
-    public GoalKpiRequest getKpiGoalById(@PathVariable Long id, HttpServletRequest httpRequest) {
+    public GoalKpiResponse getKpiGoalById(@PathVariable Long id, HttpServletRequest httpRequest) {
         Long memberId = extractMemberId(httpRequest);
         return goalService.getKpiGoalById(id, memberId);
     }

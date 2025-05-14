@@ -8,7 +8,6 @@ import lombok.Getter;
 @Builder
 public class StrategyRiskIdentificationRequest {
 
-    private final Long id;
     private final String riskType;
     private final String riskCategory;
     private final String riskCause;
@@ -31,19 +30,4 @@ public class StrategyRiskIdentificationRequest {
                 .plans(plans)
                 .build();
     }
-
-    public static StrategyRiskIdentificationRequest fromEntity(StrategyRiskIdentification entity) {
-        return StrategyRiskIdentificationRequest.builder()
-                .id(entity.getId())
-                .riskType(entity.getRiskType())
-                .riskCategory(entity.getRiskCategory())
-                .riskCause(entity.getRiskCause())
-                .time(entity.getTime())
-                .impact(entity.getImpact())
-                .financialImpact(entity.getFinancialImpact())
-                .businessModelImpact(entity.getBusinessModelImpact())
-                .plans(entity.getPlans())
-                .build();
-    }
-
 }

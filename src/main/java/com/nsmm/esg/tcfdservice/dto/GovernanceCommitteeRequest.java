@@ -1,6 +1,6 @@
 package com.nsmm.esg.tcfdservice.dto;
 
-import com.nsmm.esg.tcfdservice.entity.*;
+import com.nsmm.esg.tcfdservice.entity.GovernanceCommittee;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,7 +8,6 @@ import lombok.Getter;
 @Builder
 public class GovernanceCommitteeRequest {
 
-    private final Long id;
     private final String committeeName;
     private final String memberName;
     private final String memberPosition;
@@ -23,17 +22,6 @@ public class GovernanceCommitteeRequest {
                 .memberPosition(memberPosition)
                 .memberAffiliation(memberAffiliation)
                 .climateResponsibility(climateResponsibility)
-                .build();
-    }
-
-    public static GovernanceCommitteeRequest fromEntity(GovernanceCommittee entity) {
-        return GovernanceCommitteeRequest.builder()
-                .id(entity.getId())
-                .committeeName(entity.getCommitteeName())
-                .memberName(entity.getMemberName())
-                .memberPosition(entity.getMemberPosition())
-                .memberAffiliation(entity.getMemberAffiliation())
-                .climateResponsibility(entity.getClimateResponsibility())
                 .build();
     }
 }
