@@ -49,7 +49,7 @@ public class GoalService {
     public void updateKpiGoal(Long goalId, Long memberId, GoalKpiRequest request) {
         GoalKpi goalKpi = goalKpiRepository.findById(goalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 KPI 목표가 존재하지 않습니다. ID = " + goalId));
-        if(!goalKpi.getMemberId().equals(memberId)) {
+        if (!goalKpi.getMemberId().equals(memberId)) {
             throw new IllegalArgumentException("해당 목표에 대한 권한이 없습니다.");
         }
         goalKpi.updateFromDto(request);
