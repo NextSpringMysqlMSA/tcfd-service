@@ -18,6 +18,7 @@ public class GovernanceCommitteeRequest {
     private final String memberAffiliation;     // 위원회 구성원 소속 (예: 이사회, 경영진, 외부전문가 등)
     private final String climateResponsibility; // 기후변화 관련 책임 영역 (예: 전략 수립, 리스크 평가, 목표 관리 등)
 
+
     /**
      * 요청 DTO를 엔티티 객체로 변환하는 메서드
      *

@@ -31,13 +31,4 @@ public class ErrorResponse {
                 .build();
     }
 
-    public static ErrorResponse of(String errorCode, String message, String path, Map<String, String> errors) {
-        return ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .errorCode(errorCode)
-                .message(message)
-                .path(path)
-                .errors(errors)
-                .build();
-    }
 }

@@ -2,6 +2,7 @@ package com.nsmm.esg.tcfdservice.service;
 
 import com.nsmm.esg.tcfdservice.dto.*;
 import com.nsmm.esg.tcfdservice.entity.*;
+import com.nsmm.esg.tcfdservice.exception.DuplicateResourceException;
 import com.nsmm.esg.tcfdservice.exception.ResourceNotFoundException;
 import com.nsmm.esg.tcfdservice.exception.UnauthorizedAccessException;
 import com.nsmm.esg.tcfdservice.repository.*;
@@ -26,6 +27,9 @@ public class GovernanceService {
      * 위원회 생성
      */
     public Long createCommittee(Long memberId, GovernanceCommitteeRequest request) {
+        if (committeeRepository.existsByMemberIdAndName(memberId, request.getCommitteeName())) {
+            throw new DuplicateResourceException("위원회");
+        }
         return saveEntityAndReturnId(request.toEntity(memberId), committeeRepository);
     }
 
