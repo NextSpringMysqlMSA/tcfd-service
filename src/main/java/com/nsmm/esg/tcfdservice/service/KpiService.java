@@ -45,7 +45,7 @@ public class KpiService {
 
 
     /**
-     * KPI 목표 수정
+     * KPI 목표 수정`
      */
     @Transactional
     public void updateKpiGoal(Long goalId, Long memberId, GoalKpiRequest request) {
