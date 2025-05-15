@@ -6,6 +6,7 @@ import com.nsmm.esg.tcfdservice.entity.GoalKpi;
 import com.nsmm.esg.tcfdservice.repository.GoalKpiRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,13 +47,14 @@ public class KpiService {
     /**
      * KPI 목표 수정
      */
+    @Transactional
     public void updateKpiGoal(Long goalId, Long memberId, GoalKpiRequest request) {
         GoalKpi goalKpi = kpiRepository.findById(goalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 KPI 목표가 존재하지 않습니다. ID = " + goalId));
         if (!goalKpi.getMemberId().equals(memberId)) {
             throw new IllegalArgumentException("해당 목표에 대한 권한이 없습니다.");
         }
-        goalKpi.updateFromDto(request);
+        goalKpi.updateFromDto(request);  // 변경 감지 (dirty checking)
     }
 
     /**
