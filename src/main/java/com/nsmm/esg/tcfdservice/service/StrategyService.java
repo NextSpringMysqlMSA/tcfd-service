@@ -7,7 +7,6 @@ import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisResponse;
 import com.nsmm.esg.tcfdservice.entity.StrategyRiskIdentification;
 import com.nsmm.esg.tcfdservice.entity.StrategyScenarioAnalysis;
 import com.nsmm.esg.tcfdservice.exception.ResourceNotFoundException;
-import com.nsmm.esg.tcfdservice.exception.DuplicateResourceException;
 import com.nsmm.esg.tcfdservice.exception.UnauthorizedAccessException;
 import com.nsmm.esg.tcfdservice.repository.StrategyRiskIdentificationRepository;
 import com.nsmm.esg.tcfdservice.repository.StrategyScenarioAnalysisRepository;
@@ -58,9 +57,6 @@ public class StrategyService {
     );
 
     public Long createScenario(Long memberId, StrategyScenarioAnalysisRequest request) {
-        if (strategyScenarioAnalysisRepository.existsByMemberIdAndScenarioAndBaseYear(memberId, request.getScenario(), request.getBaseYear())) {
-            throw new DuplicateResourceException("시나리오 분석 항목");
-        }
         StrategyScenarioAnalysis entity = request.toEntity(memberId);
         applyEstimatedDamage(entity, request);
         return strategyScenarioAnalysisRepository.save(entity).getId();

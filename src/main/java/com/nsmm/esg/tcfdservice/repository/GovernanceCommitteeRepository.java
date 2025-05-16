@@ -11,6 +11,5 @@ public interface GovernanceCommitteeRepository extends JpaRepository<GovernanceC
 
     List<GovernanceCommittee> findByMemberId(Long memberId);
 
-    boolean existsByMemberIdAndName(Long memberId, String name);
 
 }

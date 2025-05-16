@@ -7,7 +7,6 @@ import com.nsmm.esg.tcfdservice.dto.GoalNetZeroResponse;
 import com.nsmm.esg.tcfdservice.entity.GoalNetZero;
 import com.nsmm.esg.tcfdservice.entity.GoalNetZeroEmission;
 import com.nsmm.esg.tcfdservice.entity.GoalNetZeroIndustry;
-import com.nsmm.esg.tcfdservice.exception.DuplicateResourceException;
 import com.nsmm.esg.tcfdservice.exception.InvalidRequestException;
 import com.nsmm.esg.tcfdservice.exception.ResourceNotFoundException;
 import com.nsmm.esg.tcfdservice.repository.GoalNetZeroRepository;
@@ -46,13 +45,7 @@ public class NetZeroService {
      */
     @Transactional
     public GoalNetZeroResponse createNetZeroGoal(Long memberId, GoalNetZeroRequest request) {
-        if (goalNetZeroRepository.existsByMemberIdAndBaseYearAndTargetYearAndScenario(
-                memberId,
-                request.getBaseYear(),
-                request.getTargetYear(),
-                request.getScenario())) {
-            throw new DuplicateResourceException("넷제로 목표");
-        }
+
         GoalNetZero goal = buildGoal(memberId, request);
         GoalNetZero saved = goalNetZeroRepository.save(goal);
         return toResponse(saved);

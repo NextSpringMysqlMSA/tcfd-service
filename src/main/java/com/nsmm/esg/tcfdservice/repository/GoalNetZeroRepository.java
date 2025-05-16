@@ -14,5 +14,4 @@ public interface GoalNetZeroRepository extends JpaRepository<GoalNetZero, Long> 
 
     Optional<GoalNetZero> findByIdAndMemberId(Long id, Long memberId);
 
-    boolean existsByMemberIdAndBaseYearAndTargetYearAndScenario(Long memberId, int baseYear, int targetYear, String scenario);
 }
