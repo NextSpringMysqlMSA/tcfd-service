@@ -7,6 +7,9 @@ import com.nsmm.esg.tcfdservice.dto.GoalNetZeroResponse;
 import com.nsmm.esg.tcfdservice.entity.GoalNetZero;
 import com.nsmm.esg.tcfdservice.entity.GoalNetZeroEmission;
 import com.nsmm.esg.tcfdservice.entity.GoalNetZeroIndustry;
+import com.nsmm.esg.tcfdservice.exception.DuplicateResourceException;
+import com.nsmm.esg.tcfdservice.exception.InvalidRequestException;
+import com.nsmm.esg.tcfdservice.exception.ResourceNotFoundException;
 import com.nsmm.esg.tcfdservice.repository.GoalNetZeroRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +46,13 @@ public class NetZeroService {
      */
     @Transactional
     public GoalNetZeroResponse createNetZeroGoal(Long memberId, GoalNetZeroRequest request) {
+        if (goalNetZeroRepository.existsByMemberIdAndBaseYearAndTargetYearAndScenario(
+                memberId,
+                request.getBaseYear(),
+                request.getTargetYear(),
+                request.getScenario())) {
+            throw new DuplicateResourceException("넷제로 목표");
+        }
         GoalNetZero goal = buildGoal(memberId, request);
         GoalNetZero saved = goalNetZeroRepository.save(goal);
         return toResponse(saved);
@@ -62,7 +72,7 @@ public class NetZeroService {
      */
     public GoalNetZeroResponse getNetZeroGoalById(Long id, Long memberId) {
         GoalNetZero goal = goalNetZeroRepository.findByIdAndMemberId(id, memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 목표가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("해당 목표가 존재하지 않거나 권한이 없습니다."));
         return toResponse(goal);
     }
 
@@ -72,7 +82,7 @@ public class NetZeroService {
     @Transactional
     public GoalNetZeroResponse updateNetZeroGoal(Long id, Long memberId, GoalNetZeroRequest request) {
         GoalNetZero goal = goalNetZeroRepository.findByIdAndMemberId(id, memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 목표가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("해당 목표가 존재하지 않거나 권한이 없습니다."));
 
         goal.updateInfo(request.getIndustrialSector(), request.getBaseYear(), request.getTargetYear(), request.getScenario());
         goal.getIndustries().clear();
@@ -91,7 +101,7 @@ public class NetZeroService {
     @Transactional
     public void deleteNetZeroGoal(Long id, Long memberId) {
         GoalNetZero goal = goalNetZeroRepository.findByIdAndMemberId(id, memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 목표가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("해당 목표가 존재하지 않거나 권한이 없습니다."));
         goalNetZeroRepository.delete(goal);
     }
 
@@ -101,7 +111,7 @@ public class NetZeroService {
     private GoalNetZero buildGoal(Long memberId, GoalNetZeroRequest request) {
         List<GoalNetZeroRequest.IndustryAsset> assets = request.getAssets();
         if (assets == null || assets.isEmpty()) {
-            throw new IllegalArgumentException("최소 1개의 자산 항목이 필요합니다.");
+            throw new InvalidRequestException("최소 1개의 자산 항목이 필요합니다.");
         }
 
         // 산업 항목 포함 GoalNetZero 생성 (DTO의 toEntity 활용)
@@ -157,7 +167,7 @@ public class NetZeroService {
     private double resolveEmissionFactor(String industry, double providedEf) {
         if (providedEf != 0) return providedEf;
         double ef = INDUSTRY_EMISSION_FACTORS.getOrDefault(industry, 0.0);
-        if (ef == 0.0) throw new IllegalArgumentException("배출계수가 정의되지 않은 산업입니다: " + industry);
+        if (ef == 0.0) throw new InvalidRequestException("배출계수가 정의되지 않은 산업입니다: " + industry);
         return ef;
     }
 

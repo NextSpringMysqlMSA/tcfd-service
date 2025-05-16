@@ -2,6 +2,9 @@ package com.nsmm.esg.tcfdservice.service;
 
 import com.nsmm.esg.tcfdservice.dto.*;
 import com.nsmm.esg.tcfdservice.entity.*;
+import com.nsmm.esg.tcfdservice.exception.DuplicateResourceException;
+import com.nsmm.esg.tcfdservice.exception.ResourceNotFoundException;
+import com.nsmm.esg.tcfdservice.exception.UnauthorizedAccessException;
 import com.nsmm.esg.tcfdservice.repository.*;
 import com.nsmm.esg.tcfdservice.entity.Identifiable;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,9 @@ public class GovernanceService {
      * 위원회 생성
      */
     public Long createCommittee(Long memberId, GovernanceCommitteeRequest request) {
+        if (committeeRepository.existsByMemberIdAndName(memberId, request.getCommitteeName())) {
+            throw new DuplicateResourceException("위원회");
+        }
         return saveEntityAndReturnId(request.toEntity(memberId), committeeRepository);
     }
 
@@ -40,12 +46,11 @@ public class GovernanceService {
      * 특정 위원회 조회
      */
     public GovernanceCommitteeResponse getCommitteeById(Long memberId, Long committeeId) {
-        // 특정 committeeId에 해당하는 위원회 정보를 조회
         GovernanceCommittee committee = committeeRepository.findById(committeeId)
-                .filter(c -> c.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("수정할 위원회가 존재하지 않거나 권한이 없습니다."));
-
-        // 엔티티를 요청 객체로 변환하여 반환
+                .orElseThrow(() -> new ResourceNotFoundException("위원회가 존재하지 않습니다."));
+        if (!committee.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         return GovernanceCommitteeResponse.fromEntity(committee);
     }
 
@@ -55,9 +60,10 @@ public class GovernanceService {
     @Transactional
     public void updateCommittee(Long memberId, Long id, GovernanceCommitteeRequest request) {
         GovernanceCommittee committee = committeeRepository.findById(id)
-                .filter(c -> c.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("수정할 위원회가 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("수정할 위원회가 존재하지 않습니다."));
+        if (!committee.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         committee.updateFromRequest(request);
     }
 
@@ -66,9 +72,10 @@ public class GovernanceService {
      */
     public void deleteCommittee(Long memberId, Long id) {
         GovernanceCommittee committee = committeeRepository.findById(id)
-                .filter(c -> c.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("삭제할 위원회가 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("삭제할 위원회가 존재하지 않습니다."));
+        if (!committee.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         committeeRepository.delete(committee);
     }
     //----------------------------------------------------------------------------------------------------------------
@@ -94,8 +101,10 @@ public class GovernanceService {
      */
     public GovernanceMeetingResponse getMeetingById(Long memberId, Long meetingId) {
         GovernanceMeeting meeting = meetingRepository.findById(meetingId)
-                .filter(m -> m.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("조회할 회의가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("조회할 회의가 존재하지 않습니다."));
+        if (!meeting.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         return GovernanceMeetingResponse.fromEntity(meeting);
     }
 
@@ -105,9 +114,10 @@ public class GovernanceService {
     @Transactional
     public void updateMeeting(Long memberId, Long id, GovernanceMeetingRequest request) {
         GovernanceMeeting meeting = meetingRepository.findById(id)
-                .filter(m -> m.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("수정할 회의가 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("수정할 회의가 존재하지 않습니다."));
+        if (!meeting.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         meeting.updateFromRequest(request);
     }
 
@@ -116,9 +126,10 @@ public class GovernanceService {
      */
     public void deleteMeeting(Long memberId, Long id) {
         GovernanceMeeting meeting = meetingRepository.findById(id)
-                .filter(m -> m.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("삭제할 회의가 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("삭제할 회의가 존재하지 않습니다."));
+        if (!meeting.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         meetingRepository.delete(meeting);
     }
     //----------------------------------------------------------------------------------------------------------------
@@ -144,8 +155,10 @@ public class GovernanceService {
      */
     public GovernanceExecutiveKpiResponse getExecutiveKpiById(Long memberId, Long kpiId) {
         GovernanceExecutiveKpi kpi = kpiRepository.findById(kpiId)
-                .filter(k -> k.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("조회할 KPI가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("조회할 KPI가 존재하지 않습니다."));
+        if (!kpi.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         return GovernanceExecutiveKpiResponse.fromEntity(kpi);
     }
 
@@ -156,9 +169,10 @@ public class GovernanceService {
     @Transactional
     public void updateExecutiveKpi(Long memberId, Long id, GovernanceExecutiveKpiRequest request) {
         GovernanceExecutiveKpi kpi = kpiRepository.findById(id)
-                .filter(k -> k.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("수정할 KPI가 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("수정할 KPI가 존재하지 않습니다."));
+        if (!kpi.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         kpi.updateFromRequest(request);
     }
 
@@ -167,9 +181,10 @@ public class GovernanceService {
      */
     public void deleteExecutiveKpi(Long memberId, Long id) {
         GovernanceExecutiveKpi kpi = kpiRepository.findById(id)
-                .filter(k -> k.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("삭제할 KPI가 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("삭제할 KPI가 존재하지 않습니다."));
+        if (!kpi.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         kpiRepository.delete(kpi);
     }
     //----------------------------------------------------------------------------------------------------------------
@@ -195,8 +210,10 @@ public class GovernanceService {
      */
     public GovernanceEducationResponse getEducationById(Long memberId, Long educationId) {
         GovernanceEducation education = educationRepository.findById(educationId)
-                .filter(e -> e.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("조회할 교육이 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("조회할 교육이 존재하지 않습니다."));
+        if (!education.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         return GovernanceEducationResponse.fromEntity(education);
     }
 
@@ -207,9 +224,10 @@ public class GovernanceService {
     @Transactional
     public void updateEducation(Long memberId, Long id, GovernanceEducationRequest request) {
         GovernanceEducation education = educationRepository.findById(id)
-                .filter(e -> e.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("수정할 교육이 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("수정할 교육이 존재하지 않습니다."));
+        if (!education.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         education.updateFromRequest(request);
     }
 
@@ -218,9 +236,10 @@ public class GovernanceService {
      */
     public void deleteEducation(Long memberId, Long id) {
         GovernanceEducation education = educationRepository.findById(id)
-                .filter(e -> e.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("삭제할 교육이 존재하지 않거나 권한이 없습니다."));
-
+                .orElseThrow(() -> new ResourceNotFoundException("삭제할 교육이 존재하지 않습니다."));
+        if (!education.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("권한이 없습니다.");
+        }
         educationRepository.delete(education);
     }
     //----------------------------------------------------------------------------------------------------------------

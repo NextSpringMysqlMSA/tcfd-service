@@ -10,4 +10,6 @@ import java.util.List;
 public interface StrategyScenarioAnalysisRepository extends JpaRepository<StrategyScenarioAnalysis, Long> {
     List<StrategyScenarioAnalysis> findByMemberId(Long memberId);
 
+    boolean existsByMemberIdAndScenarioAndBaseYear(Long memberId, String scenario, Integer baseYear);
+
 }
