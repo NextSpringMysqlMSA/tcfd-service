@@ -6,9 +6,11 @@ import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisRequest;
 import com.nsmm.esg.tcfdservice.dto.StrategyScenarioAnalysisResponse;
 import com.nsmm.esg.tcfdservice.entity.StrategyRiskIdentification;
 import com.nsmm.esg.tcfdservice.entity.StrategyScenarioAnalysis;
+import com.nsmm.esg.tcfdservice.exception.ResourceNotFoundException;
+import com.nsmm.esg.tcfdservice.exception.DuplicateResourceException;
+import com.nsmm.esg.tcfdservice.exception.UnauthorizedAccessException;
 import com.nsmm.esg.tcfdservice.repository.StrategyRiskIdentificationRepository;
 import com.nsmm.esg.tcfdservice.repository.StrategyScenarioAnalysisRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +36,11 @@ public class StrategyService {
     // 시나리오 분석 단건 조회
     public StrategyScenarioAnalysisResponse getScenarioById(Long memberId, Long id) {
         StrategyScenarioAnalysis scenario = strategyScenarioAnalysisRepository.findById(id)
-                .filter(s -> s.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("해당 시나리오가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("Scenario", id));
+
+        if (!scenario.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("해당 시나리오에 대한 권한이 없습니다.");
+        }
 
         return StrategyScenarioAnalysisResponse.fromEntity(scenario);
     }
@@ -53,6 +58,9 @@ public class StrategyService {
     );
 
     public Long createScenario(Long memberId, StrategyScenarioAnalysisRequest request) {
+        if (strategyScenarioAnalysisRepository.existsByMemberIdAndScenarioAndBaseYear(memberId, request.getScenario(), request.getBaseYear())) {
+            throw new DuplicateResourceException("시나리오 분석 항목");
+        }
         StrategyScenarioAnalysis entity = request.toEntity(memberId);
         applyEstimatedDamage(entity, request);
         return strategyScenarioAnalysisRepository.save(entity).getId();
@@ -61,10 +69,10 @@ public class StrategyService {
     @Transactional
     public void updateScenario(Long memberId, Long id, StrategyScenarioAnalysisRequest request) {
         StrategyScenarioAnalysis scenario = strategyScenarioAnalysisRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 시나리오가 존재하지 않습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("Scenario", id));
 
         if (!scenario.getMemberId().equals(memberId)) {
-            throw new IllegalArgumentException("해당 시나리오에 대한 권한이 없습니다.");
+            throw new UnauthorizedAccessException("해당 시나리오에 대한 권한이 없습니다.");
         }
 
         scenario.updateFromDto(request);
@@ -102,11 +110,11 @@ public class StrategyService {
     // 시나리오 분석 삭제 - 소유자 확인 후 삭제
     public void deleteScenario(Long memberId, Long id) {
         StrategyScenarioAnalysis scenario = strategyScenarioAnalysisRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 시나리오가 존재하지 않습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("Scenario", id));
 
         // 사용자 권한 확인
         if (!scenario.getMemberId().equals(memberId)) {
-            throw new IllegalArgumentException("해당 시나리오에 대한 권한이 없습니다.");
+            throw new UnauthorizedAccessException("해당 시나리오에 대한 권한이 없습니다.");
         }
 
         strategyScenarioAnalysisRepository.delete(scenario);
@@ -124,8 +132,11 @@ public class StrategyService {
     // 리스크 부분 조회
     public StrategyRiskIdentificationResponse getRiskById(Long memberId, Long id) {
         StrategyRiskIdentification risk = strategyRiskIdentificationRepository.findById(id)
-                .filter(r -> r.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("해당 리스크가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("Risk", id));
+
+        if (!risk.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("해당 리스크에 대한 권한이 없습니다.");
+        }
 
         return StrategyRiskIdentificationResponse.fromEntity(risk);
     }
@@ -139,11 +150,11 @@ public class StrategyService {
     @Transactional
     public void updateRisk(Long memberId, Long id, StrategyRiskIdentificationRequest request) {
         StrategyRiskIdentification risk = strategyRiskIdentificationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("수정할 리스크가 없거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("Risk", id));
 
         // 사용자 권한 확인
         if (!risk.getMemberId().equals(memberId)) {
-            throw new IllegalArgumentException("해당 리스크에 대한 권한이 없습니다.");
+            throw new UnauthorizedAccessException("해당 리스크에 대한 권한이 없습니다.");
         }
 
         // DTO 값으로 엔티티 업데이트
@@ -153,11 +164,11 @@ public class StrategyService {
     // 리스크 식별 삭제 - 소유자 확인 후 삭제
     public void deleteRisk(Long memberId, Long id) {
         StrategyRiskIdentification risk = strategyRiskIdentificationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("삭제할 리스크가 없거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("Risk", id));
 
         // 사용자 권한 확인
         if (!risk.getMemberId().equals(memberId)) {
-            throw new IllegalArgumentException("해당 리스크에 대한 권한이 없습니다.");
+            throw new UnauthorizedAccessException("해당 리스크에 대한 권한이 없습니다.");
         }
 
         strategyRiskIdentificationRepository.delete(risk);

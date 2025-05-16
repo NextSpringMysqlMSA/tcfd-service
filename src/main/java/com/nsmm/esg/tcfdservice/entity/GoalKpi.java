@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "goal_kpi")
-public class GoalKpi implements Identifiable<Long> {
+public class GoalKpi  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,16 +57,6 @@ public class GoalKpi implements Identifiable<Long> {
     @UpdateTimestamp
     private LocalDateTime updatedAt;           // 데이터 수정 일시
 
-    /**
-     * Identifiable 인터페이스 구현 메서드
-     * 엔티티의 고유 식별자 반환
-     *
-     * @return KPI 고유 식별자
-     */
-    @Override
-    public Long getId() {
-        return this.id;
-    }
 
     /**
      * 요청 DTO를 사용하여 엔티티 정보 업데이트

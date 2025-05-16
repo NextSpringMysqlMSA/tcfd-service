@@ -3,9 +3,12 @@ package com.nsmm.esg.tcfdservice.service;
 import com.nsmm.esg.tcfdservice.dto.GoalKpiRequest;
 import com.nsmm.esg.tcfdservice.dto.GoalKpiResponse;
 import com.nsmm.esg.tcfdservice.entity.GoalKpi;
+import com.nsmm.esg.tcfdservice.exception.ResourceNotFoundException;
+import com.nsmm.esg.tcfdservice.exception.UnauthorizedAccessException;
 import com.nsmm.esg.tcfdservice.repository.GoalKpiRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +22,15 @@ public class KpiService {
      * KPI 목표 저장
      */
     public Long createKpiGoal(Long memberId, GoalKpiRequest request) {
+        // Check for duplicate KPI goal for the same member and properties
+        if (kpiRepository.existsByMemberIdAndIndicatorAndDetailedIndicatorAndBaseYearAndGoalYear(
+                memberId,
+                request.getIndicator(),
+                request.getDetailedIndicator(),
+                request.getBaseYear(),
+                request.getGoalYear())) {
+            throw new com.nsmm.esg.tcfdservice.exception.DuplicateResourceException("KPI 목표");
+        }
         GoalKpi entity = request.toEntity(memberId);
         return kpiRepository.save(entity).getId();
     }
@@ -37,22 +49,26 @@ public class KpiService {
      */
     public GoalKpiResponse getKpiGoalById(Long id, Long memberId) {
         GoalKpi kpi = kpiRepository.findById(id)
-                .filter(g -> g.getMemberId().equals(memberId))
-                .orElseThrow(() -> new IllegalArgumentException("조회할 KPI 목표가 존재하지 않거나 권한이 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("KPI", id));
+
+        if (!kpi.getMemberId().equals(memberId)) {
+            throw new UnauthorizedAccessException("해당 KPI 목표에 대한 접근 권한이 없습니다.");
+        }
+
         return GoalKpiResponse.fromEntity(kpi);
     }
 
-
     /**
-     * KPI 목표 수정
+     * KPI 목표 수정`
      */
+    @Transactional
     public void updateKpiGoal(Long goalId, Long memberId, GoalKpiRequest request) {
         GoalKpi goalKpi = kpiRepository.findById(goalId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 KPI 목표가 존재하지 않습니다. ID = " + goalId));
+                .orElseThrow(() -> new ResourceNotFoundException("해당 KPI 목표가 존재하지 않습니다. ID = " + goalId));
         if (!goalKpi.getMemberId().equals(memberId)) {
-            throw new IllegalArgumentException("해당 목표에 대한 권한이 없습니다.");
+            throw new UnauthorizedAccessException("해당 목표에 대한 권한이 없습니다.");
         }
-        goalKpi.updateFromDto(request);
+        goalKpi.updateFromDto(request);  // 변경 감지 (dirty checking)
     }
 
     /**
@@ -60,7 +76,7 @@ public class KpiService {
      */
     public void deleteKpiGoal(Long goalId, Long memberId) {
         if (!kpiRepository.existsById(goalId)) {
-            throw new IllegalArgumentException("해당 KPI 목표가 존재하지 않습니다. ID = " + goalId);
+            throw new ResourceNotFoundException("해당 KPI 목표가 존재하지 않습니다. ID = " + goalId);
         }
         kpiRepository.deleteById(goalId);
     }
