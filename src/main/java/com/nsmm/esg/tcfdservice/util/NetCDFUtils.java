@@ -1,24 +1,59 @@
 package com.nsmm.esg.tcfdservice.util;
 
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import ucar.ma2.Array;
 import ucar.ma2.IndexIterator;
+import ucar.nc2.NetcdfFile;
 
-import java.io.File;
+import java.io.IOException;
 
 /**
  * NetCDF 관련 유틸리티 클래스
+ * - S3에서 .nc 파일 직접 로드
  * - 좌표 기반 인덱스 탐색
- * - 기후 재해별 NetCDF 파일 경로 자동 탐색
  */
+@RequiredArgsConstructor
 public class NetCDFUtils {
 
+    private final S3Client s3;
+    private final String bucket;
+
     /**
-     * 주어진 실수형 배열(Array)에서 target 값과 가장 가까운 값의 인덱스를 반환
-     * (예: 위도 또는 경도 배열에서 가장 가까운 지점을 찾을 때 사용)
+     * S3에 저장된 NetCDF 파일을 시나리오 기반 경로로부터 메모리에서 불러옴
+     * 예: data/drought/ssp1-2.6/drought_ssp1-2.6_2020.nc
      *
-     * @param array  NetCDF에서 추출한 Array (lat 또는 lon)
-     * @param target 찾고자 하는 목표 위도 또는 경도
-     * @return 가장 가까운 값의 인덱스
+     * @param hazardType 재해 유형 (예: drought, flood, wind)
+     * @param scenario   시나리오 (예: ssp1-2.6)
+     * @param baseYear   기준 연도 (예: 2020)
+     * @return NetcdfFile (메모리 기반)
+     */
+    public NetcdfFile loadFromS3(String hazardType, String scenario, int baseYear) throws IOException {
+        String key = String.format("data/%s/%s/%s_%s_%d.nc",
+                hazardType.toLowerCase(),
+                scenario.toLowerCase(),
+                hazardType.toLowerCase(),
+                scenario.toLowerCase(),
+                baseYear);
+
+        ResponseInputStream<GetObjectResponse> inputStream = s3.getObject(
+                GetObjectRequest.builder()
+                        .bucket(bucket)
+                        .key(key)
+                        .build()
+        );
+
+        byte[] bytes = IOUtils.toByteArray(inputStream);
+        return NetcdfFile.openInMemory(key, bytes); // 메모리 내에서 직접 파싱
+    }
+
+    /**
+     * 주어진 실수형 배열(Array)에서 target 값과 가장 가까운 인덱스 반환
+     * (위도 또는 경도 좌표 일치용)
      */
     public static int findNearestIndex(Array array, double target) {
         IndexIterator iter = array.getIndexIterator();
@@ -30,56 +65,10 @@ public class NetCDFUtils {
             double diff = Math.abs(value - target);
             if (diff < minDiff) {
                 minDiff = diff;
-                idx = i;  // 최소 차이가 발생한 인덱스를 저장
+                idx = i;
             }
             i++;
         }
         return idx;
-    }
-
-    /**
-     * 지정한 재해 유형(hazardType), 시나리오(scenario), 기준연도(baseYear)를 기반으로
-     * NetCDF 기후 파일의 경로를 자동으로 탐색
-     *
-     * 디렉토리 구조: data/{hazardType}/{scenario}/
-     * 파일명 형식: {hazardType}_{scenario}_{baseYear}.nc (와 유사한 이름을 자동 탐색)
-     *
-     * @param hazardType 재해 유형 (예: wind, flood, drought 등)
-     * @param scenario   시나리오명 (예: ssp1-2.6)
-     * @param baseYear   기준 연도 (예: 2020)
-     * @return 해당 파일의 절대 경로
-     */
-    public static String resolveHazardPath(String hazardType, String scenario, int baseYear) {
-        // 예: data/wind/ssp1-2.6
-        String folder = String.format("data/%s/%s", hazardType.toLowerCase(), scenario.toLowerCase());
-        File dir = new File(folder);
-
-        // 디렉토리 존재 여부 확인
-        if (!dir.exists() || !dir.isDirectory()) {
-            throw new RuntimeException("디렉토리 없음: " + dir.getAbsolutePath());
-        }
-
-        // 디렉토리 내 파일 목록 불러오기 (null 처리 포함)
-        File[] files = dir.listFiles();
-        if (files == null || files.length == 0) {
-            throw new RuntimeException("디렉토리 내 NetCDF 파일 없음: " + dir.getAbsolutePath());
-        }
-
-        // 소문자로 변환하여 파일명 조건 검사
-        String scenarioPart = scenario.toLowerCase();
-        String yearPart = String.valueOf(baseYear);
-
-        for (File file : files) {
-            String name = file.getName().toLowerCase();
-            if (name.contains(hazardType.toLowerCase()) &&
-                    name.contains(scenarioPart) &&
-                    name.contains(yearPart) &&
-                    name.endsWith(".nc")) {
-                return file.getAbsolutePath();  // 조건에 맞는 파일 반환
-            }
-        }
-
-        // 조건에 맞는 파일이 없는 경우 예외 발생
-        throw new RuntimeException("해당 조건의 파일 없음: hazard=" + hazardType + ", scenario=" + scenario + ", year=" + baseYear);
     }
 }
