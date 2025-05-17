@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface GovernanceMeetingRepository extends JpaRepository<GovernanceMeeting, Long> {
     List<GovernanceMeeting> findByMemberId(Long memberId);
+
 }
