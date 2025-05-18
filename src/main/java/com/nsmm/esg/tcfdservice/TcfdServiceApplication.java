@@ -2,8 +2,10 @@ package com.nsmm.esg.tcfdservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class TcfdServiceApplication {
 
 	public static void main(String[] args) {

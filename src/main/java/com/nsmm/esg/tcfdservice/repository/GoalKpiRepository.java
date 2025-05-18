@@ -10,11 +10,5 @@ import java.util.List;
 public interface GoalKpiRepository extends JpaRepository<GoalKpi, Long> {
     List<GoalKpi> findByMemberId(Long memberId);
 
-    boolean existsByMemberIdAndIndicatorAndDetailedIndicatorAndBaseYearAndGoalYear(
-        Long memberId,
-        String indicator,
-        String detailedIndicator,
-        int baseYear,
-        int goalYear
-    );
+
 }

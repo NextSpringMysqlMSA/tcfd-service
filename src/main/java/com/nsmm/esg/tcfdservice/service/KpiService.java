@@ -22,15 +22,6 @@ public class KpiService {
      * KPI 목표 저장
      */
     public Long createKpiGoal(Long memberId, GoalKpiRequest request) {
-        // Check for duplicate KPI goal for the same member and properties
-        if (kpiRepository.existsByMemberIdAndIndicatorAndDetailedIndicatorAndBaseYearAndGoalYear(
-                memberId,
-                request.getIndicator(),
-                request.getDetailedIndicator(),
-                request.getBaseYear(),
-                request.getGoalYear())) {
-            throw new com.nsmm.esg.tcfdservice.exception.DuplicateResourceException("KPI 목표");
-        }
         GoalKpi entity = request.toEntity(memberId);
         return kpiRepository.save(entity).getId();
     }

@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface GovernanceExecutiveKpiRepository extends JpaRepository<GovernanceExecutiveKpi, Long> {
     List<GovernanceExecutiveKpi> findByMemberId(Long memberId);
+
 }

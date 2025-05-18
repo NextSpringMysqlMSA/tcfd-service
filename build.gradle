@@ -36,6 +36,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'edu.ucar:netcdf4:5.5.3' // NetCDF-Java core
+	// AWS SDK - S3 + Region
+	implementation 'software.amazon.awssdk:s3:2.25.0'
+	implementation 'software.amazon.awssdk:regions:2.25.0'
+	implementation 'commons-io:commons-io:2.14.0'
+
+
 
 
 	testImplementation 'org.springframework.security:spring-security-test'
