@@ -39,7 +39,6 @@ dependencies {
 	// AWS SDK - S3 + Region
 	implementation 'software.amazon.awssdk:s3:2.25.0'
 	implementation 'software.amazon.awssdk:regions:2.25.0'
-
 	implementation 'commons-io:commons-io:2.14.0'
 
 
