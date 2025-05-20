@@ -21,7 +21,9 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven { url 'https://artifacts.unidata.ucar.edu/repository/unidata-all/' } // NetCDF 전용 리포
+	flatDir {
+		dirs 'lib'
+	}
 
 }
 
@@ -35,14 +37,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'edu.ucar:netcdf4:5.5.3' // NetCDF-Java core
+	implementation(name: 'netcdfAll-5.8.0')
+
 	// AWS SDK - S3 + Region
 	implementation 'software.amazon.awssdk:s3:2.25.0'
 	implementation 'software.amazon.awssdk:regions:2.25.0'
 	implementation 'commons-io:commons-io:2.14.0'
-
-
-
 
 	testImplementation 'org.springframework.security:spring-security-test'
 
