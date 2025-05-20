@@ -6,6 +6,7 @@ COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
+COPY lib lib
 
 # 의존성 캐싱
 RUN chmod +x ./gradlew

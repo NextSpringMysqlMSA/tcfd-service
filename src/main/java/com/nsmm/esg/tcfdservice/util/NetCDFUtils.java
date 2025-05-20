@@ -3,19 +3,15 @@ package com.nsmm.esg.tcfdservice.util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import ucar.ma2.Array;
 import ucar.ma2.IndexIterator;
 import ucar.nc2.NetcdfFile;
-import ucar.nc2.NetcdfFiles;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.UUID;
+
 
 /**
  * NetCDF 관련 유틸리티 클래스
@@ -41,7 +37,7 @@ public class NetCDFUtils {
      * @param hazardType 재해 유형 (예: drought, flood, wind 등)
      * @param scenario   시나리오명 (예: ssp1-2.6)
      * @param baseYear   기준 연도 (예: 2020)
-     * @return 파싱된 NetcdfFile 객체
+     * @return 파싱된 NetcdfFile 客體
      * @throws IOException 다운로드 또는 파싱 실패 시 예외 발생
      */
     public NetcdfFile loadFromS3(String hazardType, String scenario, int baseYear) throws IOException {
