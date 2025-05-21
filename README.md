@@ -1,9 +1,5 @@
 flowchart TD
 
-
-```mermaid
-flowchart TD
-
 %% 공통 시작 및 인증 처리
     Start((Start))
     Start --> Auth["X-MEMBER-ID 인증"]
@@ -40,7 +36,18 @@ flowchart TD
     Delete --> SvcDelete["meetingService.deleteMeeting()"]
     SvcDelete --> RespDelete["삭제 완료 메시지"]
     RespDelete --> End5((End))
-```
+
+%% 색상 스타일 정의
+    classDef forest fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32;
+    classDef terminal fill:#d0f0c0,stroke:#1b5e20,color:#1b5e20;
+    classDef error fill:#fdecea,stroke:#c62828,color:#c62828;
+
+%% 클래스 적용
+    class Start,End1,End2,End3,End4,End5,EndErr terminal;
+    class Auth,AuthCheck,Router,GetList,GetOne,Create,Update,Delete,
+          SvcList,SvcOne,SvcCreate,SvcUpdate,SvcDelete,
+          RespList,RespOne,RespCreate,RespUpdate,RespDelete forest;
+    class Error401 error;
 
 ```mermaid
 flowchart TD
