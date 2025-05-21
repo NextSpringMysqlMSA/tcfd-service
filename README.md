@@ -1,245 +1,314 @@
 ```mermaid
 flowchart TD
-    start((Start))
 
-%% 시나리오 분석
-    start --> scenarioGetAll["시나리오 전체 조회<br>GET /strategy/scenario"]
-    scenarioGetAll --> extractId1["extractMemberId()"]
-    extractId1 --> getScenarios["strategyService.getScenarios()"]
-    getScenarios --> end1((End))
+%% 공통 인증 처리
+    Start((Start))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((End))
+    AuthCheck -- "예" --> Router["요청 분기"]
 
-    start --> scenarioGetById["시나리오 단건 조회<br>GET /strategy/scenario/{id}"]
-    scenarioGetById --> extractId2["extractMemberId()"]
-    extractId2 --> getScenarioById["strategyService.getScenarioById()"]
-    getScenarioById --> end2((End))
-
-    start --> scenarioPost["시나리오 생성<br>POST /strategy/scenario"]
-    scenarioPost --> extractId3["extractMemberId()"]
-    extractId3 --> createScenario["strategyService.createScenario()"]
-    createScenario --> end3((End))
-
-    start --> scenarioPut["시나리오 수정<br>PUT /strategy/scenario/{id}"]
-    scenarioPut --> extractId4["extractMemberId()"]
-    extractId4 --> updateScenario["strategyService.updateScenario()"]
-    updateScenario --> end4((End))
-
-    start --> scenarioDelete["시나리오 삭제<br>DELETE /strategy/scenario/{id}"]
-    scenarioDelete --> extractId5["extractMemberId()"]
-    extractId5 --> deleteScenario["strategyService.deleteScenario()"]
-    deleteScenario --> end5((End))
-
-%% 리스크 식별
-    start --> riskGetAll["리스크 전체 조회<br>GET /strategy/risk"]
-    riskGetAll --> extractId6["extractMemberId()"]
-    extractId6 --> getRisks["strategyService.getRisks()"]
-    getRisks --> end6((End))
-
-    start --> riskGetById["리스크 단건 조회<br>GET /strategy/risk/{id}"]
-    riskGetById --> extractId7["extractMemberId()"]
-    extractId7 --> getRiskById["strategyService.getRiskById()"]
-    getRiskById --> end7((End))
-
-    start --> riskPost["리스크 생성<br>POST /strategy/risk"]
-    riskPost --> extractId8["extractMemberId()"]
-    extractId8 --> createRisk["strategyService.createRisk()"]
-    createRisk --> end8((End))
-
-    start --> riskPut["리스크 수정<br>PUT /strategy/risk/{id}"]
-    riskPut --> extractId9["extractMemberId()"]
-    extractId9 --> updateRisk["strategyService.updateRisk()"]
-    updateRisk --> end9((End))
-
-    start --> riskDelete["리스크 삭제<br>DELETE /strategy/risk/{id}"]
-    riskDelete --> extractId10["extractMemberId()"]
-    extractId10 --> deleteRisk["strategyService.deleteRisk()"]
-    deleteRisk --> end10((End))
-```
-
-```mermaid
-flowchart TD
-  start((Start))
-
-  %% 위원회
-  start --> CList["GET /committee"]
-  CList --> CListSvc["getCommittees()"]
-  CListSvc --> CListResp["위원회 목록 반환"]
-
-  start --> COne["GET /committee/{id}"]
-  COne --> COneSvc["getCommitteeById()"]
-  COneSvc --> COneResp["위원회 상세 반환"]
-
-  start --> CCreate["POST /committee"]
-  CCreate --> CCreateSvc["createCommittee()"]
-  CCreateSvc --> CCreateResp["생성 완료 메시지"]
-
-  start --> CUpdate["PUT /committee/{id}"]
-  CUpdate --> CUpdateSvc["updateCommittee()"]
-  CUpdateSvc --> CUpdateResp["수정 완료 메시지"]
-
-  start --> CDelete["DELETE /committee/{id}"]
-  CDelete --> CDeleteSvc["deleteCommittee()"]
-  CDeleteSvc --> CDeleteResp["삭제 완료 메시지"]
-
-  %% 회의
-  start --> MList["GET /meeting"]
-  MList --> MListSvc["getMeetings()"]
-  MListSvc --> MListResp["회의 목록 반환"]
-
-  start --> MOne["GET /meeting/{id}"]
-  MOne --> MOneSvc["getMeetingById()"]
-  MOneSvc --> MOneResp["회의 상세 반환"]
-
-  start --> MCreate["POST /meeting"]
-  MCreate --> MCreateSvc["createMeeting()"]
-  MCreateSvc --> MCreateResp["등록 완료 메시지"]
-
-  start --> MUpdate["PUT /meeting/{id}"]
-  MUpdate --> MUpdateSvc["updateMeeting()"]
-  MUpdateSvc --> MUpdateResp["수정 완료 메시지"]
-
-  start --> MDelete["DELETE /meeting/{id}"]
-  MDelete --> MDeleteSvc["deleteMeeting()"]
-  MDeleteSvc --> MDeleteResp["삭제 완료 메시지"]
-
-  %% 경영진 KPI
-  start --> KList["GET /executive-kpi"]
-  KList --> KListSvc["getExecutiveKpis()"]
-  KListSvc --> KListResp["KPI 목록 반환"]
-
-  start --> KOne["GET /executive-kpi/{id}"]
-  KOne --> KOneSvc["getExecutiveKpiById()"]
-  KOneSvc --> KOneResp["KPI 상세 반환"]
-
-  start --> KCreate["POST /executive-kpi"]
-  KCreate --> KCreateSvc["createExecutiveKpi()"]
-  KCreateSvc --> KCreateResp["등록 완료 메시지"]
-
-  start --> KUpdate["PUT /executive-kpi/{id}"]
-  KUpdate --> KUpdateSvc["updateExecutiveKpi()"]
-  KUpdateSvc --> KUpdateResp["수정 완료 메시지"]
-
-  start --> KDelete["DELETE /executive-kpi/{id}"]
-  KDelete --> KDeleteSvc["deleteExecutiveKpi()"]
-  KDeleteSvc --> KDeleteResp["삭제 완료 메시지"]
-
-  %% 환경 교육
-  start --> EList["GET /education"]
-  EList --> EListSvc["getEducations()"]
-  EListSvc --> EListResp["교육 목록 반환"]
-
-  start --> EOne["GET /education/{id}"]
-  EOne --> EOneSvc["getEducationById()"]
-  EOneSvc --> EOneResp["교육 상세 반환"]
-
-  start --> ECreate["POST /education"]
-  ECreate --> ECreateSvc["createEducation()"]
-  ECreateSvc --> ECreateResp["등록 완료 메시지"]
-
-  start --> EUpdate["PUT /education/{id}"]
-  EUpdate --> EUpdateSvc["updateEducation()"]
-  EUpdateSvc --> EUpdateResp["수정 완료 메시지"]
-
-  start --> EDelete["DELETE /education/{id}"]
-  EDelete --> EDeleteSvc["deleteEducation()"]
-  EDeleteSvc --> EDeleteResp["삭제 완료 메시지"]
-
-  %% 끝
-  EDeleteResp --> done((End))
-```
-
-```mermaid
-flowchart TD
-  start((Start))
-
-  %% TCFD 종합 진행률 조회
-  start --> getProgress["GET /internal/tcfd/progress"]
-  getProgress --> callProgress["InternalProgressService.getProgress()"]
-  callProgress --> end1((End))
-
-  %% NetZero 배출량 진행률 조회
-  start --> getNetZero["GET /internal/tcfd/progress/netzero"]
-  getNetZero --> callNetZero["InternalProgressService.getNetZeroEmissionProgress()"]
-  callNetZero --> end2((End))
-```
-```mermaid
-flowchart TD
-    start((Start))
-
-%% KPI 전체 조회
-    start --> getAllKpi["GET /goal/kpi"]
-    getAllKpi --> extract1[[extractMemberId]]
-    extract1 --> isValid1{"유효한 요청인가?"}
-    isValid1 -- Yes --> serviceAll[[KpiService.getKpiGoals]]
-    isValid1 -- No --> error1["Response: 400 Bad Request"]
-    serviceAll --> end1((End))
-    error1 --> end1
-
-%% KPI 단건 조회
-    start --> getOneKpi["GET /goal/kpi/{id}"]
-    getOneKpi --> extract2[[extractMemberId]]
-    extract2 --> isValid2{"ID 존재 여부"}
-    isValid2 -- Yes --> serviceOne[[KpiService.getKpiGoalById]]
-    isValid2 -- No --> error2["Response: 404 Not Found"]
-    serviceOne --> end2((End))
-    error2 --> end2
-
-%% KPI 생성
-    start --> postKpi["POST /goal/kpi"]
-    postKpi --> extract3[[extractMemberId]]
-    extract3 --> isValid3{"필수값 존재 여부"}
-    isValid3 -- Yes --> servicePost[[KpiService.createKpiGoal]]
-    isValid3 -- No --> error3["Response: 400 Bad Request"]
-    servicePost --> end3((End))
-    error3 --> end3
-
-%% KPI 수정
-    start --> putKpi["PUT /goal/kpi/{id}"]
-    putKpi --> extract4[[extractMemberId]]
-    extract4 --> isValid4{"ID 및 값 유효?"}
-    isValid4 -- Yes --> servicePut[[KpiService.updateKpiGoal]]
-    isValid4 -- No --> error4["Response: 400 or 404"]
-    servicePut --> end4((End))
-    error4 --> end4
-
-%% KPI 삭제
-    start --> deleteKpi["DELETE /goal/kpi/{id}"]
-    deleteKpi --> extract5[[extractMemberId]]
-    extract5 --> isValid5{"삭제 가능한 ID?"}
-    isValid5 -- Yes --> serviceDelete[[KpiService.deleteKpiGoal]]
-    isValid5 -- No --> error5["Response: 404 Not Found"]
-    serviceDelete --> end5((End))
-    error5 --> end5
-```
-```mermaid
-flowchart TD
-
-%% 전체 조회
-    start1((Start)) --> getAllNetZero["GET /netzero"]
-    getAllNetZero --> extractMemberId1[[extractMemberId]]
-    extractMemberId1 --> callGetAll[[NetZeroService.getNetZeroGoals]]
-    callGetAll --> end1((End))
+%% 목록 조회
+    Router --> GetList["위원회 목록 조회"]
+    GetList --> SvcList["committeeService.getCommittees()"]
+    SvcList --> RespList["위원회 목록 반환"]
+    RespList --> End1((End))
 
 %% 단건 조회
-    start2((Start)) --> getNetZeroById["GET /netzero/{id}"]
-    getNetZeroById --> extractMemberId2[[extractMemberId]]
-    extractMemberId2 --> callGetOne[[NetZeroService.getNetZeroGoalById]]
-    callGetOne --> end2((End))
+    Router --> GetOne["위원회 단건 조회"]
+    GetOne --> SvcOne["committeeService.getCommitteeById()"]
+    SvcOne --> RespOne["단건 반환"]
+    RespOne --> End2((End))
 
-%% 생성
-    start3((Start)) --> postNetZero["POST /netzero"]
-    postNetZero --> extractMemberId3[[extractMemberId]]
-    extractMemberId3 --> callCreate[[NetZeroService.createNetZeroGoal]]
-    callCreate --> end3((End))
+%% 등록
+    Router --> Create["위원회 등록"]
+    Create --> SvcCreate["committeeService.createCommittee()"]
+    SvcCreate --> RespCreate["등록 완료 메시지"]
+    RespCreate --> End3((End))
 
 %% 수정
-    start4((Start)) --> putNetZero["PUT /netzero/{id}"]
-    putNetZero --> extractMemberId4[[extractMemberId]]
-    extractMemberId4 --> callUpdate[[NetZeroService.updateNetZeroGoal]]
-    callUpdate --> end4((End))
+    Router --> Update["위원회 수정"]
+    Update --> SvcUpdate["committeeService.updateCommittee()"]
+    SvcUpdate --> RespUpdate["수정 완료 메시지"]
+    RespUpdate --> End4((End))
 
 %% 삭제
-    start5((Start)) --> deleteNetZero["DELETE /netzero/{id}"]
-    deleteNetZero --> extractMemberId5[[extractMemberId]]
-    extractMemberId5 --> callDelete[[NetZeroService.deleteNetZeroGoal]]
-    callDelete --> end5((End))
+    Router --> Delete["위원회 삭제"]
+    Delete --> SvcDelete["committeeService.deleteCommittee()"]
+    SvcDelete --> RespDelete["삭제 완료 메시지"]
+    RespDelete --> End5((End))
+```
+
+```mermaid
+flowchart TD
+
+%% 공통 시작 및 인증 처리
+    Start((Start))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((End))
+    AuthCheck -- "예" --> Router["요청 분기"]
+
+%% 목록 조회
+    Router --> GetList["회의 목록 조회"]
+    GetList --> SvcList["meetingService.getMeetings()"]
+    SvcList --> RespList["회의 목록 반환"]
+    RespList --> End1((End))
+
+%% 단건 조회
+    Router --> GetOne["회의 단건 조회"]
+    GetOne --> SvcOne["meetingService.getMeetingById()"]
+    SvcOne --> RespOne["회의 반환"]
+    RespOne --> End2((End))
+
+%% 등록
+    Router --> Create["회의 등록"]
+    Create --> SvcCreate["meetingService.createMeeting()"]
+    SvcCreate --> RespCreate["등록 완료 메시지"]
+    RespCreate --> End3((End))
+
+%% 수정
+    Router --> Update["회의 수정"]
+    Update --> SvcUpdate["meetingService.updateMeeting()"]
+    SvcUpdate --> RespUpdate["수정 완료 메시지"]
+    RespUpdate --> End4((End))
+
+%% 삭제
+    Router --> Delete["회의 삭제"]
+    Delete --> SvcDelete["meetingService.deleteMeeting()"]
+    SvcDelete --> RespDelete["삭제 완료 메시지"]
+    RespDelete --> End5((End))
+```
+
+```mermaid
+flowchart TD
+
+%% 공통 시작 및 인증 처리
+    Start((Start))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((End))
+    AuthCheck -- "예" --> Router["요청 분기"]
+
+%% KPI 목록 조회
+    Router --> GetList["KPI 목록 조회"]
+    GetList --> SvcList["kpiService.getKpiGoals()"]
+    SvcList --> RespList["KPI 목록 반환"]
+    RespList --> End1((End))
+
+%% KPI 단건 조회
+    Router --> GetOne["KPI 단건 조회"]
+    GetOne --> SvcOne["kpiService.getKpiGoalById()"]
+    SvcOne --> RespOne["KPI 반환"]
+    RespOne --> End2((End))
+
+%% KPI 등록
+    Router --> Create["KPI 등록"]
+    Create --> SvcCreate["kpiService.createKpiGoal()"]
+    SvcCreate --> RespCreate["등록 완료 메시지"]
+    RespCreate --> End3((End))
+
+%% KPI 수정
+    Router --> Update["KPI 수정"]
+    Update --> SvcUpdate["kpiService.updateKpiGoal()"]
+    SvcUpdate --> RespUpdate["수정 완료 메시지"]
+    RespUpdate --> End4((End))
+
+%% KPI 삭제
+    Router --> Delete["KPI 삭제"]
+    Delete --> SvcDelete["kpiService.deleteKpiGoal()"]
+    SvcDelete --> RespDelete["삭제 완료 메시지"]
+    RespDelete --> End5((End))
+```
+
+```mermaid
+flowchart TD
+
+%% 공통 시작 및 인증 처리
+    Start((Start))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((End))
+    AuthCheck -- "예" --> Router["요청 분기"]
+
+%% 교육 목록 조회
+    Router --> GetList["교육 목록 조회"]
+    GetList --> SvcList["educationService.getEducations()"]
+    SvcList --> RespList["교육 목록 반환"]
+    RespList --> End1((End))
+
+%% 교육 단건 조회
+    Router --> GetOne["교육 단건 조회"]
+    GetOne --> SvcOne["educationService.getEducationById()"]
+    SvcOne --> RespOne["교육 반환"]
+    RespOne --> End2((End))
+
+%% 교육 등록
+    Router --> Create["교육 등록"]
+    Create --> SvcCreate["educationService.createEducation()"]
+    SvcCreate --> RespCreate["등록 완료 메시지"]
+    RespCreate --> End3((End))
+
+%% 교육 수정
+    Router --> Update["교육 수정"]
+    Update --> SvcUpdate["educationService.updateEducation()"]
+    SvcUpdate --> RespUpdate["수정 완료 메시지"]
+    RespUpdate --> End4((End))
+
+%% 교육 삭제
+    Router --> Delete["교육 삭제"]
+    Delete --> SvcDelete["educationService.deleteEducation()"]
+    SvcDelete --> RespDelete["삭제 완료 메시지"]
+    RespDelete --> End5((End))
+```
+```mermaid
+flowchart TD
+
+%% 공통 시작 및 인증
+    Start((Start))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((End))
+    AuthCheck -- "예" --> Router["요청 분기"]
+
+%% TCFD 진행도 조회
+    Router --> TCFDGet["TCFD 진행도 조회"]
+    TCFDGet --> SvcTCFD["internalProgressService.getProgress()"]
+    SvcTCFD --> RespTCFD["TCFD 진행도 반환"]
+    RespTCFD --> End1((End))
+
+%% NetZero 배출량 조회
+    Router --> NZGet["NetZero 배출량 진행률 조회"]
+    NZGet --> SvcNZ["internalProgressService.getNetZeroEmissionProgress()"]
+    SvcNZ --> RespNZ["NetZero 배출량 반환"]
+    RespNZ --> End2((End))
+```
+
+```mermaid
+flowchart TD
+
+%% 공통 시작 및 인증
+    Start((Start))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndError((End))
+    AuthCheck -- "예" --> Route["요청 분기"]
+
+%% 전체 조회
+    Route --> NetZeroGetAll["GET /netzero"]
+    NetZeroGetAll --> ServiceGetAll["NetZeroService.getNetZeroGoals"]
+    ServiceGetAll --> RespGetAll["목표 목록 반환"]
+    RespGetAll --> End1((End))
+
+%% 단건 조회
+    Route --> NetZeroGetOne["GET /netzero/{id}"]
+    NetZeroGetOne --> ServiceGetOne["NetZeroService.getNetZeroGoalById"]
+    ServiceGetOne --> RespGetOne["목표 반환"]
+    RespGetOne --> End2((End))
+
+%% 생성 (계산 포함)
+    Route --> NetZeroCreate["POST /netzero"]
+    NetZeroCreate --> BuildGoal["요청 기반 GoalNetZero 생성"]
+    BuildGoal --> CalcEF["산업별 EF / AF / Eb 계산"]
+    CalcEF --> CalcReduction["평균 감축률 계산"]
+    CalcReduction --> YearlyEmission["연도별 배출량 계산"]
+    YearlyEmission --> SaveGoal["DB 저장"]
+    SaveGoal --> RespPost["생성된 목표 반환"]
+    RespPost --> End3((End))
+
+%% 수정
+    Route --> NetZeroUpdate["PUT /netzero/{id}"]
+    NetZeroUpdate --> UpdateGoal["기존 목표 수정 + 재계산"]
+    UpdateGoal --> RespPut["수정된 목표 반환"]
+    RespPut --> End4((End))
+
+%% 삭제
+    Route --> NetZeroDelete["DELETE /netzero/{id}"]
+    NetZeroDelete --> DeleteGoal["NetZero 목표 삭제"]
+    DeleteGoal --> RespDelete["삭제 완료 메시지"]
+    RespDelete --> End5((End))
+```
+
+```mermaid
+flowchart TD
+
+%% 공통 시작 및 인증
+Start((Start))
+Start --> Auth["X-MEMBER-ID 인증"]
+Auth --> AuthCheck{"인증 성공 여부"}
+AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndError((End))
+AuthCheck -- "예" --> Route["요청 분기"]
+
+%% 전체 조회
+Route --> ScenarioGetAll["GET /strategy/scenario"]
+ScenarioGetAll --> ServiceGetAll["StrategyService.getScenarios()"]
+ServiceGetAll --> RespGetAll["시나리오 목록 반환"]
+RespGetAll --> End1((End))
+
+%% 단건 조회
+Route --> ScenarioGetOne["GET /strategy/scenario/{id}"]
+ScenarioGetOne --> ServiceGetOne["StrategyService.getScenarioById()"]
+ServiceGetOne --> RespGetOne["시나리오 반환"]
+RespGetOne --> End2((End))
+
+%% 생성
+Route --> ScenarioPost["POST /strategy/scenario"]
+ScenarioPost --> EstimateDamage["피해 추정 계산"]
+EstimateDamage --> ServicePost["StrategyService.createScenario()"]
+ServicePost --> RespPost["생성 완료 메시지"]
+RespPost --> End3((End))
+
+%% 수정
+Route --> ScenarioPut["PUT /strategy/scenario/{id}"]
+ScenarioPut --> EstimateUpdate["피해 재계산"]
+EstimateUpdate --> ServicePut["StrategyService.updateScenario()"]
+ServicePut --> RespPut["수정 완료 메시지"]
+RespPut --> End4((End))
+
+%% 삭제
+Route --> ScenarioDelete["DELETE /strategy/scenario/{id}"]
+ScenarioDelete --> ServiceDelete["StrategyService.deleteScenario()"]
+ServiceDelete --> RespDelete["삭제 완료 메시지"]
+RespDelete --> End5((End))
+```
+
+```mermaid
+flowchart TD
+
+%% 공통 시작 및 인증
+    Start((Start))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndError((End))
+    AuthCheck -- "예" --> Route["요청 분기"]
+
+%% 전체 조회
+    Route --> RiskGetAll["GET /strategy/risk"]
+    RiskGetAll --> ServiceGetAll["StrategyService.getRisks()"]
+    ServiceGetAll --> RespGetAll["리스크 목록 반환"]
+    RespGetAll --> End1((End))
+
+%% 단건 조회
+    Route --> RiskGetOne["GET /strategy/risk/{id}"]
+    RiskGetOne --> ServiceGetOne["StrategyService.getRiskById()"]
+    ServiceGetOne --> RespGetOne["리스크 반환"]
+    RespGetOne --> End2((End))
+
+%% 생성
+    Route --> RiskPost["POST /strategy/risk"]
+    RiskPost --> ServicePost["StrategyService.createRisk()"]
+    ServicePost --> RespPost["생성 완료 메시지"]
+    RespPost --> End3((End))
+
+%% 수정
+    Route --> RiskPut["PUT /strategy/risk/{id}"]
+    RiskPut --> ServicePut["StrategyService.updateRisk()"]
+    ServicePut --> RespPut["수정 완료 메시지"]
+    RespPut --> End4((End))
+
+%% 삭제
+    Route --> RiskDelete["DELETE /strategy/risk/{id}"]
+    RiskDelete --> ServiceDelete["StrategyService.deleteRisk()"]
+    ServiceDelete --> RespDelete["삭제 완료 메시지"]
+    RespDelete --> End5((End))
 ```
