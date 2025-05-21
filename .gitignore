@@ -91,6 +91,9 @@ fabric.properties
 
 !.idea/codeStyles
 !.idea/runConfigurations
+!lib/**/*.jar
+
+
 
 ### Java ###
 # Compiled class file
