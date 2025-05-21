@@ -1,43 +1,5 @@
-```mermaid
 flowchart TD
 
-%% 공통 인증 처리
-    Start((Start))
-    Start --> Auth["X-MEMBER-ID 인증"]
-    Auth --> AuthCheck{"인증 성공 여부"}
-    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((End))
-    AuthCheck -- "예" --> Router["요청 분기"]
-
-%% 목록 조회
-    Router --> GetList["위원회 목록 조회"]
-    GetList --> SvcList["committeeService.getCommittees()"]
-    SvcList --> RespList["위원회 목록 반환"]
-    RespList --> End1((End))
-
-%% 단건 조회
-    Router --> GetOne["위원회 단건 조회"]
-    GetOne --> SvcOne["committeeService.getCommitteeById()"]
-    SvcOne --> RespOne["단건 반환"]
-    RespOne --> End2((End))
-
-%% 등록
-    Router --> Create["위원회 등록"]
-    Create --> SvcCreate["committeeService.createCommittee()"]
-    SvcCreate --> RespCreate["등록 완료 메시지"]
-    RespCreate --> End3((End))
-
-%% 수정
-    Router --> Update["위원회 수정"]
-    Update --> SvcUpdate["committeeService.updateCommittee()"]
-    SvcUpdate --> RespUpdate["수정 완료 메시지"]
-    RespUpdate --> End4((End))
-
-%% 삭제
-    Router --> Delete["위원회 삭제"]
-    Delete --> SvcDelete["committeeService.deleteCommittee()"]
-    SvcDelete --> RespDelete["삭제 완료 메시지"]
-    RespDelete --> End5((End))
-```
 
 ```mermaid
 flowchart TD
