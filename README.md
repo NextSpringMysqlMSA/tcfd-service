@@ -43,12 +43,13 @@ flowchart TD
     classDef terminal fill:#d0f0c0,stroke:#1b5e20,color:#1b5e20;
     classDef error fill:#fdecea,stroke:#c62828,color:#c62828;
 
-%% 클래스 적용
+%% 클래스 적용 (줄바꿈 없이 한 줄에 작성)
     class Start,End1,End2,End3,End4,End5,EndErr terminal;
-    class Auth,AuthCheck,Router,GetList,GetOne,Create,Update,Delete,
-          SvcList,SvcOne,SvcCreate,SvcUpdate,SvcDelete,
-          RespList,RespOne,RespCreate,RespUpdate,RespDelete forest;
+    class Auth,AuthCheck,Router,GetList,GetOne,Create,Update,Delete,SvcList,SvcOne,SvcCreate,SvcUpdate,SvcDelete,RespList,RespOne,RespCreate,RespUpdate,RespDelete forest;
     class Error401 error;
+
+---
+
 
 ```mermaid
 flowchart TD
