@@ -48,7 +48,6 @@ flowchart TD
     class Auth,AuthCheck,Router,GetList,GetOne,Create,Update,Delete,SvcList,SvcOne,SvcCreate,SvcUpdate,SvcDelete,RespList,RespOne,RespCreate,RespUpdate,RespDelete forest;
     class Error401 error;
 
----
 
 
 ```mermaid
