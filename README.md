@@ -1,3 +1,4 @@
+```mermaid
 flowchart TD
 
 %% 공통 시작 및 인증 처리
