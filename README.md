@@ -16,28 +16,28 @@ flowchart TD
     AuthCheck -- "Yes" --> Router["요청 라우팅"]
 
     %% 목록 조회
-    Router --> GetList["위원회 목록 조회\nGET /committees"]
-    GetList --> SvcList["committeeService.getCommittees()"]
+    Router --> GetList["위원회 목록 조회"]
+    GetList --> SvcList["governanceService.getCommittees()"]
     SvcList --> RespList["위원회 목록 반환\n200 OK"] --> End1((종료))
 
     %% 단건 조회
-    Router --> GetOne["위원회 단건 조회\nGET /committees/{id}"]
-    GetOne --> SvcOne["committeeService.getCommitteeById()"]
+    Router --> GetOne["위원회 단건 조회"]
+    GetOne --> SvcOne["governanceService.getCommitteeById()"]
     SvcOne --> RespOne["위원회 정보 반환\n200 OK"] --> End2((종료))
 
     %% 등록
-    Router --> Create["위원회 등록\nPOST /committees"]
-    Create --> SvcCreate["committeeService.createCommittee()"]
+    Router --> Create["위원회 등록"]
+    Create --> SvcCreate["governanceService.createCommittee()"]
     SvcCreate --> RespCreate["등록 완료\n201 Created"] --> End3((종료))
 
     %% 수정
-    Router --> Update["위원회 수정\nPUT /committees/{id}"]
-    Update --> SvcUpdate["committeeService.updateCommittee()"]
+    Router --> Update["위원회 수정"]
+    Update --> SvcUpdate["governanceService.updateCommittee()"]
     SvcUpdate --> RespUpdate["수정 완료\n200 OK"] --> End4((종료))
 
     %% 삭제
-    Router --> Delete["위원회 삭제\nDELETE /committees/{id}"]
-    Delete --> SvcDelete["committeeService.deleteCommittee()"]
+    Router --> Delete["위원회 삭제"]
+    Delete --> SvcDelete["governanceService.deleteCommittee()"]
     SvcDelete --> RespDelete["삭제 완료\n204 No Content"] --> End5((종료))
 
     %% 스타일 적용
@@ -68,31 +68,31 @@ flowchart TD
 
     %% 목록 조회
     Router --> GetList["회의 목록 조회"]
-    GetList --> SvcList["meetingService.getMeetings()"]
+    GetList --> SvcList["governanceService.getMeetings()"]
     SvcList --> RespList["회의 목록 반환"]
     RespList --> End1((종료))
 
     %% 단건 조회
     Router --> GetOne["회의 단건 조회"]
-    GetOne --> SvcOne["meetingService.getMeetingById()"]
+    GetOne --> SvcOne["governanceService.getMeetingById()"]
     SvcOne --> RespOne["회의 반환"]
     RespOne --> End2((종료))
 
     %% 등록
     Router --> Create["회의 등록"]
-    Create --> SvcCreate["meetingService.createMeeting()"]
+    Create --> SvcCreate["governanceService.createMeeting()"]
     SvcCreate --> RespCreate["등록 완료 메시지"]
     RespCreate --> End3((종료))
 
     %% 수정
     Router --> Update["회의 수정"]
-    Update --> SvcUpdate["meetingService.updateMeeting()"]
+    Update --> SvcUpdate["governanceService.updateMeeting()"]
     SvcUpdate --> RespUpdate["수정 완료 메시지"]
     RespUpdate --> End4((종료))
 
     %% 삭제
     Router --> Delete["회의 삭제"]
-    Delete --> SvcDelete["meetingService.deleteMeeting()"]
+    Delete --> SvcDelete["governanceService.deleteMeeting()"]
     SvcDelete --> RespDelete["삭제 완료 메시지"]
     RespDelete --> End5((종료))
     
@@ -180,31 +180,31 @@ flowchart TD
 
     %% 교육 목록 조회
     Router --> GetList["교육 목록 조회"]
-    GetList --> SvcList["educationService.getEducations()"]
+    GetList --> SvcList["governanceService.getEducations()"]
     SvcList --> RespList["교육 목록 반환"]
     RespList --> End1((종료))
 
     %% 교육 단건 조회
     Router --> GetOne["교육 단건 조회"]
-    GetOne --> SvcOne["educationService.getEducationById()"]
+    GetOne --> SvcOne["governanceService.getEducationById()"]
     SvcOne --> RespOne["교육 정보 반환"]
     RespOne --> End2((종료))
 
     %% 교육 등록
     Router --> Create["교육 등록"]
-    Create --> SvcCreate["educationService.createEducation()"]
+    Create --> SvcCreate["governanceService.createEducation()"]
     SvcCreate --> RespCreate["등록 완료 메시지"]
     RespCreate --> End3((종료))
 
     %% 교육 수정
     Router --> Update["교육 수정"]
-    Update --> SvcUpdate["educationService.updateEducation()"]
+    Update --> SvcUpdate["governanceService.updateEducation()"]
     SvcUpdate --> RespUpdate["수정 완료 메시지"]
     RespUpdate --> End4((종료))
 
     %% 교육 삭제
     Router --> Delete["교육 삭제"]
-    Delete --> SvcDelete["educationService.deleteEducation()"]
+    Delete --> SvcDelete["governanceService.deleteEducation()"]
     SvcDelete --> RespDelete["삭제 완료 메시지"]
     RespDelete --> End5((종료))
     
@@ -403,6 +403,64 @@ flowchart TD
     class RespTCFD,RespNZ,RespGetAll,RespGetOne,RespPost,RespPut,RespDelete response
     class Error401 error
 ```
+
+---
+# TCFD KPI
+```mermaid
+flowchart TD
+    %% 스타일 정의 
+    classDef process fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef decision fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef endpoint fill:#d0f0c0,stroke:#1b5e20,stroke-width:1.5px,color:#1b5e20
+    classDef service fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef response fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef error fill:#fdecea,stroke:#c62828,stroke-width:1.5px,color:#c62828
+
+    %% 공통 시작 및 인증 처리
+    Start((시작)) --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((종료))
+    AuthCheck -- "예" --> Router["요청 분기"]
+
+    %% KPI 목록 조회
+    Router --> GetList["KPI 목표 목록 조회"]
+    GetList --> SvcList["kpiService.getKpiGoals()"]
+    SvcList --> RespList["KPI 목록 반환"]
+    RespList --> End1((종료))
+
+    %% KPI 단건 조회
+    Router --> GetOne["KPI 목표 단건 조회"]
+    GetOne --> SvcOne["kpiService.getKpiGoalById()"]
+    SvcOne --> RespOne["KPI 반환"]
+    RespOne --> End2((종료))
+
+    %% KPI 등록
+    Router --> Create["KPI 목표 등록"]
+    Create --> SvcCreate["kpiService.createKpiGoal()"]
+    SvcCreate --> RespCreate["등록 완료 메시지"]
+    RespCreate --> End3((종료))
+
+    %% KPI 수정
+    Router --> Update["KPI 목표 수정"]
+    Update --> SvcUpdate["kpiService.updateKpiGoal()"]
+    SvcUpdate --> RespUpdate["수정 완료 메시지"]
+    RespUpdate --> End4((종료))
+    
+    %% KPI 삭제
+    Router --> Delete["KPI 목표 삭제"]
+    Delete --> SvcDelete["kpiService.deleteKpiGoal()"]
+    SvcDelete --> RespDelete["삭제 완료 메시지"]
+    RespDelete --> End5((종료))
+    
+    %% 스타일 적용
+    class Start,End1,End2,End3,End4,End5,EndErr endpoint
+    class Auth,GetList,GetOne,Create,Update,Delete,Router process
+    class AuthCheck decision
+    class SvcList,SvcOne,SvcCreate,SvcUpdate,SvcDelete service
+    class RespList,RespOne,RespCreate,RespUpdate,RespDelete response
+    class Error401 error
+```
+
 
 
 
