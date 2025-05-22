@@ -2,6 +2,7 @@
 ##플로우차트
 
 ### 거버넌스 위원회
+
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -53,6 +54,7 @@ flowchart TD
 ```
 ---
 ### 거버넌스 회의
+
 ```mermaid
 flowchart TD
     %% 스타일 정의 
