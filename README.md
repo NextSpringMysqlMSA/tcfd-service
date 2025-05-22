@@ -1,4 +1,4 @@
-# TCFD 위원회
+# 거버넌스 위원회
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -49,7 +49,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# TCFD 회의
+# 거버넌스 회의
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -105,7 +105,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# TCFD 경영진 KPI
+# 거버넌스 경영진 KPI
 ```mermaid
 flowchart TD
 %% 스타일 정의 
@@ -161,7 +161,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# TCFD 교육
+# 거버넌스 교육
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -331,7 +331,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# 내부 진행도 및 NetZero 목표 관리
+# 목표 및 전략 NetZero 관리
 
 ```mermaid
 flowchart TD
