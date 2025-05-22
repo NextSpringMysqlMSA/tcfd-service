@@ -1,4 +1,7 @@
-# 거버넌스 위원회
+---
+##플로우차트
+
+### 거버넌스 위원회
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -49,7 +52,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# 거버넌스 회의
+### 거버넌스 회의
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -105,7 +108,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# 거버넌스 경영진 KPI
+### 거버넌스 경영진 KPI
 ```mermaid
 flowchart TD
 %% 스타일 정의 
@@ -161,7 +164,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# 거버넌스 교육
+### 거버넌스 교육
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -218,7 +221,7 @@ flowchart TD
 ```
 
 ---
-# 전략 리스크 관리
+### 전략 리스크 관리
 
 ```mermaid
 flowchart TD
@@ -272,7 +275,7 @@ flowchart TD
 ```
 ---
 
-# 전략 시나리오 관리
+### 전략 시나리오 관리
 
 ```mermaid
 flowchart TD
@@ -331,7 +334,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-# 목표 및 전략 NetZero 관리
+### 목표 및 전략 NetZero 관리
 
 ```mermaid
 flowchart TD
@@ -405,7 +408,7 @@ flowchart TD
 ```
 
 ---
-# 목표 및 전략 KPI
+### 목표 및 전략 KPI
 ```mermaid
 flowchart TD
     %% 스타일 정의 
