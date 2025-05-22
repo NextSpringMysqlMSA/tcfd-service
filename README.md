@@ -405,7 +405,7 @@ flowchart TD
 ```
 
 ---
-# TCFD KPI
+# 목표 및 전략 KPI
 ```mermaid
 flowchart TD
     %% 스타일 정의 
