@@ -32,5 +32,4 @@ public class InternalTcfdController {
         return internalProgressService.getNetZeroEmissionProgress(memberId);
     }
 
-
 }

@@ -49,7 +49,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-#TCFD 회의
+# TCFD 회의
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -105,10 +105,10 @@ flowchart TD
     class Error401 error
 ```
 ---
-TCFD KPI
+# TCFD 경영진 KPI
 ```mermaid
 flowchart TD
-    %% 스타일 정의 
+%% 스타일 정의 
     classDef process fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
     classDef decision fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
     classDef endpoint fill:#d0f0c0,stroke:#1b5e20,stroke-width:1.5px,color:#1b5e20
@@ -116,43 +116,43 @@ flowchart TD
     classDef response fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
     classDef error fill:#fdecea,stroke:#c62828,stroke-width:1.5px,color:#c62828
 
-    %% 공통 시작 및 인증 처리
+%% 공통 시작 및 인증 처리
     Start((시작)) --> Auth["X-MEMBER-ID 인증"]
     Auth --> AuthCheck{"인증 성공 여부"}
     AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndErr((종료))
     AuthCheck -- "예" --> Router["요청 분기"]
 
-    %% KPI 목록 조회
-    Router --> GetList["KPI 목록 조회"]
-    GetList --> SvcList["kpiService.getKpiGoals()"]
+%% KPI 목록 조회
+    Router --> GetList["경영진 KPI 목록 조회"]
+    GetList --> SvcList["governanceService.getExecutiveKpis()"]
     SvcList --> RespList["KPI 목록 반환"]
     RespList --> End1((종료))
 
-    %% KPI 단건 조회
-    Router --> GetOne["KPI 단건 조회"]
-    GetOne --> SvcOne["kpiService.getKpiGoalById()"]
+%% KPI 단건 조회
+    Router --> GetOne["경영진 KPI 단건 조회"]
+    GetOne --> SvcOne["governanceService.getExecutiveKpiById()"]
     SvcOne --> RespOne["KPI 반환"]
     RespOne --> End2((종료))
 
-    %% KPI 등록
-    Router --> Create["KPI 등록"]
-    Create --> SvcCreate["kpiService.createKpiGoal()"]
+%% KPI 등록
+    Router --> Create["경영진 KPI 등록"]
+    Create --> SvcCreate["governanceService.createExecutiveKpi()"]
     SvcCreate --> RespCreate["등록 완료 메시지"]
     RespCreate --> End3((종료))
 
-    %% KPI 수정
-    Router --> Update["KPI 수정"]
-    Update --> SvcUpdate["kpiService.updateKpiGoal()"]
+%% KPI 수정
+    Router --> Update["경영진 KPI 수정"]
+    Update --> SvcUpdate["governanceService.updateExecutiveKpi()"]
     SvcUpdate --> RespUpdate["수정 완료 메시지"]
     RespUpdate --> End4((종료))
-    
-    %% KPI 삭제
-    Router --> Delete["KPI 삭제"]
-    Delete --> SvcDelete["kpiService.deleteKpiGoal()"]
+
+%% KPI 삭제
+    Router --> Delete["경영진 KPI 삭제"]
+    Delete --> SvcDelete["governanceService.deleteExecutiveKpi()"]
     SvcDelete --> RespDelete["삭제 완료 메시지"]
     RespDelete --> End5((종료))
-    
-    %% 스타일 적용
+
+%% 스타일 적용
     class Start,End1,End2,End3,End4,End5,EndErr endpoint
     class Auth,GetList,GetOne,Create,Update,Delete,Router process
     class AuthCheck decision
@@ -161,7 +161,7 @@ flowchart TD
     class Error401 error
 ```
 ---
-TCFD 교육
+# TCFD 교육
 ```mermaid
 flowchart TD
     %% 스타일 정의 
@@ -214,6 +214,120 @@ flowchart TD
     class AuthCheck decision
     class SvcList,SvcOne,SvcCreate,SvcUpdate,SvcDelete service
     class RespList,RespOne,RespCreate,RespUpdate,RespDelete response
+    class Error401 error
+```
+
+---
+# 전략 리스크 관리
+
+```mermaid
+flowchart TD
+    %% 스타일 정의 
+    classDef process fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef decision fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef endpoint fill:#d0f0c0,stroke:#1b5e20,stroke-width:1.5px,color:#1b5e20
+    classDef service fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef response fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef error fill:#fdecea,stroke:#c62828,stroke-width:1.5px,color:#c62828
+
+    %% 공통 시작 및 인증
+    Start((시작))
+    Start --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"]
+    AuthCheck -- "예" --> Route["요청 처리 분기"]
+
+    %% 전체 조회
+    Route --> RiskGetAll["리스크 목록 조회"]
+    RiskGetAll --> ServiceGetAll["strategyService.getRisks()"]
+    ServiceGetAll --> RespGetAll["리스크 목록 반환\n200 OK"]
+
+    %% 단건 조회
+    Route --> RiskGetOne["리스크 단건 조회"]
+    RiskGetOne --> ServiceGetOne["strategyService.getRiskById()"]
+    ServiceGetOne --> RespGetOne["리스크 정보 반환\n200 OK"]
+
+    %% 생성
+    Route --> RiskPost["리스크 등록"]
+    RiskPost --> ServicePost["strategyService.createRisk()"]
+    ServicePost --> RespPost["생성 완료\n201 Created"]
+
+    %% 수정
+    Route --> RiskPut["리스크 수정"]
+    RiskPut --> ServicePut["strategyService.updateRisk()"]
+    ServicePut --> RespPut["수정 완료\n200 OK"]
+
+    %% 삭제
+    Route --> RiskDelete["리스크 삭제"]
+    RiskDelete --> ServiceDelete["strategyService.deleteRisk()"]
+    ServiceDelete --> RespDelete["삭제 완료\n204 No Content"]
+
+    %% 스타일 적용
+    class Start endpoint
+    class Auth,RiskGetAll,RiskGetOne,RiskPost,RiskPut,RiskDelete,Route process
+    class AuthCheck decision
+    class ServiceGetAll,ServiceGetOne,ServicePost,ServicePut,ServiceDelete service
+    class RespGetAll,RespGetOne,RespPost,RespPut,RespDelete response
+    class Error401 error
+```
+---
+
+# 전략 시나리오 관리
+
+```mermaid
+flowchart TD
+    %% 스타일 정의 
+    classDef process fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef decision fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef endpoint fill:#d0f0c0,stroke:#1b5e20,stroke-width:1.5px,color:#1b5e20
+    classDef service fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef response fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
+    classDef error fill:#fdecea,stroke:#c62828,stroke-width:1.5px,color:#c62828
+
+    %% 공통 시작 및 인증
+    Start((시작)) --> Auth["X-MEMBER-ID 인증"]
+    Auth --> AuthCheck{"인증 성공 여부"}
+    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndError((종료))
+    AuthCheck -- "예" --> Route["요청 처리 분기"]
+
+    %% 전체 조회
+    Route --> ScenarioGetAll["시나리오 목록 조회"]
+    ScenarioGetAll --> ServiceGetAll["strategyService.getScenarios()"]
+    ServiceGetAll --> RespGetAll["시나리오 목록 반환\n200 OK"]
+    RespGetAll --> End1((종료))
+
+    %% 단건 조회
+    Route --> ScenarioGetOne["시나리오 단건 조회"]
+    ScenarioGetOne --> ServiceGetOne["strategyService.getScenarioById()"]
+    ServiceGetOne --> RespGetOne["시나리오 정보 반환\n200 OK"]
+    RespGetOne --> End2((종료))
+
+    %% 생성
+    Route --> ScenarioPost["시나리오 등록"]
+    ScenarioPost --> EstimateDamage["피해 추정 계산"]
+    EstimateDamage --> ServicePost["strategyService.createScenario()"]
+    ServicePost --> RespPost["생성 완료\n201 Created"]
+    RespPost --> End3((종료))
+
+    %% 수정
+    Route --> ScenarioPut["시나리오 수정"]
+    ScenarioPut --> EstimateUpdate["피해 재계산"]
+    EstimateUpdate --> ServicePut["strategyService.updateScenario()"]
+    ServicePut --> RespPut["수정 완료\n200 OK"]
+    RespPut --> End4((종료))
+
+    %% 삭제
+    Route --> ScenarioDelete["시나리오 삭제"]
+    ScenarioDelete --> ServiceDelete["strategyService.deleteScenario()"]
+    ServiceDelete --> RespDelete["삭제 완료\n204 No Content"]
+    RespDelete --> End5((종료))
+
+    %% 스타일 적용
+    class Start,End1,End2,End3,End4,End5,EndError endpoint
+    class Auth,ScenarioGetAll,ScenarioGetOne,ScenarioPost,ScenarioPut,ScenarioDelete,Route,EstimateDamage,EstimateUpdate process
+    class AuthCheck decision
+    class ServiceGetAll,ServiceGetOne,ServicePost,ServicePut,ServiceDelete service
+    class RespGetAll,RespGetOne,RespPost,RespPut,RespDelete response
     class Error401 error
 ```
 ---
@@ -289,116 +403,6 @@ flowchart TD
     class RespTCFD,RespNZ,RespGetAll,RespGetOne,RespPost,RespPut,RespDelete response
     class Error401 error
 ```
----
 
-# 전략 시나리오 관리
 
-```mermaid
-flowchart TD
-    %% 스타일 정의 
-    classDef process fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef decision fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef endpoint fill:#d0f0c0,stroke:#1b5e20,stroke-width:1.5px,color:#1b5e20
-    classDef service fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef response fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef error fill:#fdecea,stroke:#c62828,stroke-width:1.5px,color:#c62828
 
-    %% 공통 시작 및 인증
-    Start((시작)) --> Auth["X-MEMBER-ID 인증"]
-    Auth --> AuthCheck{"인증 성공 여부"}
-    AuthCheck -- "아니오" --> Error401["401 Unauthorized"] --> EndError((종료))
-    AuthCheck -- "예" --> Route["요청 처리 분기"]
-
-    %% 전체 조회
-    Route --> ScenarioGetAll["시나리오 목록 조회"]
-    ScenarioGetAll --> ServiceGetAll["strategyService.getScenarios()"]
-    ServiceGetAll --> RespGetAll["시나리오 목록 반환\n200 OK"]
-    RespGetAll --> End1((종료))
-
-    %% 단건 조회
-    Route --> ScenarioGetOne["시나리오 단건 조회"]
-    ScenarioGetOne --> ServiceGetOne["strategyService.getScenarioById()"]
-    ServiceGetOne --> RespGetOne["시나리오 정보 반환\n200 OK"]
-    RespGetOne --> End2((종료))
-
-    %% 생성
-    Route --> ScenarioPost["시나리오 등록"]
-    ScenarioPost --> EstimateDamage["피해 추정 계산"]
-    EstimateDamage --> ServicePost["strategyService.createScenario()"]
-    ServicePost --> RespPost["생성 완료\n201 Created"]
-    RespPost --> End3((종료))
-
-    %% 수정
-    Route --> ScenarioPut["시나리오 수정"]
-    ScenarioPut --> EstimateUpdate["피해 재계산"]
-    EstimateUpdate --> ServicePut["strategyService.updateScenario()"]
-    ServicePut --> RespPut["수정 완료\n200 OK"]
-    RespPut --> End4((종료))
-
-    %% 삭제
-    Route --> ScenarioDelete["시나리오 삭제"]
-    ScenarioDelete --> ServiceDelete["strategyService.deleteScenario()"]
-    ServiceDelete --> RespDelete["삭제 완료\n204 No Content"]
-    RespDelete --> End5((종료))
-
-    %% 스타일 적용
-    class Start,End1,End2,End3,End4,End5,EndError endpoint
-    class Auth,ScenarioGetAll,ScenarioGetOne,ScenarioPost,ScenarioPut,ScenarioDelete,Route,EstimateDamage,EstimateUpdate process
-    class AuthCheck decision
-    class ServiceGetAll,ServiceGetOne,ServicePost,ServicePut,ServiceDelete service
-    class RespGetAll,RespGetOne,RespPost,RespPut,RespDelete response
-    class Error401 error
-```
----
-# 전략 리스크 관리
-
-```mermaid
-flowchart TD
-    %% 스타일 정의 
-    classDef process fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef decision fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef endpoint fill:#d0f0c0,stroke:#1b5e20,stroke-width:1.5px,color:#1b5e20
-    classDef service fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef response fill:#e6f4ea,stroke:#2e7d32,stroke-width:1.5px,color:#2e7d32
-    classDef error fill:#fdecea,stroke:#c62828,stroke-width:1.5px,color:#c62828
-
-    %% 공통 시작 및 인증
-    Start((시작))
-    Start --> Auth["X-MEMBER-ID 인증"]
-    Auth --> AuthCheck{"인증 성공 여부"}
-    AuthCheck -- "아니오" --> Error401["401 Unauthorized"]
-    AuthCheck -- "예" --> Route["요청 처리 분기"]
-
-    %% 전체 조회
-    Route --> RiskGetAll["리스크 목록 조회"]
-    RiskGetAll --> ServiceGetAll["strategyService.getRisks()"]
-    ServiceGetAll --> RespGetAll["리스크 목록 반환\n200 OK"]
-
-    %% 단건 조회
-    Route --> RiskGetOne["리스크 단건 조회"]
-    RiskGetOne --> ServiceGetOne["strategyService.getRiskById()"]
-    ServiceGetOne --> RespGetOne["리스크 정보 반환\n200 OK"]
-
-    %% 생성
-    Route --> RiskPost["리스크 등록"]
-    RiskPost --> ServicePost["strategyService.createRisk()"]
-    ServicePost --> RespPost["생성 완료\n201 Created"]
-
-    %% 수정
-    Route --> RiskPut["리스크 수정"]
-    RiskPut --> ServicePut["strategyService.updateRisk()"]
-    ServicePut --> RespPut["수정 완료\n200 OK"]
-
-    %% 삭제
-    Route --> RiskDelete["리스크 삭제"]
-    RiskDelete --> ServiceDelete["strategyService.deleteRisk()"]
-    ServiceDelete --> RespDelete["삭제 완료\n204 No Content"]
-
-    %% 스타일 적용
-    class Start endpoint
-    class Auth,RiskGetAll,RiskGetOne,RiskPost,RiskPut,RiskDelete,Route process
-    class AuthCheck decision
-    class ServiceGetAll,ServiceGetOne,ServicePost,ServicePut,ServiceDelete service
-    class RespGetAll,RespGetOne,RespPost,RespPut,RespDelete response
-    class Error401 error
-```
