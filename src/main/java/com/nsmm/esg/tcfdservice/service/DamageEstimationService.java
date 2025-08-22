@@ -41,8 +41,8 @@ public class DamageEstimationService {
             float prRaw = readValue(nc, "pr", lat, lon);
             float actualPrecip = prRaw * 86400f;
             double ratio = Math.max(0, 1 - (actualPrecip / normalPrecipitation)) * 100;
-            log.info("🌧️ 실제 강수량: {} mm", actualPrecip);
-            log.info("📊 평년 강수량: {} mm", normalPrecipitation);
+            log.info("실제 강수량: {} mm", actualPrecip);
+            log.info("평년 강수량: {} mm", normalPrecipitation);
             return logAndReturnDamage("가뭄", actualPrecip, "실제 강수량(mm)", ratio, assetValue);
         } catch (Exception e) {
             throw handleError("가뭄", e);
@@ -76,15 +76,15 @@ public class DamageEstimationService {
     }
 
     private Long logAndReturnDamage(String type, float value, String unitLabel, double ratio, double assetValue) {
-        log.info("📊 {} 값: {} {}", type, String.format("%.2f", value), unitLabel);
-        log.info("📉 손실률: {}%", String.format("%.2f", ratio));
+        log.info("{} 값: {} {}", type, String.format("%.2f", value), unitLabel);
+        log.info("손실률: {}%", String.format("%.2f", ratio));
         long damage = Math.round(assetValue * ratio / 100);
-        log.info("💸 예상 피해액 (원): {}", damage);
+        log.info("예상 피해액 (원): {}", damage);
         return damage;
     }
 
     private RuntimeException handleError(String type, Exception e) {
-        log.error("🚨 {} 피해 계산 실패: {}", type, e.getMessage(), e);
+        log.error("{} 피해 계산 실패: {}", type, e.getMessage(), e);
         return new RuntimeException(type + " 피해 계산 실패", e);
     }
 }

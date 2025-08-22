@@ -28,7 +28,7 @@ public class InternalTcfdController {
 
     @GetMapping("/progress/netzero")
     public List<NetZeroEmissionResponse> getNetZeroEmissionProgress(@RequestHeader("X-MEMBER-ID") Long memberId) {
-        log.info("📩 [NetZero] memberId = {}", memberId);
+        log.info("[NetZero] memberId = {}", memberId);
         return internalProgressService.getNetZeroEmissionProgress(memberId);
     }
 

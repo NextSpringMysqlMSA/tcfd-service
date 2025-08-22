@@ -44,7 +44,7 @@ public class NetCDFUtils {
                 scenario.toLowerCase(),
                 baseYear);
 
-        log.debug("📦 S3에서 NetCDF 파일 다운로드 시작: key={}", key);
+        log.debug("S3에서 NetCDF 파일 다운로드 시작: key={}", key);
 
         Path tempFile = Files.createTempFile("netcdf-", ".nc");
 
@@ -56,16 +56,16 @@ public class NetCDFUtils {
 
             // S3 스트림을 임시 파일에 저장
             Files.copy(responseInputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
-            log.debug("✅ 임시 파일 저장 완료: {}", tempFile);
+            log.debug("임시 파일 저장 완료: {}", tempFile);
 
             // NetCDF 파일 파싱
             NetcdfFile netcdfFile = NetcdfFile.open(tempFile.toString());
-            log.debug("📈 NetCDF 파싱 완료: {}", key);
+            log.debug("NetCDF 파싱 완료: {}", key);
 
             return netcdfFile;
 
         } catch (Exception e) {
-            log.error("❌ NetCDF 처리 실패: key={}, 원인={}", key, e.getMessage(), e);
+            log.error("NetCDF 처리 실패: key={}, 원인={}", key, e.getMessage(), e);
             throw new IOException("NetCDF 로딩 실패: " + key, e);
 
         } finally {
@@ -74,10 +74,10 @@ public class NetCDFUtils {
             try {
                 if (Files.exists(tempFile)) {
                     Files.delete(tempFile);
-                    log.debug("🗑️ 임시 파일 삭제 완료: {}", tempFile);
+                    log.debug("임시 파일 삭제 완료: {}", tempFile);
                 }
             } catch (IOException cleanupEx) {
-                log.warn("⚠️ 임시 파일 삭제 실패: {}", tempFile, cleanupEx);
+                log.warn("임시 파일 삭제 실패: {}", tempFile, cleanupEx);
             }
         }
     }

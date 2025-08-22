@@ -123,7 +123,7 @@ public class NetZeroService {
             industry.setBaseEmission(baseEmission);
             totalBaseEmission += baseEmission;
 
-            log.info("📌 산업={}, EF={}, AF={}, Ai={}, AV={}, Eb={}",
+            log.info("산업={}, EF={}, AF={}, Ai={}, AV={}, Eb={}",
                     industry.getIndustry(), ef, af, industry.getAmount(), industry.getTotalAssetValue(), baseEmission);
         }
 
@@ -131,7 +131,7 @@ public class NetZeroService {
         double reductionRate = calculateAverageReductionRate(
                 totalBaseEmission, 1.0, request.getBaseYear(), request.getTargetYear());
         int roundedReductionRate = (int) Math.round(reductionRate * 100);
-        log.info("✅ 총Eb={}, 평균감축률={}%", Math.round(totalBaseEmission), roundedReductionRate);
+        log.info("총Eb={}, 평균감축률={}%", Math.round(totalBaseEmission), roundedReductionRate);
 
         // 연도별 배출량 계산 및 등록
         for (int year : TARGET_YEARS) {
@@ -147,7 +147,7 @@ public class NetZeroService {
 
             goal.addEmission(e);
 
-            log.info("📊 E({}) = {}, f(y) = {}", year, Math.round(emission), String.format("%.6f", factor));
+            log.info("E({}) = {}, f(y) = {}", year, Math.round(emission), String.format("%.6f", factor));
         }
 
         return goal;

@@ -44,9 +44,9 @@ public class InternalProgressService {
         int incomplete = totalSections - completed;
         int rate = totalSections == 0 ? 0 : (int) ((completed * 100.0) / totalSections);
 
-        System.out.println("🟢 완료 항목 수: " + completed + " / 총 항목: " + totalSections);
-        System.out.println("🔴 미완료 항목 수: " + incomplete);
-        System.out.println("📊 완료율: " + rate + "%");
+        System.out.println("완료 항목 수: " + completed + " / 총 항목: " + totalSections);
+        System.out.println("미완료 항목 수: " + incomplete);
+        System.out.println("완료율: " + rate + "%");
 
         return TcfdProgressResponse.builder()
                 .totalCount(totalSections)
@@ -61,7 +61,7 @@ public class InternalProgressService {
 
         // 목표가 없으면 빈 리스트 반환
         if (goals.isEmpty()) {
-            log.info("🌱 NetZero 목표 없음: memberId={}", memberId);
+            log.info("NetZero 목표 없음: memberId={}", memberId);
             return Collections.emptyList();
         }
 
