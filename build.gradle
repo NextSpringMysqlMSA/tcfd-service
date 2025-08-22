@@ -19,8 +19,13 @@ configurations {
 	}
 }
 
+
 repositories {
 	mavenCentral()
+	flatDir {
+		dirs 'lib'
+	}
+
 }
 
 ext {
